@@ -1,7 +1,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    2.2.2
-Release:    3%{?dist}
+Release:    4%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -695,6 +695,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Mon Apr 04 2016 Simone Caronni <negativo17@gmail.com> - 1:2.2.2-4
+- Rebuild for libva bump.
+
 * Fri Mar 18 2016 Simone Caronni <negativo17@gmail.com> - 1:2.2.2-3
 - Fix Matroska build.
 
