@@ -1,14 +1,12 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
-Version:    2.2.2
-Release:    5%{?dist}
+Version:    2.2.3
+Release:    1%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
 
 Source0:    http://download.videolan.org/pub/videolan/%{name}/%{version}/%{name}-%{version}.tar.xz
-
-# kva.h / sndio / audioclient / kai ?
 
 BuildRequires:  a52dec-devel
 BuildRequires:  aalib-devel
@@ -695,6 +693,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Tue May 03 2016 Simone Caronni <negativo17@gmail.com> - 1:2.2.3-1
+- Update to 2.2.3.
+
 * Wed Apr 20 2016 Simone Caronni <negativo17@gmail.com> - 1:2.2.2-5
 - Rebuild for libprojectM bump.
 
