@@ -1,14 +1,17 @@
+%global commit0 196e144633dafcae8c328ac12194bb335a711213
+%global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
+
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
-Version:    2.2.2
-Release:    5%{?dist}
+Version:    3.0.0
+Release:    1.%{?shortcommit0}%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
 
-Source0:    http://download.videolan.org/pub/videolan/%{name}/%{version}/%{name}-%{version}.tar.xz
-
-# kva.h / sndio / audioclient / kai ?
+#Source0:    http://download.videolan.org/pub/videolan/%{name}/%{version}/%{name}-%{version}.tar.xz
+Source0:    %{name}-%{version}-%{shortcommit0}.tar.xz
+Source1:    %{name}-snapshot.sh
 
 BuildRequires:  a52dec-devel
 BuildRequires:  aalib-devel
@@ -45,7 +48,7 @@ BuildRequires:  pkgconfig(egl)
 BuildRequires:  pkgconfig(fdk-aac)
 BuildRequires:  pkgconfig(flac)
 BuildRequires:  pkgconfig(fluidsynth) >= 1.1.2
-BuildRequires:  pkgconfig(freerdp) >= 1.0.1
+#BuildRequires:  pkgconfig(freerdp) >= 1.0.1
 BuildRequires:  pkgconfig(freetype2)
 BuildRequires:  pkgconfig(fribidi)
 BuildRequires:  pkgconfig(gl)
@@ -68,7 +71,7 @@ BuildRequires:  pkgconfig(libidn)
 #BuildRequires:  pkgconfig(libgoom2)
 BuildRequires:  pkgconfig(libmfx)
 BuildRequires:  pkgconfig(libmodplug) > 0.8.8
-BuildRequires:  pkgconfig(libmpeg2) > 0.3.2
+#BuildRequires:  pkgconfig(libmpeg2) > 0.3.2
 BuildRequires:  pkgconfig(libmtp) >= 1.0.0
 BuildRequires:  pkgconfig(libnotify)
 BuildRequires:  pkgconfig(libpostproc)
@@ -90,14 +93,10 @@ BuildRequires:  pkgconfig(opencv) >= 2.0
 BuildRequires:  pkgconfig(minizip)
 BuildRequires:  pkgconfig(ncursesw)
 BuildRequires:  pkgconfig(opus) >= 1.0.3
-# QT 5.5.0 and 5.5.1 not supported:
-# http://git.videolan.org/gitweb.cgi/vlc/vlc-2.2.git/?a=commit;h=64dccb0fdd71075e37e03c4b52a0c9f5bb749d3f
-#BuildRequires:  pkgconfig(Qt5Core) >= 5.1.0
-#BuildRequires:  pkgconfig(Qt5Gui)
-#BuildRequires:  pkgconfig(Qt5Widgets)
-#BuildRequires:  pkgconfig(Qt5X11Extras)
-BuildRequires:  pkgconfig(QtCore)
-BuildRequires:  pkgconfig(QtGui) >= 4.6.0
+BuildRequires:  pkgconfig(Qt5Core) >= 5.1.0
+BuildRequires:  pkgconfig(Qt5Gui)
+BuildRequires:  pkgconfig(Qt5Widgets)
+BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  pkgconfig(samplerate)
 BuildRequires:  pkgconfig(schroedinger-1.0) >= 1.0.10
 BuildRequires:  pkgconfig(sdl) >= 1.2.10
@@ -194,12 +193,11 @@ This package contains the JACK audio plugin.
 
 
 %prep
-%setup -q -n %{name}-%{version}
-sed -i -e 's|AM_GNU_GETTEXT_VERSION(\[0.18.3\])|AM_GNU_GETTEXT_VERSION(\[0.18.2\])|g' \
-    configure.ac
+%setup -q -n %{name}
 
 %build
-autoreconf -vif
+# Calls autoreconf to generate m4 macros and prepare Makefiles
+./bootstrap
 %configure \
     --disable-silent-rules \
     --disable-optimizations \
@@ -362,7 +360,7 @@ fi
 %{_libdir}/%{name}/plugins/access/liblive555_plugin.so
 %{_libdir}/%{name}/plugins/access/libpulsesrc_plugin.so
 %{_libdir}/%{name}/plugins/access/librar_plugin.so
-%{_libdir}/%{name}/plugins/access/librdp_plugin.so
+#%{_libdir}/%{name}/plugins/access/librdp_plugin.so
 %{_libdir}/%{name}/plugins/access/librtp_plugin.so
 %{_libdir}/%{name}/plugins/access/libsdp_plugin.so
 %{_libdir}/%{name}/plugins/access/libsftp_plugin.so
@@ -433,7 +431,7 @@ fi
 %{_libdir}/%{name}/plugins/codec/libjpeg_plugin.so
 %{_libdir}/%{name}/plugins/codec/libkate_plugin.so
 %{_libdir}/%{name}/plugins/codec/liblibass_plugin.so
-%{_libdir}/%{name}/plugins/codec/liblibmpeg2_plugin.so
+#%{_libdir}/%{name}/plugins/codec/liblibmpeg2_plugin.so
 %{_libdir}/%{name}/plugins/codec/liblpcm_plugin.so
 %{_libdir}/%{name}/plugins/codec/libmpeg_audio_plugin.so
 %{_libdir}/%{name}/plugins/codec/libomxil_plugin.so
@@ -695,6 +693,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Mon May 02 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-1.196e144
+- Update to a 3.0.0 snapshot.
+
 * Wed Apr 20 2016 Simone Caronni <negativo17@gmail.com> - 1:2.2.2-5
 - Rebuild for libprojectM bump.
 
