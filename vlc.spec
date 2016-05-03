@@ -1,4 +1,4 @@
-%global commit0 196e144633dafcae8c328ac12194bb335a711213
+%global commit0 b016524cdddba086758599881373d396d0c0f06f
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 Summary:    The cross-platform open-source multimedia framework, player and server
@@ -52,7 +52,6 @@ BuildRequires:  pkgconfig(fluidsynth) >= 1.1.2
 BuildRequires:  pkgconfig(freetype2)
 BuildRequires:  pkgconfig(fribidi)
 BuildRequires:  pkgconfig(gl)
-BuildRequires:  pkgconfig(gnome-vfs-2.0)
 BuildRequires:  pkgconfig(gnutls) >= 3.0.20
 BuildRequires:  pkgconfig(gstreamer-app-1.0)
 BuildRequires:  pkgconfig(gstreamer-video-1.0)
@@ -72,6 +71,7 @@ BuildRequires:  pkgconfig(libidn)
 BuildRequires:  pkgconfig(libmfx)
 BuildRequires:  pkgconfig(libmodplug) > 0.8.8
 #BuildRequires:  pkgconfig(libmpeg2) > 0.3.2
+BuildRequires:  pkgconfig(libmpg123)
 BuildRequires:  pkgconfig(libmtp) >= 1.0.0
 BuildRequires:  pkgconfig(libnotify)
 BuildRequires:  pkgconfig(libpostproc)
@@ -93,8 +93,8 @@ BuildRequires:  pkgconfig(opencv) >= 2.0
 BuildRequires:  pkgconfig(minizip)
 BuildRequires:  pkgconfig(ncursesw)
 BuildRequires:  pkgconfig(opus) >= 1.0.3
-BuildRequires:  pkgconfig(Qt5Core) >= 5.1.0
-BuildRequires:  pkgconfig(Qt5Gui)
+BuildRequires:  pkgconfig(Qt5Core) >= 5.2.0
+BuildRequires:  pkgconfig(Qt5Gui) >= 5.5.0
 BuildRequires:  pkgconfig(Qt5Widgets)
 BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  pkgconfig(samplerate)
@@ -274,7 +274,7 @@ fi
 %files
 %{!?_licensedir:%global license %%doc}
 %license COPYING
-%doc AUTHORS ChangeLog NEWS README THANKS
+%doc AUTHORS NEWS README THANKS
 %{_bindir}/qvlc
 %{_bindir}/svlc
 %{_datadir}/applications/*
@@ -282,10 +282,9 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}*.png
 %{_datadir}/icons/hicolor/*/apps/%{name}*.xpm
 %{_datadir}/%{name}/skins2
-%{_libdir}/%{name}/plugins/access/libgnomevfs_plugin.so
 %{_libdir}/%{name}/plugins/access/libxcb_screen_plugin.so
 %{_libdir}/%{name}/plugins/audio_output/libpulse_plugin.so
-%{_libdir}/%{name}/plugins/gui/libqt4_plugin.so
+%{_libdir}/%{name}/plugins/gui/libqt_plugin.so
 %{_libdir}/%{name}/plugins/gui/libskins2_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libaa_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libcaca_plugin.so
@@ -317,6 +316,8 @@ fi
 %dir %{_libdir}/%{name}/plugins/control
 %dir %{_libdir}/%{name}/plugins/demux
 %dir %{_libdir}/%{name}/plugins/gui
+%dir %{_libdir}/%{name}/plugins/keystore
+%dir %{_libdir}/%{name}/plugins/logger
 %dir %{_libdir}/%{name}/plugins/lua
 %dir %{_libdir}/%{name}/plugins/meta_engine
 %dir %{_libdir}/%{name}/plugins/misc
@@ -338,8 +339,11 @@ fi
 %{_libdir}/%{name}/lua
 %{_libdir}/%{name}/plugins/access/libaccess_alsa_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_bd_plugin.so
+%{_libdir}/%{name}/plugins/access/libaccess_concat_plugin.so
+%{_libdir}/%{name}/plugins/access/libaccess_imem_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_mms_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_mtp_plugin.so
+#%{_libdir}/%{name}/plugins/access/libaccesslive555
 %{_libdir}/%{name}/plugins/access/libattachment_plugin.so
 %{_libdir}/%{name}/plugins/access/libavio_plugin.so
 %{_libdir}/%{name}/plugins/access/libcdda_plugin.so
@@ -352,6 +356,7 @@ fi
 %{_libdir}/%{name}/plugins/access/libfilesystem_plugin.so
 %{_libdir}/%{name}/plugins/access/libftp_plugin.so
 %{_libdir}/%{name}/plugins/access/libhttp_plugin.so
+%{_libdir}/%{name}/plugins/access/libhttps_plugin.so
 %{_libdir}/%{name}/plugins/access/libidummy_plugin.so
 %{_libdir}/%{name}/plugins/access/libimem_plugin.so
 %{_libdir}/%{name}/plugins/access/liblibbluray_plugin.so
@@ -372,6 +377,7 @@ fi
 %{_libdir}/%{name}/plugins/access/libv4l2_plugin.so
 %{_libdir}/%{name}/plugins/access/libvdr_plugin.so
 %{_libdir}/%{name}/plugins/access/libvnc_plugin.so
+%{_libdir}/%{name}/plugins/access/libwl_screenshooter_plugin.so
 %{_libdir}/%{name}/plugins/access/libzip_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_dummy_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_file_plugin.so
@@ -391,8 +397,9 @@ fi
 %{_libdir}/%{name}/plugins/audio_filter/libgain_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libheadphone_channel_mixer_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libkaraoke_plugin.so
+%{_libdir}/%{name}/plugins/audio_filter/libmad_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libmono_plugin.so
-%{_libdir}/%{name}/plugins/audio_filter/libmpgatofixed32_plugin.so
+#%{_libdir}/%{name}/plugins/audio_filter/libmpgatofixed32_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libnormvol_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libparam_eq_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libremap_plugin.so
@@ -427,25 +434,30 @@ fi
 %{_libdir}/%{name}/plugins/codec/libflac_plugin.so
 %{_libdir}/%{name}/plugins/codec/libg711_plugin.so
 %{_libdir}/%{name}/plugins/codec/libgstdecode_plugin.so
-%{_libdir}/%{name}/plugins/codec/libhwdummy_plugin.so
+#%{_libdir}/%{name}/plugins/codec/libhwdummy_plugin.so
 %{_libdir}/%{name}/plugins/codec/libjpeg_plugin.so
 %{_libdir}/%{name}/plugins/codec/libkate_plugin.so
 %{_libdir}/%{name}/plugins/codec/liblibass_plugin.so
 #%{_libdir}/%{name}/plugins/codec/liblibmpeg2_plugin.so
 %{_libdir}/%{name}/plugins/codec/liblpcm_plugin.so
 %{_libdir}/%{name}/plugins/codec/libmpeg_audio_plugin.so
+%{_libdir}/%{name}/plugins/codec/libmpg123_plugin.so
+%{_libdir}/%{name}/plugins/codec/liboggspots_plugin.so
 %{_libdir}/%{name}/plugins/codec/libomxil_plugin.so
 %{_libdir}/%{name}/plugins/codec/libopus_plugin.so
 %{_libdir}/%{name}/plugins/codec/libpng_plugin.so
 %{_libdir}/%{name}/plugins/codec/libqsv_plugin.so
 %{_libdir}/%{name}/plugins/codec/librawvideo_plugin.so
+%{_libdir}/%{name}/plugins/codec/librtpvideo_plugin.so
 %{_libdir}/%{name}/plugins/codec/libschroedinger_plugin.so
+%{_libdir}/%{name}/plugins/codec/libscte18_plugin.so
 %{_libdir}/%{name}/plugins/codec/libscte27_plugin.so
 %{_libdir}/%{name}/plugins/codec/libsdl_image_plugin.so
 %{_libdir}/%{name}/plugins/codec/libspeex_plugin.so
 %{_libdir}/%{name}/plugins/codec/libspudec_plugin.so
 %{_libdir}/%{name}/plugins/codec/libstl_plugin.so
 %{_libdir}/%{name}/plugins/codec/libsubsdec_plugin.so
+%{_libdir}/%{name}/plugins/codec/libsubsttml_plugin.so
 %{_libdir}/%{name}/plugins/codec/libsubstx3g_plugin.so
 %{_libdir}/%{name}/plugins/codec/libsubsusf_plugin.so
 %{_libdir}/%{name}/plugins/codec/libsvgdec_plugin.so
@@ -466,11 +478,12 @@ fi
 %{_libdir}/%{name}/plugins/control/libdummy_plugin.so
 %{_libdir}/%{name}/plugins/control/libgestures_plugin.so
 %{_libdir}/%{name}/plugins/control/libhotkeys_plugin.so
-%{_libdir}/%{name}/plugins/control/liblirc_plugin.so
+#%{_libdir}/%{name}/plugins/control/liblirc_plugin.so
 %{_libdir}/%{name}/plugins/control/libmotion_plugin.so
 %{_libdir}/%{name}/plugins/control/libnetsync_plugin.so
 %{_libdir}/%{name}/plugins/control/liboldrc_plugin.so
 %{_libdir}/%{name}/plugins/control/libxcb_hotkeys_plugin.so
+%{_libdir}/%{name}/plugins/demux/libadaptive_plugin.so
 %{_libdir}/%{name}/plugins/demux/libaiff_plugin.so
 %{_libdir}/%{name}/plugins/demux/libasf_plugin.so
 %{_libdir}/%{name}/plugins/demux/libau_plugin.so
@@ -483,8 +496,7 @@ fi
 %{_libdir}/%{name}/plugins/demux/libdiracsys_plugin.so
 %{_libdir}/%{name}/plugins/demux/libes_plugin.so
 %{_libdir}/%{name}/plugins/demux/libflacsys_plugin.so
-%{_libdir}/%{name}/plugins/demux/libh264_plugin.so
-%{_libdir}/%{name}/plugins/demux/libhevc_plugin.so
+%{_libdir}/%{name}/plugins/demux/libh26x_plugin.so
 %{_libdir}/%{name}/plugins/demux/libimage_plugin.so
 %{_libdir}/%{name}/plugins/demux/libmjpeg_plugin.so
 %{_libdir}/%{name}/plugins/demux/libmkv_plugin.so
@@ -507,6 +519,7 @@ fi
 %{_libdir}/%{name}/plugins/demux/libsubtitle_plugin.so
 %{_libdir}/%{name}/plugins/demux/libts_plugin.so
 %{_libdir}/%{name}/plugins/demux/libtta_plugin.so
+%{_libdir}/%{name}/plugins/demux/libttml_plugin.so
 %{_libdir}/%{name}/plugins/demux/libty_plugin.so
 %{_libdir}/%{name}/plugins/demux/libvc1_plugin.so
 %{_libdir}/%{name}/plugins/demux/libvobsub_plugin.so
@@ -514,6 +527,12 @@ fi
 %{_libdir}/%{name}/plugins/demux/libwav_plugin.so
 %{_libdir}/%{name}/plugins/demux/libxa_plugin.so
 %{_libdir}/%{name}/plugins/gui/libncurses_plugin.so
+%{_libdir}/%{name}/plugins/keystore/libfile_keystore_plugin.so
+%{_libdir}/%{name}/plugins/keystore/libmemory_keystore_plugin.so
+%{_libdir}/%{name}/plugins/logger/libconsole_logger_plugin.so
+%{_libdir}/%{name}/plugins/logger/libfile_logger_plugin.so
+%{_libdir}/%{name}/plugins/logger/libsd_journal_plugin.so
+%{_libdir}/%{name}/plugins/logger/libsyslog_plugin.so
 %{_libdir}/%{name}/plugins/lua/liblua_plugin.so
 %{_libdir}/%{name}/plugins/meta_engine/libfolder_plugin.so
 %{_libdir}/%{name}/plugins/meta_engine/libtaglib_plugin.so
@@ -550,7 +569,8 @@ fi
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_mpeg4video_plugin.so
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_mpegvideo_plugin.so
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_vc1_plugin.so
-%{_libdir}/%{name}/plugins/services_discovery/libbonjour_plugin.so
+%{_libdir}/%{name}/plugins/services_discovery/libavahi_plugin.so
+#%{_libdir}/%{name}/plugins/services_discovery/libbonjour_plugin.so
 %{_libdir}/%{name}/plugins/services_discovery/libmediadirs_plugin.so
 %{_libdir}/%{name}/plugins/services_discovery/libmtp_plugin.so
 %{_libdir}/%{name}/plugins/services_discovery/libpodcast_plugin.so
@@ -559,14 +579,20 @@ fi
 %{_libdir}/%{name}/plugins/services_discovery/libudev_plugin.so
 %{_libdir}/%{name}/plugins/services_discovery/libupnp_plugin.so
 %{_libdir}/%{name}/plugins/services_discovery/libxcb_apps_plugin.so
-%{_libdir}/%{name}/plugins/stream_filter/libdash_plugin.so
+%{_libdir}/%{name}/plugins/stream_filter/libcache_block_plugin.so
+%{_libdir}/%{name}/plugins/stream_filter/libcache_read_plugin.so
+#%{_libdir}/%{name}/plugins/stream_filter/libdash_plugin.so
 %{_libdir}/%{name}/plugins/stream_filter/libdecomp_plugin.so
-%{_libdir}/%{name}/plugins/stream_filter/libhttplive_plugin.so
+%{_libdir}/%{name}/plugins/stream_filter/libhds_plugin.so
+#%{_libdir}/%{name}/plugins/stream_filter/libhttplive_plugin.so
+%{_libdir}/%{name}/plugins/stream_filter/libinflate_plugin.so
+%{_libdir}/%{name}/plugins/stream_filter/libprefetch_plugin.so
 %{_libdir}/%{name}/plugins/stream_filter/librecord_plugin.so
-%{_libdir}/%{name}/plugins/stream_filter/libsmooth_plugin.so
+#%{_libdir}/%{name}/plugins/stream_filter/libsmooth_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_autodel_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_bridge_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_chromaprint_plugin.so
+%{_libdir}/%{name}/plugins/stream_out/libstream_out_cycle_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_delay_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_description_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_display_plugin.so
@@ -574,7 +600,7 @@ fi
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_duplicate_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_es_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_gather_plugin.so
-%{_libdir}/%{name}/plugins/stream_out/libstream_out_langfromtelx_plugin.so
+#%{_libdir}/%{name}/plugins/stream_out/libstream_out_langfromtelx_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_mosaic_bridge_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_raop_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_record_plugin.so
@@ -595,6 +621,7 @@ fi
 %{_libdir}/%{name}/plugins/vdpau/libvdpau_sharpen_plugin.so
 %{_libdir}/%{name}/plugins/video_chroma/libchain_plugin.so
 %{_libdir}/%{name}/plugins/video_chroma/libgrey_yuv_plugin.so
+%{_libdir}/%{name}/plugins/video_chroma/libi420_nv12_plugin.so
 %{_libdir}/%{name}/plugins/video_chroma/libi420_rgb_mmx_plugin.so
 %{_libdir}/%{name}/plugins/video_chroma/libi420_rgb_plugin.so
 %{_libdir}/%{name}/plugins/video_chroma/libi420_rgb_sse2_plugin.so
@@ -607,13 +634,14 @@ fi
 %{_libdir}/%{name}/plugins/video_chroma/libi422_yuy2_sse2_plugin.so
 %{_libdir}/%{name}/plugins/video_chroma/librv32_plugin.so
 %{_libdir}/%{name}/plugins/video_chroma/libswscale_plugin.so
+%{_libdir}/%{name}/plugins/video_chroma/libyuvp_plugin.so
 %{_libdir}/%{name}/plugins/video_chroma/libyuy2_i420_plugin.so
 %{_libdir}/%{name}/plugins/video_chroma/libyuy2_i422_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libadjust_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libalphamask_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libanaglyph_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libantiflicker_plugin.so
-%{_libdir}/%{name}/plugins/video_filter/libatmo_plugin.so
+#%{_libdir}/%{name}/plugins/video_filter/libatmo_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libaudiobargraph_v_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libball_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libblend_plugin.so
@@ -624,8 +652,10 @@ fi
 %{_libdir}/%{name}/plugins/video_filter/libcroppadd_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libdeinterlace_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libdynamicoverlay_plugin.so
+%{_libdir}/%{name}/plugins/video_filter/libedgedetection_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/liberase_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libextract_plugin.so
+%{_libdir}/%{name}/plugins/video_filter/libfps_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libfreeze_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libgaussianblur_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libgradfun_plugin.so
@@ -657,7 +687,6 @@ fi
 %{_libdir}/%{name}/plugins/video_filter/libtransform_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libvhs_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libwave_plugin.so
-%{_libdir}/%{name}/plugins/video_filter/libyuvp_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libegl_x11_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libfb_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libgl_plugin.so
@@ -665,6 +694,8 @@ fi
 %{_libdir}/%{name}/plugins/video_output/libvdummy_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libvmem_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libvout_sdl_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libwl_shell_surface_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libwl_shm_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libyuv_plugin.so
 %{_libdir}/%{name}/plugins/video_splitter/libclone_plugin.so
 %{_libdir}/%{name}/plugins/video_splitter/libpanoramix_plugin.so
@@ -693,8 +724,13 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
-* Mon May 02 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-1.196e144
+* Tue May 24 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-1.b016524
 - Update to a 3.0.0 snapshot.
+- Remove Gnome VFS, rdp and libmpeg2 support.
+- Enable QT 5.5 interface.
+- Enable Wayland output.
+- Disable RDP support until FreeRDP decides to make a release and VLC does
+  support it.
 
 * Wed Apr 20 2016 Simone Caronni <negativo17@gmail.com> - 1:2.2.2-5
 - Rebuild for libprojectM bump.
