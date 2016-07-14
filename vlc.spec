@@ -1,10 +1,10 @@
-%global commit0 b016524cdddba086758599881373d396d0c0f06f
+%global commit0 6cb361c1fb83c026cb9303db65e27d95b3d077cc
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.0
-Release:    1.%{?shortcommit0}%{?dist}
+Release:    2.%{?shortcommit0}%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -70,7 +70,7 @@ BuildRequires:  pkgconfig(libidn)
 #BuildRequires:  pkgconfig(libgoom2)
 BuildRequires:  pkgconfig(libmfx)
 BuildRequires:  pkgconfig(libmodplug) > 0.8.8
-#BuildRequires:  pkgconfig(libmpeg2) > 0.3.2
+BuildRequires:  pkgconfig(libmpeg2) > 0.3.2
 BuildRequires:  pkgconfig(libmpg123)
 BuildRequires:  pkgconfig(libmtp) >= 1.0.0
 BuildRequires:  pkgconfig(libnotify)
@@ -79,6 +79,7 @@ BuildRequires:  pkgconfig(libprojectM)
 BuildRequires:  pkgconfig(libpulse) >= 1.0
 BuildRequires:  pkgconfig(libraw1394) >= 2.0.1
 BuildRequires:  pkgconfig(librsvg-2.0) >= 2.9.0
+BuildRequires:  pkgconfig(libsecret-1) >= 0.18
 #BuildRequires:  pkgconfig(libsidplay2)
 BuildRequires:  pkgconfig(libssh2)
 BuildRequires:  pkgconfig(libswscale)
@@ -93,6 +94,7 @@ BuildRequires:  pkgconfig(opencv) >= 2.0
 BuildRequires:  pkgconfig(minizip)
 BuildRequires:  pkgconfig(ncursesw)
 BuildRequires:  pkgconfig(opus) >= 1.0.3
+BuildRequires:  pkgconfig(protobuf-lite) >= 2.5.0
 BuildRequires:  pkgconfig(Qt5Core) >= 5.2.0
 BuildRequires:  pkgconfig(Qt5Gui) >= 5.5.0
 BuildRequires:  pkgconfig(Qt5Widgets)
@@ -206,7 +208,6 @@ This package contains the JACK audio plugin.
     --enable-fdkaac \
     --enable-lirc \
     --enable-omxil \
-    --enable-omxilvout \
     --with-default-font=%{_datadir}/fonts/dejavu/DejaVuSans.ttf \
     --with-default-font-family=DejaVuSans \
     --with-default-monospace-font=%{_datadir}/fonts/dejavu/DejaVuSansMono.ttf \
@@ -343,7 +344,6 @@ fi
 %{_libdir}/%{name}/plugins/access/libaccess_imem_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_mms_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_mtp_plugin.so
-#%{_libdir}/%{name}/plugins/access/libaccesslive555
 %{_libdir}/%{name}/plugins/access/libattachment_plugin.so
 %{_libdir}/%{name}/plugins/access/libavio_plugin.so
 %{_libdir}/%{name}/plugins/access/libcdda_plugin.so
@@ -365,8 +365,8 @@ fi
 %{_libdir}/%{name}/plugins/access/liblive555_plugin.so
 %{_libdir}/%{name}/plugins/access/libpulsesrc_plugin.so
 %{_libdir}/%{name}/plugins/access/librar_plugin.so
-#%{_libdir}/%{name}/plugins/access/librdp_plugin.so
 %{_libdir}/%{name}/plugins/access/librtp_plugin.so
+%{_libdir}/%{name}/plugins/access/libsatip_plugin.so
 %{_libdir}/%{name}/plugins/access/libsdp_plugin.so
 %{_libdir}/%{name}/plugins/access/libsftp_plugin.so
 %{_libdir}/%{name}/plugins/access/libshm_plugin.so
@@ -386,20 +386,17 @@ fi
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_shout_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_udp_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/liba52tofloat32_plugin.so
-%{_libdir}/%{name}/plugins/audio_filter/liba52tospdif_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libaudio_format_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libaudiobargraph_a_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libchorus_flanger_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libcompressor_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libdolby_surround_decoder_plugin.so
-%{_libdir}/%{name}/plugins/audio_filter/libdtstospdif_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libequalizer_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libgain_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libheadphone_channel_mixer_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libkaraoke_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libmad_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libmono_plugin.so
-#%{_libdir}/%{name}/plugins/audio_filter/libmpgatofixed32_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libnormvol_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libparam_eq_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libremap_plugin.so
@@ -409,6 +406,7 @@ fi
 %{_libdir}/%{name}/plugins/audio_filter/libspatializer_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libspeex_resampler_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libstereo_widen_plugin.so
+%{_libdir}/%{name}/plugins/audio_filter/libtospdif_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libtrivial_channel_mixer_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libugly_resampler_plugin.so
 %{_libdir}/%{name}/plugins/audio_mixer/libfloat_mixer_plugin.so
@@ -434,11 +432,10 @@ fi
 %{_libdir}/%{name}/plugins/codec/libflac_plugin.so
 %{_libdir}/%{name}/plugins/codec/libg711_plugin.so
 %{_libdir}/%{name}/plugins/codec/libgstdecode_plugin.so
-#%{_libdir}/%{name}/plugins/codec/libhwdummy_plugin.so
 %{_libdir}/%{name}/plugins/codec/libjpeg_plugin.so
 %{_libdir}/%{name}/plugins/codec/libkate_plugin.so
 %{_libdir}/%{name}/plugins/codec/liblibass_plugin.so
-#%{_libdir}/%{name}/plugins/codec/liblibmpeg2_plugin.so
+%{_libdir}/%{name}/plugins/codec/liblibmpeg2_plugin.so
 %{_libdir}/%{name}/plugins/codec/liblpcm_plugin.so
 %{_libdir}/%{name}/plugins/codec/libmpeg_audio_plugin.so
 %{_libdir}/%{name}/plugins/codec/libmpg123_plugin.so
@@ -478,7 +475,6 @@ fi
 %{_libdir}/%{name}/plugins/control/libdummy_plugin.so
 %{_libdir}/%{name}/plugins/control/libgestures_plugin.so
 %{_libdir}/%{name}/plugins/control/libhotkeys_plugin.so
-#%{_libdir}/%{name}/plugins/control/liblirc_plugin.so
 %{_libdir}/%{name}/plugins/control/libmotion_plugin.so
 %{_libdir}/%{name}/plugins/control/libnetsync_plugin.so
 %{_libdir}/%{name}/plugins/control/liboldrc_plugin.so
@@ -491,6 +487,7 @@ fi
 %{_libdir}/%{name}/plugins/demux/libavi_plugin.so
 %{_libdir}/%{name}/plugins/demux/libcaf_plugin.so
 %{_libdir}/%{name}/plugins/demux/libdemux_cdg_plugin.so
+%{_libdir}/%{name}/plugins/demux/libdemux_chromecast_plugin.so
 %{_libdir}/%{name}/plugins/demux/libdemux_stl_plugin.so
 %{_libdir}/%{name}/plugins/demux/libdemuxdump_plugin.so
 %{_libdir}/%{name}/plugins/demux/libdiracsys_plugin.so
@@ -528,7 +525,9 @@ fi
 %{_libdir}/%{name}/plugins/demux/libxa_plugin.so
 %{_libdir}/%{name}/plugins/gui/libncurses_plugin.so
 %{_libdir}/%{name}/plugins/keystore/libfile_keystore_plugin.so
+%{_libdir}/%{name}/plugins/keystore/libkwallet_plugin.so
 %{_libdir}/%{name}/plugins/keystore/libmemory_keystore_plugin.so
+%{_libdir}/%{name}/plugins/keystore/libsecret_plugin.so
 %{_libdir}/%{name}/plugins/logger/libconsole_logger_plugin.so
 %{_libdir}/%{name}/plugins/logger/libfile_logger_plugin.so
 %{_libdir}/%{name}/plugins/logger/libsd_journal_plugin.so
@@ -570,7 +569,6 @@ fi
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_mpegvideo_plugin.so
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_vc1_plugin.so
 %{_libdir}/%{name}/plugins/services_discovery/libavahi_plugin.so
-#%{_libdir}/%{name}/plugins/services_discovery/libbonjour_plugin.so
 %{_libdir}/%{name}/plugins/services_discovery/libmediadirs_plugin.so
 %{_libdir}/%{name}/plugins/services_discovery/libmtp_plugin.so
 %{_libdir}/%{name}/plugins/services_discovery/libpodcast_plugin.so
@@ -581,17 +579,15 @@ fi
 %{_libdir}/%{name}/plugins/services_discovery/libxcb_apps_plugin.so
 %{_libdir}/%{name}/plugins/stream_filter/libcache_block_plugin.so
 %{_libdir}/%{name}/plugins/stream_filter/libcache_read_plugin.so
-#%{_libdir}/%{name}/plugins/stream_filter/libdash_plugin.so
 %{_libdir}/%{name}/plugins/stream_filter/libdecomp_plugin.so
 %{_libdir}/%{name}/plugins/stream_filter/libhds_plugin.so
-#%{_libdir}/%{name}/plugins/stream_filter/libhttplive_plugin.so
 %{_libdir}/%{name}/plugins/stream_filter/libinflate_plugin.so
 %{_libdir}/%{name}/plugins/stream_filter/libprefetch_plugin.so
 %{_libdir}/%{name}/plugins/stream_filter/librecord_plugin.so
-#%{_libdir}/%{name}/plugins/stream_filter/libsmooth_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_autodel_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_bridge_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_chromaprint_plugin.so
+%{_libdir}/%{name}/plugins/stream_out/libstream_out_chromecast_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_cycle_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_delay_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_description_plugin.so
@@ -600,7 +596,6 @@ fi
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_duplicate_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_es_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_gather_plugin.so
-#%{_libdir}/%{name}/plugins/stream_out/libstream_out_langfromtelx_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_mosaic_bridge_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_raop_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_record_plugin.so
@@ -641,7 +636,6 @@ fi
 %{_libdir}/%{name}/plugins/video_filter/libalphamask_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libanaglyph_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libantiflicker_plugin.so
-#%{_libdir}/%{name}/plugins/video_filter/libatmo_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libaudiobargraph_v_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libball_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libblend_plugin.so
@@ -724,6 +718,10 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Thu Jul 14 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-2.6cb361c
+- Update to latest snapshot.
+- Enable libmpeg2, libsecret and protobuf-lite (Chromecast) plugin.
+
 * Tue May 24 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-1.b016524
 - Update to a 3.0.0 snapshot.
 - Remove Gnome VFS, rdp and libmpeg2 support.
