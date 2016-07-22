@@ -1,10 +1,25 @@
-%global commit0 6cb361c1fb83c026cb9303db65e27d95b3d077cc
+%global commit0 9d277665475a6002fdcfcb394c25442da14d889b
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
+
+#checking for LUA... configure: WARNING: No package 'lua5.2' found, trying lua 5.1 instead
+#checking for LUA... configure: WARNING: No package 'lua5.1' found, trying lua >= 5.1 instead
+#configure: WARNING: Library libdsm >= 0.2.0 needed for dsm was not found
+#configure: WARNING: Blackmagic DeckLink SDI include files not found
+#configure: WARNING: Library freerdp >= 1.0.1 needed for freerdp was not found
+#configure: WARNING: No package 'libsidplay2' found (required for sid).
+#configure: WARNING: Library shine >= 3.0.0 needed for shine was not found
+#configure: WARNING: Library libdca >= 0.0.5 needed for dca was not found
+#configure: WARNING: Library fluidlite needed for fluidlite was not found
+#configure: WARNING: Library aribb24 needed for aribsub was not found
+#configure: WARNING: Cannot find development headers for mmal...
+#configure: WARNING: Library libgoom2 needed for goom was not found
+#configure: WARNING: No package 'libvsxu' found.
+#configure: WARNING: Library microdns needed for microdns was not found
 
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.0
-Release:    2.%{?shortcommit0}%{?dist}
+Release:    3.%{?shortcommit0}%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -33,11 +48,11 @@ BuildRequires:  libmpcdec-devel
 BuildRequires:  libtar-devel
 BuildRequires:  libtool
 BuildRequires:  lirc-devel
-BuildRequires:  live555-devel
 BuildRequires:  yasm
 
 BuildRequires:  pkgconfig(avahi-client) >= 0.6
 BuildRequires:  pkgconfig(alsa) >= 1.0.24
+BuildRequires:  pkgconfig(aribb25) >= 0.2.6
 #BuildRequires:  pkgconfig(asdcplib)
 BuildRequires:  pkgconfig(caca) >= 0.99.beta14
 BuildRequires:  pkgconfig(cairo) >= 1.13.1
@@ -57,6 +72,7 @@ BuildRequires:  pkgconfig(gstreamer-app-1.0)
 BuildRequires:  pkgconfig(gstreamer-video-1.0)
 BuildRequires:  pkgconfig(gtk+-2.0)
 BuildRequires:  pkgconfig(jack) >= 1.9.7
+BuildRequires:  pkgconfig(libarchive) >= 3.1.0
 BuildRequires:  pkgconfig(libass) >= 0.9.8
 BuildRequires:  pkgconfig(libavc1394) >= 0.5.3
 BuildRequires:  pkgconfig(libavcodec) >= 53.34.0
@@ -73,6 +89,7 @@ BuildRequires:  pkgconfig(libmodplug) > 0.8.8
 BuildRequires:  pkgconfig(libmpeg2) > 0.3.2
 BuildRequires:  pkgconfig(libmpg123)
 BuildRequires:  pkgconfig(libmtp) >= 1.0.0
+#BuildRequires:  pkgconfig(libnfs) >= 1.10.0
 BuildRequires:  pkgconfig(libnotify)
 BuildRequires:  pkgconfig(libpostproc)
 BuildRequires:  pkgconfig(libprojectM)
@@ -89,6 +106,7 @@ BuildRequires:  pkgconfig(libva-drm)
 BuildRequires:  pkgconfig(libva-x11)
 BuildRequires:  pkgconfig(libvncclient) >= 0.9.9
 #BuildRequires:  pkgconfig(libvsxu)
+BuildRequires:  pkgconfig(live555)
 BuildRequires:  pkgconfig(lua) >= 5.1
 BuildRequires:  pkgconfig(opencv) >= 2.0
 BuildRequires:  pkgconfig(minizip)
@@ -106,6 +124,7 @@ BuildRequires:  pkgconfig(smbclient)
 BuildRequires:  pkgconfig(SDL_image) >= 1.2.10
 #BuildRequires:  pkgconfig(shine) >= 3.0.0
 BuildRequires:  pkgconfig(shout) >= 2.1
+BuildRequires:  pkgconfig(soxr) >= 0.1.2
 BuildRequires:  pkgconfig(speex) >= 1.0.5
 BuildRequires:  pkgconfig(speexdsp)
 BuildRequires:  pkgconfig(taglib) >= 1.9
@@ -339,6 +358,7 @@ fi
 %{_libdir}/%{name}/*.so*
 %{_libdir}/%{name}/lua
 %{_libdir}/%{name}/plugins/access/libaccess_alsa_plugin.so
+%{_libdir}/%{name}/plugins/access/libaccess_archive_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_bd_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_concat_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_imem_plugin.so
@@ -403,6 +423,7 @@ fi
 %{_libdir}/%{name}/plugins/audio_filter/libsamplerate_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libscaletempo_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libsimple_channel_mixer_plugin.so
+%{_libdir}/%{name}/plugins/audio_filter/libsoxr_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libspatializer_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libspeex_resampler_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libstereo_widen_plugin.so
@@ -577,6 +598,7 @@ fi
 %{_libdir}/%{name}/plugins/services_discovery/libudev_plugin.so
 %{_libdir}/%{name}/plugins/services_discovery/libupnp_plugin.so
 %{_libdir}/%{name}/plugins/services_discovery/libxcb_apps_plugin.so
+%{_libdir}/%{name}/plugins/stream_filter/libaribcam_plugin.so
 %{_libdir}/%{name}/plugins/stream_filter/libcache_block_plugin.so
 %{_libdir}/%{name}/plugins/stream_filter/libcache_read_plugin.so
 %{_libdir}/%{name}/plugins/stream_filter/libdecomp_plugin.so
@@ -683,6 +705,7 @@ fi
 %{_libdir}/%{name}/plugins/video_filter/libwave_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libegl_x11_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libfb_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libflaschen_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libgl_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libglx_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libvdummy_plugin.so
@@ -718,9 +741,13 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Fri Jul 22 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-3.9d27766
+- Update to latest snapshot.
+- Enable aribb25, soxr, libarchive, live555, libnfs plugins.
+
 * Thu Jul 14 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-2.6cb361c
 - Update to latest snapshot.
-- Enable libmpeg2, libsecret and protobuf-lite (Chromecast) plugin.
+- Enable libmpeg2, libsecret and protobuf-lite (Chromecast) plugins.
 
 * Tue May 24 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-1.b016524
 - Update to a 3.0.0 snapshot.
