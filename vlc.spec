@@ -1,11 +1,11 @@
-%global commit0 9d277665475a6002fdcfcb394c25442da14d889b
+%global commit0 e7c0cb0f653afce070625c0685a2f04e05db91ec
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
-#checking for LUA... configure: WARNING: No package 'lua5.2' found, trying lua 5.1 instead
+#configure: WARNING: No package 'lua5.2' found, trying lua 5.1 instead
 #checking for LUA... configure: WARNING: No package 'lua5.1' found, trying lua >= 5.1 instead
 #configure: WARNING: Library libdsm >= 0.2.0 needed for dsm was not found
+#configure: WARNING: Library libnfs >= 1.10.0 needed for nfs was not found
 #configure: WARNING: Blackmagic DeckLink SDI include files not found
-#configure: WARNING: Library freerdp >= 1.0.1 needed for freerdp was not found
 #configure: WARNING: No package 'libsidplay2' found (required for sid).
 #configure: WARNING: Library shine >= 3.0.0 needed for shine was not found
 #configure: WARNING: Library libdca >= 0.0.5 needed for dca was not found
@@ -19,7 +19,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.0
-Release:    3.%{?shortcommit0}%{?dist}
+Release:    4.%{?shortcommit0}%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -63,7 +63,7 @@ BuildRequires:  pkgconfig(egl)
 BuildRequires:  pkgconfig(fdk-aac)
 BuildRequires:  pkgconfig(flac)
 BuildRequires:  pkgconfig(fluidsynth) >= 1.1.2
-#BuildRequires:  pkgconfig(freerdp) >= 1.0.1
+BuildRequires:  pkgconfig(freerdp) >= 1.0.1
 BuildRequires:  pkgconfig(freetype2)
 BuildRequires:  pkgconfig(fribidi)
 BuildRequires:  pkgconfig(gl)
@@ -75,10 +75,10 @@ BuildRequires:  pkgconfig(jack) >= 1.9.7
 BuildRequires:  pkgconfig(libarchive) >= 3.1.0
 BuildRequires:  pkgconfig(libass) >= 0.9.8
 BuildRequires:  pkgconfig(libavc1394) >= 0.5.3
-BuildRequires:  pkgconfig(libavcodec) >= 53.34.0
+BuildRequires:  pkgconfig(libavcodec) >= 55.26.0
 BuildRequires:  pkgconfig(libavformat) >= 53.21.0
-BuildRequires:  pkgconfig(libavutil) >= 51.22.0
-BuildRequires:  pkgconfig(libbluray) >= 0.3.0
+BuildRequires:  pkgconfig(libavutil) >= 52.4.0
+BuildRequires:  pkgconfig(libbluray) >= 0.6.2
 BuildRequires:  pkgconfig(libcddb) >= 0.9.5
 BuildRequires:  pkgconfig(libchromaprint) >= 0.6.0
 BuildRequires:  pkgconfig(libdc1394-2) >= 2.1.0
@@ -359,7 +359,6 @@ fi
 %{_libdir}/%{name}/lua
 %{_libdir}/%{name}/plugins/access/libaccess_alsa_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_archive_plugin.so
-%{_libdir}/%{name}/plugins/access/libaccess_bd_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_concat_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_imem_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_mms_plugin.so
@@ -385,6 +384,7 @@ fi
 %{_libdir}/%{name}/plugins/access/liblive555_plugin.so
 %{_libdir}/%{name}/plugins/access/libpulsesrc_plugin.so
 %{_libdir}/%{name}/plugins/access/librar_plugin.so
+%{_libdir}/%{name}/plugins/access/librdp_plugin.so
 %{_libdir}/%{name}/plugins/access/librtp_plugin.so
 %{_libdir}/%{name}/plugins/access/libsatip_plugin.so
 %{_libdir}/%{name}/plugins/access/libsdp_plugin.so
@@ -405,7 +405,6 @@ fi
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_livehttp_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_shout_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_udp_plugin.so
-%{_libdir}/%{name}/plugins/audio_filter/liba52tofloat32_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libaudio_format_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libaudiobargraph_a_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libchorus_flanger_plugin.so
@@ -436,7 +435,6 @@ fi
 %{_libdir}/%{name}/plugins/audio_output/libafile_plugin.so
 %{_libdir}/%{name}/plugins/audio_output/libalsa_plugin.so
 %{_libdir}/%{name}/plugins/audio_output/libamem_plugin.so
-%{_libdir}/%{name}/plugins/codec/liba52_plugin.so
 %{_libdir}/%{name}/plugins/codec/libadpcm_plugin.so
 %{_libdir}/%{name}/plugins/codec/libaes3_plugin.so
 %{_libdir}/%{name}/plugins/codec/libaraw_plugin.so
@@ -445,7 +443,6 @@ fi
 %{_libdir}/%{name}/plugins/codec/libcdg_plugin.so
 %{_libdir}/%{name}/plugins/codec/libcvdsub_plugin.so
 %{_libdir}/%{name}/plugins/codec/libddummy_plugin.so
-%{_libdir}/%{name}/plugins/codec/libdts_plugin.so
 %{_libdir}/%{name}/plugins/codec/libdvbsub_plugin.so
 %{_libdir}/%{name}/plugins/codec/libedummy_plugin.so
 %{_libdir}/%{name}/plugins/codec/libfaad_plugin.so
@@ -455,6 +452,7 @@ fi
 %{_libdir}/%{name}/plugins/codec/libgstdecode_plugin.so
 %{_libdir}/%{name}/plugins/codec/libjpeg_plugin.so
 %{_libdir}/%{name}/plugins/codec/libkate_plugin.so
+%{_libdir}/%{name}/plugins/codec/libliba52_plugin.so
 %{_libdir}/%{name}/plugins/codec/liblibass_plugin.so
 %{_libdir}/%{name}/plugins/codec/liblibmpeg2_plugin.so
 %{_libdir}/%{name}/plugins/codec/liblpcm_plugin.so
@@ -472,6 +470,7 @@ fi
 %{_libdir}/%{name}/plugins/codec/libscte27_plugin.so
 %{_libdir}/%{name}/plugins/codec/libsdl_image_plugin.so
 %{_libdir}/%{name}/plugins/codec/libspeex_plugin.so
+%{_libdir}/%{name}/plugins/codec/libspdif_plugin.so
 %{_libdir}/%{name}/plugins/codec/libspudec_plugin.so
 %{_libdir}/%{name}/plugins/codec/libstl_plugin.so
 %{_libdir}/%{name}/plugins/codec/libsubsdec_plugin.so
@@ -578,9 +577,11 @@ fi
 %{_libdir}/%{name}/plugins/mux/libmux_ts_plugin.so
 %{_libdir}/%{name}/plugins/mux/libmux_wav_plugin.so
 %{_libdir}/%{name}/plugins/notify/libnotify_plugin.so
+%{_libdir}/%{name}/plugins/packetizer/libpacketizer_a52_plugin.so
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_avparser_plugin.so
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_copy_plugin.so
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_dirac_plugin.so
+%{_libdir}/%{name}/plugins/packetizer/libpacketizer_dts_plugin.so
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_flac_plugin.so
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_h264_plugin.so
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_hevc_plugin.so
@@ -638,6 +639,7 @@ fi
 %{_libdir}/%{name}/plugins/vdpau/libvdpau_sharpen_plugin.so
 %{_libdir}/%{name}/plugins/video_chroma/libchain_plugin.so
 %{_libdir}/%{name}/plugins/video_chroma/libgrey_yuv_plugin.so
+%{_libdir}/%{name}/plugins/video_chroma/libi420_10_p010_plugin.so
 %{_libdir}/%{name}/plugins/video_chroma/libi420_nv12_plugin.so
 %{_libdir}/%{name}/plugins/video_chroma/libi420_rgb_mmx_plugin.so
 %{_libdir}/%{name}/plugins/video_chroma/libi420_rgb_plugin.so
@@ -741,6 +743,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Wed Aug 17 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-4.e7c0cb0
+- Update to latest snapshot.
+
 * Fri Jul 22 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-3.9d27766
 - Update to latest snapshot.
 - Enable aribb25, soxr, libarchive, live555, libnfs plugins.
