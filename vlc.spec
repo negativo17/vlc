@@ -63,7 +63,9 @@ BuildRequires:  pkgconfig(egl)
 BuildRequires:  pkgconfig(fdk-aac)
 BuildRequires:  pkgconfig(flac)
 BuildRequires:  pkgconfig(fluidsynth) >= 1.1.2
+%if 0%{?fedora} == 23 || 0%{?fedora} == 24 || 0%{?rhel} == 7
 BuildRequires:  pkgconfig(freerdp) >= 1.0.1
+%endif
 BuildRequires:  pkgconfig(freetype2)
 BuildRequires:  pkgconfig(fribidi)
 BuildRequires:  pkgconfig(gl)
@@ -745,6 +747,7 @@ fi
 %changelog
 * Wed Aug 17 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-4.e7c0cb0
 - Update to latest snapshot.
+- Enable FreeRDP, leave it disabled for Fedora 25 (FreeRDP 2.x snapshot).
 
 * Fri Jul 22 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-3.9d27766
 - Update to latest snapshot.
