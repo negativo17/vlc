@@ -386,7 +386,9 @@ fi
 %{_libdir}/%{name}/plugins/access/liblive555_plugin.so
 %{_libdir}/%{name}/plugins/access/libpulsesrc_plugin.so
 %{_libdir}/%{name}/plugins/access/librar_plugin.so
+%if 0%{?fedora} == 23 || 0%{?fedora} == 24 || 0%{?rhel} == 7
 %{_libdir}/%{name}/plugins/access/librdp_plugin.so
+%endif
 %{_libdir}/%{name}/plugins/access/librtp_plugin.so
 %{_libdir}/%{name}/plugins/access/libsatip_plugin.so
 %{_libdir}/%{name}/plugins/access/libsdp_plugin.so
