@@ -1,8 +1,8 @@
-%global commit0 e7c0cb0f653afce070625c0685a2f04e05db91ec
+%global commit0 749293fb351cc255e139b4f95ff88ba5de8c5041
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 #configure: WARNING: No package 'lua5.2' found, trying lua 5.1 instead
-#checking for LUA... configure: WARNING: No package 'lua5.1' found, trying lua >= 5.1 instead
+#configure: WARNING: No package 'lua5.1' found, trying lua >= 5.1 instead
 #configure: WARNING: Library libdsm >= 0.2.0 needed for dsm was not found
 #configure: WARNING: Library libnfs >= 1.10.0 needed for nfs was not found
 #configure: WARNING: Blackmagic DeckLink SDI include files not found
@@ -154,13 +154,12 @@ BuildRequires:  pkgconfig(xpm)
 BuildRequires:  pkgconfig(xproto)
 BuildRequires:  pkgconfig(zvbi-0.2) >= 0.2.28
 
-Requires:       vlc-core%{_isa} = %{?epoch}:%{version}-%{release}
-Requires:       kde-filesystem
-
 Requires:       dejavu-sans-fonts
 Requires:       dejavu-sans-mono-fonts
 Requires:       dejavu-serif-fonts
-
+Requires:       hicolor-icon-theme
+Requires:       kde-filesystem
+Requires:       vlc-core%{_isa} = %{?epoch}:%{version}-%{release}
 # For xdg-screensaver
 Requires:       xdg-utils
 
@@ -229,13 +228,14 @@ This package contains the JACK audio plugin.
     --enable-fdkaac \
     --enable-lirc \
     --enable-omxil \
+    --enable-omxil-vout \
     --with-default-font=%{_datadir}/fonts/dejavu/DejaVuSans.ttf \
     --with-default-font-family=DejaVuSans \
     --with-default-monospace-font=%{_datadir}/fonts/dejavu/DejaVuSansMono.ttf \
     --with-default-monospace-font-family=DejaVuSansMono \
     --with-pic
 
-make %{?_smp_mflags}
+%make_build
 
 %install
 make install DESTDIR=%{buildroot} INSTALL="install -p" CPPROG="cp -p"
@@ -254,13 +254,17 @@ rm -fr %{buildroot}%{_docdir}/%{name}
 %find_lang %{name}
 
 %post
-%{_libdir}/%{name}/vlc-cache-gen -f %{_libdir}/%{name} &>/dev/null
+%{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name} &>/dev/null
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
+%if 0%{!?fedora} >= 25
 %{_bindir}/update-desktop-database &> /dev/null || :
+%endif
 
 %postun
-%{_libdir}/%{name}/vlc-cache-gen -f %{_libdir}/%{name} &>/dev/null
+%{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name} &>/dev/null
+%if 0%{!?fedora} >= 25
 /usr/bin/update-desktop-database &> /dev/null || :
+%endif
 if [ $1 -eq 0 ] ; then
     /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
     /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
@@ -464,6 +468,7 @@ fi
 %{_libdir}/%{name}/plugins/codec/libmpg123_plugin.so
 %{_libdir}/%{name}/plugins/codec/liboggspots_plugin.so
 %{_libdir}/%{name}/plugins/codec/libomxil_plugin.so
+%{_libdir}/%{name}/plugins/codec/libomxil_vout_plugin.so
 %{_libdir}/%{name}/plugins/codec/libopus_plugin.so
 %{_libdir}/%{name}/plugins/codec/libpng_plugin.so
 %{_libdir}/%{name}/plugins/codec/libqsv_plugin.so
@@ -747,9 +752,11 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
-* Wed Aug 17 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-4.e7c0cb0
+* Sun Aug 21 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-4.749293f
 - Update to latest snapshot.
 - Enable FreeRDP, leave it disabled for Fedora 25 (FreeRDP 2.x snapshot).
+- Fix vlc-cache-gen call in scriptlets.
+- Do not run update-desktop-database on Fedora 25+ as per packaging guidelines.
 
 * Fri Jul 22 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-3.9d27766
 - Update to latest snapshot.
