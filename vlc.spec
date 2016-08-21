@@ -256,13 +256,13 @@ rm -fr %{buildroot}%{_docdir}/%{name}
 %post
 %{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name} &>/dev/null
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
-%if 0%{!?fedora} >= 25
+%if 0%{?fedora} <= 24 || 0%{?rhel}
 %{_bindir}/update-desktop-database &> /dev/null || :
 %endif
 
 %postun
 %{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name} &>/dev/null
-%if 0%{!?fedora} >= 25
+%if 0%{?fedora} <= 24 || 0%{?rhel}
 /usr/bin/update-desktop-database &> /dev/null || :
 %endif
 if [ $1 -eq 0 ] ; then
@@ -278,19 +278,19 @@ fi
 %postun core -p /sbin/ldconfig
 
 %posttrans core
-%{_libdir}/%{name}/vlc-cache-gen -f %{_libdir}/%{name}/plugins &>/dev/null || :
+%{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name}/plugins &>/dev/null || :
 
 %post extras
-%{_libdir}/%{name}/vlc-cache-gen -f %{_libdir}/%{name}/plugins &>/dev/null || :
+%{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name}/plugins &>/dev/null || :
 
 %postun extras
-%{_libdir}/%{name}/vlc-cache-gen -f %{_libdir}/%{name}/plugins &>/dev/null || :
+%{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name}/plugins &>/dev/null || :
 
 %post plugin-jack
-%{_libdir}/%{name}/vlc-cache-gen -f %{_libdir}/%{name}/plugins &>/dev/null || :
+%{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name}/plugins &>/dev/null || :
 
 %postun plugin-jack
-%{_libdir}/%{name}/vlc-cache-gen -f %{_libdir}/%{name}/plugins &>/dev/null || :
+%{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name}/plugins &>/dev/null || :
 
 %preun core
 if [ $1 -eq 0 ] ; then
