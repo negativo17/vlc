@@ -20,7 +20,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.0
-Release:    5%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
+Release:    6%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -758,6 +758,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Sun Oct 02 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-6.20160930git1dcb06c
+- Rebuild for x265 update.
+
 * Sun Oct 02 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-5.20160930git1dcb06c
 - Update to latest snapshot.
 - Add AppData support for Fedora (metadata from upstream).
