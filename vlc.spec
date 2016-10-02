@@ -1,5 +1,6 @@
-%global commit0 749293fb351cc255e139b4f95ff88ba5de8c5041
+%global commit0 1dcb06c6b185781b2d26d27f488120215b81e18c
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
+%global date 20160930
 
 #configure: WARNING: No package 'lua5.2' found, trying lua 5.1 instead
 #configure: WARNING: No package 'lua5.1' found, trying lua >= 5.1 instead
@@ -19,7 +20,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.0
-Release:    4.%{?shortcommit0}%{?dist}
+Release:    5%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -303,6 +304,11 @@ fi
 %doc AUTHORS NEWS README THANKS
 %{_bindir}/qvlc
 %{_bindir}/svlc
+%if 0%{?fedora}
+%{_datadir}/appdata/%{name}.appdata.xml
+%else
+%exclude %{_datadir}/appdata/%{name}.appdata.xml
+%endif
 %{_datadir}/applications/*
 %{_datadir}/kde4/apps/solid/actions/*
 %{_datadir}/icons/hicolor/*/apps/%{name}*.png
@@ -752,6 +758,11 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Sun Oct 02 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-5.20160930git1dcb06c
+- Update to latest snapshot.
+- Add AppData support for Fedora (metadata from upstream).
+- Update package release according to package guidelines.
+
 * Sun Aug 21 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-4.749293f
 - Update to latest snapshot.
 - Enable FreeRDP, leave it disabled for Fedora 25 (FreeRDP 2.x snapshot).
