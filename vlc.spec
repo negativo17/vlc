@@ -1,6 +1,6 @@
-%global commit0 1dcb06c6b185781b2d26d27f488120215b81e18c
+%global commit0 c910cc6cf559c66eb62511591349642eccc44088
+%global date 20161008
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
-%global date 20160930
 
 #configure: WARNING: No package 'lua5.2' found, trying lua 5.1 instead
 #configure: WARNING: No package 'lua5.1' found, trying lua >= 5.1 instead
@@ -20,7 +20,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.0
-Release:    6%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
+Release:    7%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -758,6 +758,10 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Sat Oct 08 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-7.20161008gitc910cc6
+- Update to latest sources.
+- Rebuild for fdk-aac update.
+
 * Sun Oct 02 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-6.20160930git1dcb06c
 - Rebuild for x265 update.
 
