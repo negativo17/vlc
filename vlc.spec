@@ -1,5 +1,5 @@
-%global commit0 c910cc6cf559c66eb62511591349642eccc44088
-%global date 20161008
+%global commit0 756dbb7c10b5e8cc29d92e7990e1818b435794c7
+%global date 20161012
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 #configure: WARNING: No package 'lua5.2' found, trying lua 5.1 instead
@@ -20,7 +20,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.0
-Release:    7%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
+Release:    8%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -449,6 +449,7 @@ fi
 %{_libdir}/%{name}/plugins/audio_output/libafile_plugin.so
 %{_libdir}/%{name}/plugins/audio_output/libalsa_plugin.so
 %{_libdir}/%{name}/plugins/audio_output/libamem_plugin.so
+%{_libdir}/%{name}/plugins/codec/liba52_plugin.so
 %{_libdir}/%{name}/plugins/codec/libadpcm_plugin.so
 %{_libdir}/%{name}/plugins/codec/libaes3_plugin.so
 %{_libdir}/%{name}/plugins/codec/libaraw_plugin.so
@@ -466,11 +467,9 @@ fi
 %{_libdir}/%{name}/plugins/codec/libgstdecode_plugin.so
 %{_libdir}/%{name}/plugins/codec/libjpeg_plugin.so
 %{_libdir}/%{name}/plugins/codec/libkate_plugin.so
-%{_libdir}/%{name}/plugins/codec/libliba52_plugin.so
 %{_libdir}/%{name}/plugins/codec/liblibass_plugin.so
 %{_libdir}/%{name}/plugins/codec/liblibmpeg2_plugin.so
 %{_libdir}/%{name}/plugins/codec/liblpcm_plugin.so
-%{_libdir}/%{name}/plugins/codec/libmpeg_audio_plugin.so
 %{_libdir}/%{name}/plugins/codec/libmpg123_plugin.so
 %{_libdir}/%{name}/plugins/codec/liboggspots_plugin.so
 %{_libdir}/%{name}/plugins/codec/libomxil_plugin.so
@@ -603,6 +602,7 @@ fi
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_mlp_plugin.so
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_mpeg4audio_plugin.so
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_mpeg4video_plugin.so
+%{_libdir}/%{name}/plugins/packetizer/libpacketizer_mpegaudio_plugin.so
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_mpegvideo_plugin.so
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_vc1_plugin.so
 %{_libdir}/%{name}/plugins/services_discovery/libavahi_plugin.so
@@ -758,6 +758,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Wed Oct 12 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-8.20161012git756dbb7
+- Update to latest snapshot.
+
 * Sat Oct 08 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-7.20161008gitc910cc6
 - Update to latest sources.
 - Rebuild for fdk-aac update.
