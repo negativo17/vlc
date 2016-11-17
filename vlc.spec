@@ -1,5 +1,5 @@
-%global commit0 756dbb7c10b5e8cc29d92e7990e1818b435794c7
-%global date 20161012
+%global commit0 ae0cb07a82384200b2e1fa1902f0fcfa2f1c84ae
+%global date 20161117
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 #configure: WARNING: No package 'lua5.2' found, trying lua 5.1 instead
@@ -20,7 +20,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.0
-Release:    8%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
+Release:    9%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -614,6 +614,7 @@ fi
 %{_libdir}/%{name}/plugins/services_discovery/libudev_plugin.so
 %{_libdir}/%{name}/plugins/services_discovery/libupnp_plugin.so
 %{_libdir}/%{name}/plugins/services_discovery/libxcb_apps_plugin.so
+%{_libdir}/%{name}/plugins/stream_filter/libadf_plugin.so
 %{_libdir}/%{name}/plugins/stream_filter/libaribcam_plugin.so
 %{_libdir}/%{name}/plugins/stream_filter/libcache_block_plugin.so
 %{_libdir}/%{name}/plugins/stream_filter/libcache_read_plugin.so
@@ -758,6 +759,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Thu Nov 17 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-9.20161117gitae0cb07
+- Update to latest snapshot.
+
 * Wed Oct 12 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-8.20161012git756dbb7
 - Update to latest snapshot.
 
