@@ -1,5 +1,5 @@
-%global commit0 ae0cb07a82384200b2e1fa1902f0fcfa2f1c84ae
-%global date 20161117
+%global commit0 5d48ad31e3bec86def868ef1f2bbcb45d01c1c1b
+%global date 20161118
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 #configure: WARNING: No package 'lua5.2' found, trying lua 5.1 instead
@@ -20,7 +20,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.0
-Release:    9%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
+Release:    10%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -33,6 +33,7 @@ BuildRequires:  a52dec-devel
 BuildRequires:  aalib-devel
 BuildRequires:  autoconf
 BuildRequires:  automake
+BuildRequires:  daala-devel
 BuildRequires:  desktop-file-utils
 BuildRequires:  faad2-devel
 BuildRequires:  gettext-devel
@@ -226,6 +227,7 @@ This package contains the JACK audio plugin.
     --disable-optimizations \
     --disable-rpath \
     --enable-aa \
+    --enable-daala \
     --enable-fdkaac \
     --enable-lirc \
     --enable-omxil \
@@ -457,6 +459,7 @@ fi
 %{_libdir}/%{name}/plugins/codec/libcc_plugin.so
 %{_libdir}/%{name}/plugins/codec/libcdg_plugin.so
 %{_libdir}/%{name}/plugins/codec/libcvdsub_plugin.so
+%{_libdir}/%{name}/plugins/codec/libdaala_plugin.so
 %{_libdir}/%{name}/plugins/codec/libddummy_plugin.so
 %{_libdir}/%{name}/plugins/codec/libdvbsub_plugin.so
 %{_libdir}/%{name}/plugins/codec/libedummy_plugin.so
@@ -759,6 +762,10 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Fri Nov 18 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-10.20161118git5d48ad3
+- Update to latest snapshot.
+- Enable Daala.
+
 * Thu Nov 17 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-9.20161117gitae0cb07
 - Update to latest snapshot.
 
