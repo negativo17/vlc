@@ -20,7 +20,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.0
-Release:    10%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
+Release:    11%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -79,9 +79,9 @@ BuildRequires:  pkgconfig(jack) >= 1.9.7
 BuildRequires:  pkgconfig(libarchive) >= 3.1.0
 BuildRequires:  pkgconfig(libass) >= 0.9.8
 BuildRequires:  pkgconfig(libavc1394) >= 0.5.3
-BuildRequires:  pkgconfig(libavcodec) >= 55.26.0
-BuildRequires:  pkgconfig(libavformat) >= 53.21.0
-BuildRequires:  pkgconfig(libavutil) >= 52.4.0
+BuildRequires:  pkgconfig(libavcodec) >= 57.64.100
+BuildRequires:  pkgconfig(libavformat) >= 57.37.100
+BuildRequires:  pkgconfig(libavutil) >= 55.24.100
 BuildRequires:  pkgconfig(libbluray) >= 0.6.2
 BuildRequires:  pkgconfig(libcddb) >= 0.9.5
 BuildRequires:  pkgconfig(libchromaprint) >= 0.6.0
@@ -103,7 +103,7 @@ BuildRequires:  pkgconfig(librsvg-2.0) >= 2.9.0
 BuildRequires:  pkgconfig(libsecret-1) >= 0.18
 #BuildRequires:  pkgconfig(libsidplay2)
 BuildRequires:  pkgconfig(libssh2)
-BuildRequires:  pkgconfig(libswscale)
+BuildRequires:  pkgconfig(libswscale) >= 4.2.100
 BuildRequires:  pkgconfig(libudev) >= 142
 BuildRequires:  pkgconfig(libupnp)
 BuildRequires:  pkgconfig(libva-drm)
@@ -762,6 +762,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Sat Nov 19 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-11.20161118git5d48ad3
+- Require components from FFmpeg 3.2 to avoid pulling in compat-ffmpeg at build.
+
 * Fri Nov 18 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-10.20161118git5d48ad3
 - Update to latest snapshot.
 - Enable Daala.
