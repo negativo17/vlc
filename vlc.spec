@@ -1,7 +1,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    2.2.4
-Release:    2%{?dist}
+Release:    3%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -31,6 +31,12 @@ BuildRequires:  lirc-devel
 BuildRequires:  live555-devel
 BuildRequires:  yasm
 
+BuildRequires:  compat-ffmpeg-devel
+#BuildRequires:  pkgconfig(libavcodec) >= 53.34.0
+#BuildRequires:  pkgconfig(libavformat) >= 53.21.0
+#BuildRequires:  pkgconfig(libavutil) >= 51.22.0
+#BuildRequires:  pkgconfig(libswscale)
+
 BuildRequires:  pkgconfig(avahi-client) >= 0.6
 BuildRequires:  pkgconfig(alsa) >= 1.0.24
 #BuildRequires:  pkgconfig(asdcplib)
@@ -55,9 +61,6 @@ BuildRequires:  pkgconfig(gtk+-2.0)
 BuildRequires:  pkgconfig(jack) >= 1.9.7
 BuildRequires:  pkgconfig(libass) >= 0.9.8
 BuildRequires:  pkgconfig(libavc1394) >= 0.5.3
-BuildRequires:  pkgconfig(libavcodec) >= 53.34.0
-BuildRequires:  pkgconfig(libavformat) >= 53.21.0
-BuildRequires:  pkgconfig(libavutil) >= 51.22.0
 BuildRequires:  pkgconfig(libbluray) >= 0.3.0
 BuildRequires:  pkgconfig(libcddb) >= 0.9.5
 BuildRequires:  pkgconfig(libchromaprint) >= 0.6.0
@@ -76,7 +79,6 @@ BuildRequires:  pkgconfig(libraw1394) >= 2.0.1
 BuildRequires:  pkgconfig(librsvg-2.0) >= 2.9.0
 #BuildRequires:  pkgconfig(libsidplay2)
 BuildRequires:  pkgconfig(libssh2)
-BuildRequires:  pkgconfig(libswscale)
 BuildRequires:  pkgconfig(libudev) >= 142
 BuildRequires:  pkgconfig(libupnp)
 BuildRequires:  pkgconfig(libva-drm)
@@ -693,6 +695,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Sat Nov 19 2016 Simone Caronni <negativo17@gmail.com> - 1:2.2.4-3
+- Explicitly build against compat-ffmpeg.
+
 * Sun Oct 02 2016 Simone Caronni <negativo17@gmail.com> - 1:2.2.4-2
 - Rebuild for x265 update.
 
