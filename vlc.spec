@@ -7,6 +7,7 @@ License:    GPLv2+
 URL:        http://www.videolan.org
 
 Source0:    http://download.videolan.org/pub/videolan/%{name}/%{version}/%{name}-%{version}.tar.xz
+Patch0:     %{name}-2.2.4-ffmpeg3.patch
 
 BuildRequires:  a52dec-devel
 BuildRequires:  aalib-devel
@@ -30,12 +31,6 @@ BuildRequires:  libtool
 BuildRequires:  lirc-devel
 BuildRequires:  live555-devel
 BuildRequires:  yasm
-
-BuildRequires:  compat-ffmpeg-devel
-#BuildRequires:  pkgconfig(libavcodec) >= 53.34.0
-#BuildRequires:  pkgconfig(libavformat) >= 53.21.0
-#BuildRequires:  pkgconfig(libavutil) >= 51.22.0
-#BuildRequires:  pkgconfig(libswscale)
 
 BuildRequires:  pkgconfig(avahi-client) >= 0.6
 BuildRequires:  pkgconfig(alsa) >= 1.0.24
@@ -61,6 +56,9 @@ BuildRequires:  pkgconfig(gtk+-2.0)
 BuildRequires:  pkgconfig(jack) >= 1.9.7
 BuildRequires:  pkgconfig(libass) >= 0.9.8
 BuildRequires:  pkgconfig(libavc1394) >= 0.5.3
+BuildRequires:  pkgconfig(libavcodec) >= 53.34.0
+BuildRequires:  pkgconfig(libavformat) >= 53.21.0
+BuildRequires:  pkgconfig(libavutil) >= 51.22.0
 BuildRequires:  pkgconfig(libbluray) >= 0.3.0
 BuildRequires:  pkgconfig(libcddb) >= 0.9.5
 BuildRequires:  pkgconfig(libchromaprint) >= 0.6.0
@@ -79,6 +77,7 @@ BuildRequires:  pkgconfig(libraw1394) >= 2.0.1
 BuildRequires:  pkgconfig(librsvg-2.0) >= 2.9.0
 #BuildRequires:  pkgconfig(libsidplay2)
 BuildRequires:  pkgconfig(libssh2)
+BuildRequires:  pkgconfig(libswscale)
 BuildRequires:  pkgconfig(libudev) >= 142
 BuildRequires:  pkgconfig(libupnp)
 BuildRequires:  pkgconfig(libva-drm)
@@ -195,6 +194,7 @@ This package contains the JACK audio plugin.
 
 %prep
 %setup -q -n %{name}-%{version}
+%patch0 -p1
 sed -i -e 's|AM_GNU_GETTEXT_VERSION(\[0.18.3\])|AM_GNU_GETTEXT_VERSION(\[0.18.2\])|g' \
     configure.ac
 
@@ -695,8 +695,8 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
-* Sat Nov 19 2016 Simone Caronni <negativo17@gmail.com> - 1:2.2.4-3
-- Explicitly build against compat-ffmpeg.
+* Mon Nov 28 2016 Simone Caronni <negativo17@gmail.com> - 1:2.2.4-3
+- Add patch for ffmpeg 3.x.
 
 * Sun Oct 02 2016 Simone Caronni <negativo17@gmail.com> - 1:2.2.4-2
 - Rebuild for x265 update.
