@@ -1,5 +1,5 @@
-%global commit0 5d48ad31e3bec86def868ef1f2bbcb45d01c1c1b
-%global date 20161118
+%global commit0 2b860fc41144a6c5c648b9d27898d85e990fb8be
+%global date 20161129
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 #configure: WARNING: No package 'lua5.2' found, trying lua 5.1 instead
@@ -20,7 +20,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.0
-Release:    11%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
+Release:    12%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -762,6 +762,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Tue Nov 29 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-12.20161129git2b860fc
+- Update to latest sources.
+
 * Sat Nov 19 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-11.20161118git5d48ad3
 - Require components from FFmpeg 3.2 to avoid pulling in compat-ffmpeg at build.
 
