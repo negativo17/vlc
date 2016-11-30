@@ -67,11 +67,13 @@ BuildRequires:  pkgconfig(flac)
 BuildRequires:  pkgconfig(fluidsynth) >= 1.1.2
 %if 0%{?fedora} == 23 || 0%{?fedora} == 24 || 0%{?rhel} == 7
 BuildRequires:  pkgconfig(freerdp) >= 1.0.1
+%else
+BuildRequires:  pkgconfig(freerdp2)
 %endif
 BuildRequires:  pkgconfig(freetype2)
 BuildRequires:  pkgconfig(fribidi)
 BuildRequires:  pkgconfig(gl)
-BuildRequires:  pkgconfig(gnutls) >= 3.0.20
+BuildRequires:  pkgconfig(gnutls) >= 3.2.0
 BuildRequires:  pkgconfig(gstreamer-app-1.0)
 BuildRequires:  pkgconfig(gstreamer-video-1.0)
 BuildRequires:  pkgconfig(gtk+-2.0)
@@ -103,6 +105,7 @@ BuildRequires:  pkgconfig(librsvg-2.0) >= 2.9.0
 BuildRequires:  pkgconfig(libsecret-1) >= 0.18
 #BuildRequires:  pkgconfig(libsidplay2)
 BuildRequires:  pkgconfig(libssh2)
+BuildRequires:  pkgconfig(libsystemd)
 BuildRequires:  pkgconfig(libswscale) >= 4.2.100
 BuildRequires:  pkgconfig(libudev) >= 142
 BuildRequires:  pkgconfig(libupnp)
@@ -118,7 +121,7 @@ BuildRequires:  pkgconfig(ncursesw)
 BuildRequires:  pkgconfig(opus) >= 1.0.3
 BuildRequires:  pkgconfig(protobuf-lite) >= 2.5.0
 BuildRequires:  pkgconfig(Qt5Core) >= 5.2.0
-BuildRequires:  pkgconfig(Qt5Gui) >= 5.5.0
+BuildRequires:  pkgconfig(Qt5Gui) >= 5.5
 BuildRequires:  pkgconfig(Qt5Widgets)
 BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  pkgconfig(samplerate)
@@ -138,7 +141,10 @@ BuildRequires:  pkgconfig(tiger) >= 0.3.1
 BuildRequires:  pkgconfig(twolame)
 BuildRequires:  pkgconfig(vdpau) >= 0.6
 BuildRequires:  pkgconfig(vorbis) >= 1.1
-BuildRequires:  pkgconfig(vpx)
+BuildRequires:  pkgconfig(vpx) >= 1.5.0
+BuildRequires:  pkgconfig(wayland-scanner)
+BuildRequires:  pkgconfig(wayland-client) >= 1.5.91
+BuildRequires:  pkgconfig(wayland-egl)
 #BuildRequires:  pkgconfig(x262)
 BuildRequires:  pkgconfig(x264) >= 0.86
 #BuildRequires:  pkgconfig(x26410b)
@@ -322,11 +328,21 @@ fi
 %{_libdir}/%{name}/plugins/gui/libskins2_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libaa_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libcaca_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libxcb_glx_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libegl_wl_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libegl_x11_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libfb_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libflaschen_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libgl_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libglx_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libvdummy_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libvmem_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libvout_sdl_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libwl_shell_surface_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libwl_shm_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libxcb_x11_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libxcb_window_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libxcb_xv_plugin.so
-%{_libdir}/%{name}/plugins/visualization/libprojectm_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libyuv_plugin.so
 
 %files core -f %{name}.lang
 %{_bindir}/%{name}
@@ -617,6 +633,14 @@ fi
 %{_libdir}/%{name}/plugins/services_discovery/libudev_plugin.so
 %{_libdir}/%{name}/plugins/services_discovery/libupnp_plugin.so
 %{_libdir}/%{name}/plugins/services_discovery/libxcb_apps_plugin.so
+%{_libdir}/%{name}/plugins/spu/libaudiobargraph_v_plugin.so
+%{_libdir}/%{name}/plugins/spu/libdynamicoverlay_plugin.so
+%{_libdir}/%{name}/plugins/spu/liblogo_plugin.so
+%{_libdir}/%{name}/plugins/spu/libmarq_plugin.so
+%{_libdir}/%{name}/plugins/spu/libmosaic_plugin.so
+%{_libdir}/%{name}/plugins/spu/libremoteosd_plugin.so
+%{_libdir}/%{name}/plugins/spu/librss_plugin.so
+%{_libdir}/%{name}/plugins/spu/libsubsdelay_plugin.so
 %{_libdir}/%{name}/plugins/stream_filter/libadf_plugin.so
 %{_libdir}/%{name}/plugins/stream_filter/libaribcam_plugin.so
 %{_libdir}/%{name}/plugins/stream_filter/libcache_block_plugin.so
@@ -679,7 +703,6 @@ fi
 %{_libdir}/%{name}/plugins/video_filter/libalphamask_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libanaglyph_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libantiflicker_plugin.so
-%{_libdir}/%{name}/plugins/video_filter/libaudiobargraph_v_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libball_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libblend_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libblendbench_plugin.so
@@ -688,7 +711,6 @@ fi
 %{_libdir}/%{name}/plugins/video_filter/libcolorthres_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libcroppadd_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libdeinterlace_plugin.so
-%{_libdir}/%{name}/plugins/video_filter/libdynamicoverlay_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libedgedetection_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/liberase_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libextract_plugin.so
@@ -700,11 +722,8 @@ fi
 %{_libdir}/%{name}/plugins/video_filter/libgrain_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libhqdn3d_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libinvert_plugin.so
-%{_libdir}/%{name}/plugins/video_filter/liblogo_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libmagnify_plugin.so
-%{_libdir}/%{name}/plugins/video_filter/libmarq_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libmirror_plugin.so
-%{_libdir}/%{name}/plugins/video_filter/libmosaic_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libmotionblur_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libmotiondetect_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/liboldmovie_plugin.so
@@ -712,33 +731,20 @@ fi
 %{_libdir}/%{name}/plugins/video_filter/libpostproc_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libpsychedelic_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libpuzzle_plugin.so
-%{_libdir}/%{name}/plugins/video_filter/libremoteosd_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libripple_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/librotate_plugin.so
-%{_libdir}/%{name}/plugins/video_filter/librss_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libscale_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libscene_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libsepia_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libsharpen_plugin.so
-%{_libdir}/%{name}/plugins/video_filter/libsubsdelay_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libtransform_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libvhs_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libwave_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libegl_x11_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libfb_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libflaschen_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libgl_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libglx_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libvdummy_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libvmem_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libvout_sdl_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libwl_shell_surface_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libwl_shm_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libyuv_plugin.so
 %{_libdir}/%{name}/plugins/video_splitter/libclone_plugin.so
 %{_libdir}/%{name}/plugins/video_splitter/libpanoramix_plugin.so
 %{_libdir}/%{name}/plugins/video_splitter/libwall_plugin.so
 %{_libdir}/%{name}/plugins/visualization/libglspectrum_plugin.so
+%{_libdir}/%{name}/plugins/visualization/libprojectm_plugin.so
 %{_libdir}/%{name}/plugins/visualization/libvisual_plugin.so
 %{_libdir}/%{name}/%{name}-cache-gen
 %{_mandir}/man1/%{name}*.1*
