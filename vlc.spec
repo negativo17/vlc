@@ -56,9 +56,9 @@ BuildRequires:  pkgconfig(gtk+-2.0)
 BuildRequires:  pkgconfig(jack) >= 1.9.7
 BuildRequires:  pkgconfig(libass) >= 0.9.8
 BuildRequires:  pkgconfig(libavc1394) >= 0.5.3
-BuildRequires:  pkgconfig(libavcodec) >= 53.34.0
-BuildRequires:  pkgconfig(libavformat) >= 53.21.0
-BuildRequires:  pkgconfig(libavutil) >= 51.22.0
+BuildRequires:  pkgconfig(libavcodec) >= 57
+BuildRequires:  pkgconfig(libavformat) >= 57
+BuildRequires:  pkgconfig(libavutil) >= 55
 BuildRequires:  pkgconfig(libbluray) >= 0.3.0
 BuildRequires:  pkgconfig(libcddb) >= 0.9.5
 BuildRequires:  pkgconfig(libchromaprint) >= 0.6.0
@@ -77,7 +77,7 @@ BuildRequires:  pkgconfig(libraw1394) >= 2.0.1
 BuildRequires:  pkgconfig(librsvg-2.0) >= 2.9.0
 #BuildRequires:  pkgconfig(libsidplay2)
 BuildRequires:  pkgconfig(libssh2)
-BuildRequires:  pkgconfig(libswscale)
+BuildRequires:  pkgconfig(libswscale) >= 4
 BuildRequires:  pkgconfig(libudev) >= 142
 BuildRequires:  pkgconfig(libupnp)
 BuildRequires:  pkgconfig(libva-drm)
@@ -696,7 +696,9 @@ fi
 
 %changelog
 * Mon Nov 28 2016 Simone Caronni <negativo17@gmail.com> - 1:2.2.4-3
-- Add patch for ffmpeg 3.x.
+- Add patch for FFmpeg 3.x.
+- Explicitly require FFmpeg 3.x versions to avoid pulling in FFmpeg
+  compatibility packages.
 
 * Sun Oct 02 2016 Simone Caronni <negativo17@gmail.com> - 1:2.2.4-2
 - Rebuild for x265 update.

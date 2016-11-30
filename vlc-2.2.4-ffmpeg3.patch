@@ -1,6 +1,60 @@
+diff -Naur vlc-2.2.4.old/configure.ac vlc-2.2.4/configure.ac
+--- vlc-2.2.4.old/configure.ac	2016-11-30 17:45:12.519821010 +0100
++++ vlc-2.2.4/configure.ac	2016-11-30 17:50:22.619097589 +0100
+@@ -2323,9 +2323,6 @@
+ [  --enable-avcodec        libavcodec codec (default enabled)])
+ AS_IF([test "${enable_avcodec}" != "no"], [
+   PKG_CHECK_MODULES(AVCODEC,[libavcodec >= 53.34.0 libavutil >= 51.22.0], [
+-    PKG_CHECK_EXISTS([libavutil < 55],, [
+-      AC_MSG_ERROR([libavutil versions 55 and later are not supported.])
+-    ])
+     VLC_SAVE_FLAGS
+     CPPFLAGS="${CPPFLAGS} ${AVCODEC_CFLAGS}"
+     CFLAGS="${CFLAGS} ${AVCODEC_CFLAGS}"
+@@ -2380,13 +2377,6 @@
+ 
+ have_avcodec_vaapi="no"
+ AS_IF([test "${have_vaapi}" = "yes" -a "${have_avcodec}" = "yes"], [
+-  case "${avfork}" in
+-    ffmpeg)
+-      PKG_CHECK_EXISTS([libavcodec >= 57.10.100], [
+-        AC_MSG_ERROR([VA API requires FFmpeg libavcodec < 57.10 or libav.])
+-      ])
+-      ;;
+-  esac
+   VLC_SAVE_FLAGS
+   CPPFLAGS="${CPPFLAGS} ${AVCODEC_CFLAGS}"
+   CFLAGS="${CFLAGS} ${AVCODEC_CFLAGS}"
+@@ -2414,13 +2404,6 @@
+ AS_IF([test "${enable_dxva2}" != "no"], [
+   if test "${SYS}" = "mingw32"; then
+   AS_IF([test "x${have_avcodec}" = "xyes"], [
+-    case "${avfork}" in
+-      ffmpeg)
+-        PKG_CHECK_EXISTS([libavcodec >= 57.10.100], [
+-          AC_MSG_ERROR([DXVA2 requires FFmpeg libavcodec < 57.10 or libav.])
+-        ])
+-        ;;
+-    esac
+     AC_CHECK_HEADERS(dxva2api.h,
+       [
+         AC_CHECK_HEADERS(libavcodec/dxva2.h, [
+@@ -3179,11 +3162,7 @@
+ AS_IF([test "${have_vdpau}" = "yes" -a "${have_avcodec}" = "yes"], [
+   case "${avfork}" in
+     libav) av_vdpau_ver="55.26.0" ;;
+-    ffmpeg) av_vdpau_ver="55.42.100"
+-      PKG_CHECK_EXISTS([libavcodec >= 57.10.100], [
+-        AC_MSG_ERROR([VDPAU requires FFmpeg libavcodec < 57.10 or libav.])
+-      ])
+-      ;;
++    ffmpeg) av_vdpau_ver="55.42.100" ;;
+   esac
+   PKG_CHECK_EXISTS([libavutil >= 52.4.0 libavcodec >= ${av_vdpau_ver}], [
+     have_avcodec_vdpau="yes"
 diff -Naur vlc-2.2.4.old/modules/codec/avcodec/audio.c vlc-2.2.4/modules/codec/avcodec/audio.c
---- vlc-2.2.4.old/modules/codec/avcodec/audio.c	2016-11-28 16:26:36.568877392 +0100
-+++ vlc-2.2.4/modules/codec/avcodec/audio.c	2016-11-28 16:26:50.737114884 +0100
+--- vlc-2.2.4.old/modules/codec/avcodec/audio.c	2016-11-30 17:45:12.623823117 +0100
++++ vlc-2.2.4/modules/codec/avcodec/audio.c	2016-11-30 17:45:21.881010485 +0100
 @@ -36,12 +36,11 @@
  #include <vlc_codec.h>
  #include <vlc_avcodec.h>
@@ -17,8 +71,8 @@ diff -Naur vlc-2.2.4.old/modules/codec/avcodec/audio.c vlc-2.2.4/modules/codec/a
  /*****************************************************************************
   * decoder_sys_t : decoder descriptor
 diff -Naur vlc-2.2.4.old/modules/codec/avcodec/avcommon_compat.h vlc-2.2.4/modules/codec/avcodec/avcommon_compat.h
---- vlc-2.2.4.old/modules/codec/avcodec/avcommon_compat.h	2016-11-28 16:26:36.568877392 +0100
-+++ vlc-2.2.4/modules/codec/avcodec/avcommon_compat.h	2016-11-28 16:26:50.757115219 +0100
+--- vlc-2.2.4.old/modules/codec/avcodec/avcommon_compat.h	2016-11-30 17:45:12.623823117 +0100
++++ vlc-2.2.4/modules/codec/avcodec/avcommon_compat.h	2016-11-30 17:45:21.883010526 +0100
 @@ -506,6 +506,15 @@
  
  #endif /* HAVE_LIBAVUTIL_AVUTIL_H */
@@ -36,8 +90,8 @@ diff -Naur vlc-2.2.4.old/modules/codec/avcodec/avcommon_compat.h vlc-2.2.4/modul
  # include <libavformat/avformat.h>
  
 diff -Naur vlc-2.2.4.old/modules/codec/avcodec/encoder.c vlc-2.2.4/modules/codec/avcodec/encoder.c
---- vlc-2.2.4.old/modules/codec/avcodec/encoder.c	2016-11-28 16:26:36.568877392 +0100
-+++ vlc-2.2.4/modules/codec/avcodec/encoder.c	2016-11-28 16:26:50.758115236 +0100
+--- vlc-2.2.4.old/modules/codec/avcodec/encoder.c	2016-11-30 17:45:12.623823117 +0100
++++ vlc-2.2.4/modules/codec/avcodec/encoder.c	2016-11-30 17:45:21.884010546 +0100
 @@ -41,7 +41,6 @@
  #include <vlc_cpu.h>
  
@@ -94,8 +148,8 @@ diff -Naur vlc-2.2.4.old/modules/codec/avcodec/encoder.c vlc-2.2.4/modules/codec
              p_sys->frame->nb_samples = p_aout_buf->i_nb_samples;
          else
 diff -Naur vlc-2.2.4.old/modules/codec/avcodec/vaapi.c vlc-2.2.4/modules/codec/avcodec/vaapi.c
---- vlc-2.2.4.old/modules/codec/avcodec/vaapi.c	2016-11-28 16:26:36.568877392 +0100
-+++ vlc-2.2.4/modules/codec/avcodec/vaapi.c	2016-11-28 16:26:50.758115236 +0100
+--- vlc-2.2.4.old/modules/codec/avcodec/vaapi.c	2016-11-30 17:45:12.623823117 +0100
++++ vlc-2.2.4/modules/codec/avcodec/vaapi.c	2016-11-30 17:45:21.885010566 +0100
 @@ -595,7 +595,7 @@
          return err;
  
@@ -106,8 +160,8 @@ diff -Naur vlc-2.2.4.old/modules/codec/avcodec/vaapi.c vlc-2.2.4/modules/codec/a
      p_va->get = Get;
      p_va->release = Release;
 diff -Naur vlc-2.2.4.old/modules/codec/avcodec/video.c vlc-2.2.4/modules/codec/avcodec/video.c
---- vlc-2.2.4.old/modules/codec/avcodec/video.c	2016-11-28 16:26:36.568877392 +0100
-+++ vlc-2.2.4/modules/codec/avcodec/video.c	2016-11-28 16:26:50.758115236 +0100
+--- vlc-2.2.4.old/modules/codec/avcodec/video.c	2016-11-30 17:45:12.623823117 +0100
++++ vlc-2.2.4/modules/codec/avcodec/video.c	2016-11-30 17:45:21.885010566 +0100
 @@ -234,7 +234,7 @@
      p_sys->p_codec = p_codec;
      p_sys->i_codec_id = i_codec_id;
