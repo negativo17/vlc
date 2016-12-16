@@ -1,5 +1,5 @@
-%global commit0 2b860fc41144a6c5c648b9d27898d85e990fb8be
-%global date 20161129
+%global commit0 ac68b13f390c927bca28ea76a4f297db7800f0e2
+%global date 20161216
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 #configure: WARNING: No package 'lua5.2' found, trying lua 5.1 instead
@@ -20,7 +20,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.0
-Release:    12%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
+Release:    13%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -768,6 +768,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Fri Dec 16 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-13.20161216gitac68b13
+- Update to latest snapshot.
+
 * Tue Nov 29 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-12.20161129git2b860fc
 - Update to latest sources.
 
