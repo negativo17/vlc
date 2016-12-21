@@ -1,5 +1,5 @@
-%global commit0 ac68b13f390c927bca28ea76a4f297db7800f0e2
-%global date 20161216
+%global commit0 6807b05320bd1baf363ea9851c0cc9f841ea3381
+%global date 20161221
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 #configure: WARNING: No package 'lua5.2' found, trying lua 5.1 instead
@@ -20,7 +20,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.0
-Release:    13%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
+Release:    14%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -55,7 +55,9 @@ BuildRequires:  yasm
 BuildRequires:  pkgconfig(avahi-client) >= 0.6
 BuildRequires:  pkgconfig(alsa) >= 1.0.24
 BuildRequires:  pkgconfig(aribb25) >= 0.2.6
-#BuildRequires:  pkgconfig(asdcplib)
+%ifarch x86_64
+BuildRequires:  pkgconfig(asdcplib)
+%endif
 BuildRequires:  pkgconfig(caca) >= 0.99.beta14
 BuildRequires:  pkgconfig(cairo) >= 1.13.1
 BuildRequires:  pkgconfig(dbus-1) >= 1.6.0
@@ -397,6 +399,9 @@ fi
 %{_libdir}/%{name}/plugins/access/libavio_plugin.so
 %{_libdir}/%{name}/plugins/access/libcdda_plugin.so
 %{_libdir}/%{name}/plugins/access/libdc1394_plugin.so
+%ifarch x86_64
+%{_libdir}/%{name}/plugins/access/libdcp_plugin.so
+%endif
 %{_libdir}/%{name}/plugins/access/libdtv_plugin.so
 %{_libdir}/%{name}/plugins/access/libdv1394_plugin.so
 %{_libdir}/%{name}/plugins/access/libdvb_plugin.so
@@ -768,6 +773,10 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Wed Dec 21 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-14.20161221git6807b05
+- Update to latest snapshot.
+- Enable asdcplib support for x86_64.
+
 * Fri Dec 16 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-13.20161216gitac68b13
 - Update to latest snapshot.
 
