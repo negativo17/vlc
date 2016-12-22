@@ -1,4 +1,4 @@
-%global commit0 6807b05320bd1baf363ea9851c0cc9f841ea3381
+%global commit0 634cd2e0e3d26237c47a11d752ec16e312ddc491
 %global date 20161221
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
@@ -20,7 +20,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.0
-Release:    14%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
+Release:    15%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -773,6 +773,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Thu Dec 22 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-15.20161221git634cd2e
+- Fix compilation on Fedora 24.
+
 * Wed Dec 21 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-14.20161221git6807b05
 - Update to latest snapshot.
 - Enable asdcplib support for x86_64.
