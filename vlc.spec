@@ -1,5 +1,5 @@
-%global commit0 634cd2e0e3d26237c47a11d752ec16e312ddc491
-%global date 20161221
+%global commit0 8d997bc0695eed22fcd27d82c6448200c79824ab
+%global date 20170103
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 #configure: WARNING: No package 'lua5.2' found, trying lua 5.1 instead
@@ -20,7 +20,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.0
-Release:    15%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
+Release:    16%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -773,6 +773,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Tue Jan 03 2017 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-16.20170103git8d997bc
+- Update to latest snapshot.
+
 * Thu Dec 22 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-15.20161221git634cd2e
 - Fix compilation on Fedora 24.
 
