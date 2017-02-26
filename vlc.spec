@@ -1,5 +1,5 @@
-%global commit0 8d997bc0695eed22fcd27d82c6448200c79824ab
-%global date 20170103
+%global commit0 b67f92d1b298e5d1cf755c45e6a99973192f5042
+%global date 20170223
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 #configure: WARNING: No package 'lua5.2' found, trying lua 5.1 instead
@@ -20,7 +20,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.0
-Release:    16%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
+Release:    17%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -67,7 +67,7 @@ BuildRequires:  pkgconfig(egl)
 BuildRequires:  pkgconfig(fdk-aac)
 BuildRequires:  pkgconfig(flac)
 BuildRequires:  pkgconfig(fluidsynth) >= 1.1.2
-%if 0%{?fedora} == 23 || 0%{?fedora} == 24 || 0%{?rhel} == 7
+%if 0%{?fedora} == 24 || 0%{?rhel} == 7
 BuildRequires:  pkgconfig(freerdp) >= 1.0.1
 %else
 BuildRequires:  pkgconfig(freerdp2)
@@ -147,6 +147,7 @@ BuildRequires:  pkgconfig(vpx) >= 1.5.0
 BuildRequires:  pkgconfig(wayland-scanner)
 BuildRequires:  pkgconfig(wayland-client) >= 1.5.91
 BuildRequires:  pkgconfig(wayland-egl)
+BuildRequires:  pkgconfig(wayland-protocols)
 #BuildRequires:  pkgconfig(x262)
 BuildRequires:  pkgconfig(x264) >= 0.86
 #BuildRequires:  pkgconfig(x26410b)
@@ -339,7 +340,6 @@ fi
 %{_libdir}/%{name}/plugins/video_output/libvdummy_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libvmem_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libvout_sdl_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libwl_shell_surface_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libwl_shm_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libxcb_x11_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libxcb_window_plugin.so
@@ -377,6 +377,7 @@ fi
 %dir %{_libdir}/%{name}/plugins/notify
 %dir %{_libdir}/%{name}/plugins/packetizer
 %dir %{_libdir}/%{name}/plugins/services_discovery
+%dir %{_libdir}/%{name}/plugins/stream_extractor
 %dir %{_libdir}/%{name}/plugins/stream_filter
 %dir %{_libdir}/%{name}/plugins/stream_out
 %dir %{_libdir}/%{name}/plugins/text_renderer
@@ -390,7 +391,6 @@ fi
 %{_libdir}/%{name}/*.so*
 %{_libdir}/%{name}/lua
 %{_libdir}/%{name}/plugins/access/libaccess_alsa_plugin.so
-%{_libdir}/%{name}/plugins/access/libaccess_archive_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_concat_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_imem_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_mms_plugin.so
@@ -418,8 +418,7 @@ fi
 %{_libdir}/%{name}/plugins/access/liblinsys_sdi_plugin.so
 %{_libdir}/%{name}/plugins/access/liblive555_plugin.so
 %{_libdir}/%{name}/plugins/access/libpulsesrc_plugin.so
-%{_libdir}/%{name}/plugins/access/librar_plugin.so
-%if 0%{?fedora} == 23 || 0%{?fedora} == 24 || 0%{?rhel} == 7
+%if 0%{?fedora} == 24 || 0%{?rhel} == 7
 %{_libdir}/%{name}/plugins/access/librdp_plugin.so
 %endif
 %{_libdir}/%{name}/plugins/access/librtp_plugin.so
@@ -435,7 +434,6 @@ fi
 %{_libdir}/%{name}/plugins/access/libvdr_plugin.so
 %{_libdir}/%{name}/plugins/access/libvnc_plugin.so
 %{_libdir}/%{name}/plugins/access/libwl_screenshooter_plugin.so
-%{_libdir}/%{name}/plugins/access/libzip_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_dummy_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_file_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_http_plugin.so
@@ -512,13 +510,14 @@ fi
 %{_libdir}/%{name}/plugins/codec/libspudec_plugin.so
 %{_libdir}/%{name}/plugins/codec/libstl_plugin.so
 %{_libdir}/%{name}/plugins/codec/libsubsdec_plugin.so
-%{_libdir}/%{name}/plugins/codec/libsubsttml_plugin.so
 %{_libdir}/%{name}/plugins/codec/libsubstx3g_plugin.so
 %{_libdir}/%{name}/plugins/codec/libsubsusf_plugin.so
 %{_libdir}/%{name}/plugins/codec/libsvgdec_plugin.so
 %{_libdir}/%{name}/plugins/codec/libt140_plugin.so
 %{_libdir}/%{name}/plugins/codec/libtelx_plugin.so
+%{_libdir}/%{name}/plugins/codec/libtextst_plugin.so
 %{_libdir}/%{name}/plugins/codec/libtheora_plugin.so
+%{_libdir}/%{name}/plugins/codec/libttml_plugin.so
 %{_libdir}/%{name}/plugins/codec/libtwolame_plugin.so
 %{_libdir}/%{name}/plugins/codec/libuleaddvaudio_plugin.so
 %{_libdir}/%{name}/plugins/codec/libvaapi_drm_plugin.so
@@ -533,6 +532,7 @@ fi
 %{_libdir}/%{name}/plugins/control/libdummy_plugin.so
 %{_libdir}/%{name}/plugins/control/libgestures_plugin.so
 %{_libdir}/%{name}/plugins/control/libhotkeys_plugin.so
+%{_libdir}/%{name}/plugins/control/liblirc_plugin.so
 %{_libdir}/%{name}/plugins/control/libmotion_plugin.so
 %{_libdir}/%{name}/plugins/control/libnetsync_plugin.so
 %{_libdir}/%{name}/plugins/control/liboldrc_plugin.so
@@ -574,7 +574,6 @@ fi
 %{_libdir}/%{name}/plugins/demux/libsubtitle_plugin.so
 %{_libdir}/%{name}/plugins/demux/libts_plugin.so
 %{_libdir}/%{name}/plugins/demux/libtta_plugin.so
-%{_libdir}/%{name}/plugins/demux/libttml_plugin.so
 %{_libdir}/%{name}/plugins/demux/libty_plugin.so
 %{_libdir}/%{name}/plugins/demux/libvc1_plugin.so
 %{_libdir}/%{name}/plugins/demux/libvobsub_plugin.so
@@ -655,6 +654,7 @@ fi
 %{_libdir}/%{name}/plugins/stream_filter/libinflate_plugin.so
 %{_libdir}/%{name}/plugins/stream_filter/libprefetch_plugin.so
 %{_libdir}/%{name}/plugins/stream_filter/librecord_plugin.so
+%{_libdir}/%{name}/plugins/stream_extractor/libarchive_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_autodel_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_bridge_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_chromaprint_plugin.so
@@ -745,6 +745,8 @@ fi
 %{_libdir}/%{name}/plugins/video_filter/libtransform_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libvhs_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libwave_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libwl_shell_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libxdg_shell_plugin.so
 %{_libdir}/%{name}/plugins/video_splitter/libclone_plugin.so
 %{_libdir}/%{name}/plugins/video_splitter/libpanoramix_plugin.so
 %{_libdir}/%{name}/plugins/video_splitter/libwall_plugin.so
@@ -773,6 +775,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Thu Feb 23 2017 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-17.20170223gitb67f92d
+- Update to latest snapshot.
+
 * Tue Jan 03 2017 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-16.20170103git8d997bc
 - Update to latest snapshot.
 
