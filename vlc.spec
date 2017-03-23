@@ -1,5 +1,5 @@
-%global commit0 b67f92d1b298e5d1cf755c45e6a99973192f5042
-%global date 20170223
+%global commit0 9513f3416dce0e5f4c12dacb6f7cadee6a643738
+%global date 20170322
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 #configure: WARNING: No package 'lua5.2' found, trying lua 5.1 instead
@@ -20,7 +20,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.0
-Release:    17%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
+Release:    18%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -37,6 +37,7 @@ BuildRequires:  daala-devel
 BuildRequires:  desktop-file-utils
 BuildRequires:  faad2-devel
 BuildRequires:  gettext-devel
+BuildRequires:  git
 #BuildRequires:  hostname
 BuildRequires:  kdelibs
 BuildRequires:  libdvbpsi-devel
@@ -775,6 +776,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Thu Mar 23 2017 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-18.20170322git9513f34
+- Update to latest snapshot.
+
 * Thu Feb 23 2017 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-17.20170223gitb67f92d
 - Update to latest snapshot.
 
