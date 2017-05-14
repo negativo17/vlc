@@ -1,5 +1,5 @@
-%global commit0 9513f3416dce0e5f4c12dacb6f7cadee6a643738
-%global date 20170322
+%global commit0 6fd55ac0fe139034074ca9911677d541a3cb2054
+%global date 20170514
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 #configure: WARNING: No package 'lua5.2' found, trying lua 5.1 instead
@@ -20,7 +20,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.0
-Release:    18%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
+Release:    19%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -547,6 +547,7 @@ fi
 %{_libdir}/%{name}/plugins/demux/libcaf_plugin.so
 %{_libdir}/%{name}/plugins/demux/libdemux_cdg_plugin.so
 %{_libdir}/%{name}/plugins/demux/libdemux_chromecast_plugin.so
+%{_libdir}/%{name}/plugins/demux/libdirectory_demux_plugin.so
 %{_libdir}/%{name}/plugins/demux/libdemux_stl_plugin.so
 %{_libdir}/%{name}/plugins/demux/libdemuxdump_plugin.so
 %{_libdir}/%{name}/plugins/demux/libdiracsys_plugin.so
@@ -776,6 +777,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Sun May 14 2017 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-19.20170514git6fd55ac
+- Update to latest snapshot.
+
 * Thu Mar 23 2017 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-18.20170322git9513f34
 - Update to latest snapshot.
 
