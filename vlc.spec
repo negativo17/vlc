@@ -1,5 +1,5 @@
-%global commit0 6fd55ac0fe139034074ca9911677d541a3cb2054
-%global date 20170514
+%global commit0 1601852d7ff89942f96bbfd11d020a794feda310
+%global date 20170624
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 #configure: WARNING: No package 'lua5.2' found, trying lua 5.1 instead
@@ -20,7 +20,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.0
-Release:    19%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
+Release:    20%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -29,7 +29,7 @@ URL:        http://www.videolan.org
 Source0:    %{name}-%{version}-%{shortcommit0}.tar.xz
 Source1:    %{name}-snapshot.sh
 
-BuildRequires:  a52dec-devel
+BuildRequires:  liba52-devel
 BuildRequires:  aalib-devel
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -264,18 +264,21 @@ rm -fr %{buildroot}%{_datadir}/%{name}/skins2/fonts
 # Let the docs section pick up files
 rm -fr %{buildroot}%{_docdir}/%{name}
 
+# ?
+rm -fr %{buildroot}%{_datadir}/macosx
+
 %find_lang %{name}
 
 %post
 %{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name} &>/dev/null
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
-%if 0%{?fedora} <= 24 || 0%{?rhel}
+%if 0%{?fedora} == 24 || 0%{?rhel}
 %{_bindir}/update-desktop-database &> /dev/null || :
 %endif
 
 %postun
 %{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name} &>/dev/null
-%if 0%{?fedora} <= 24 || 0%{?rhel}
+%if 0%{?fedora} == 24 || 0%{?rhel}
 /usr/bin/update-desktop-database &> /dev/null || :
 %endif
 if [ $1 -eq 0 ] ; then
@@ -311,7 +314,6 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %files
-%{!?_licensedir:%global license %%doc}
 %license COPYING
 %doc AUTHORS NEWS README THANKS
 %{_bindir}/qvlc
@@ -521,6 +523,7 @@ fi
 %{_libdir}/%{name}/plugins/codec/libttml_plugin.so
 %{_libdir}/%{name}/plugins/codec/libtwolame_plugin.so
 %{_libdir}/%{name}/plugins/codec/libuleaddvaudio_plugin.so
+%{_libdir}/%{name}/plugins/codec/libvaapi_dr_plugin.so
 %{_libdir}/%{name}/plugins/codec/libvaapi_drm_plugin.so
 %{_libdir}/%{name}/plugins/codec/libvaapi_x11_plugin.so
 %{_libdir}/%{name}/plugins/codec/libvorbis_plugin.so
@@ -553,6 +556,7 @@ fi
 %{_libdir}/%{name}/plugins/demux/libdiracsys_plugin.so
 %{_libdir}/%{name}/plugins/demux/libes_plugin.so
 %{_libdir}/%{name}/plugins/demux/libflacsys_plugin.so
+%{_libdir}/%{name}/plugins/demux/libgme_plugin.so
 %{_libdir}/%{name}/plugins/demux/libh26x_plugin.so
 %{_libdir}/%{name}/plugins/demux/libimage_plugin.so
 %{_libdir}/%{name}/plugins/demux/libmjpeg_plugin.so
@@ -681,6 +685,8 @@ fi
 %{_libdir}/%{name}/plugins/text_renderer/libfreetype_plugin.so
 %{_libdir}/%{name}/plugins/text_renderer/libsvg_plugin.so
 %{_libdir}/%{name}/plugins/text_renderer/libtdummy_plugin.so
+%{_libdir}/%{name}/plugins/vaapi/libvaapi_chroma_plugin.so
+%{_libdir}/%{name}/plugins/vaapi/libvaapi_filters_plugin.so
 %{_libdir}/%{name}/plugins/vdpau/libvdpau_adjust_plugin.so
 %{_libdir}/%{name}/plugins/vdpau/libvdpau_avcodec_plugin.so
 %{_libdir}/%{name}/plugins/vdpau/libvdpau_chroma_plugin.so
@@ -777,6 +783,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Sat Jun 24 2017 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-20.20170624git1601852
+- Update to latest snapshot.
+
 * Sun May 14 2017 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-19.20170514git6fd55ac
 - Update to latest snapshot.
 
