@@ -36,6 +36,7 @@ BuildRequires:  automake
 BuildRequires:  daala-devel
 BuildRequires:  desktop-file-utils
 BuildRequires:  faad2-devel
+BuildRequires:  game-music-emu-devel
 BuildRequires:  gettext-devel
 BuildRequires:  git
 #BuildRequires:  hostname
