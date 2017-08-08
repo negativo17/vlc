@@ -1,5 +1,5 @@
-%global commit0 1601852d7ff89942f96bbfd11d020a794feda310
-%global date 20170624
+%global commit0 c6cb7a33625ada1829f6bd3f397c6b215bfa7dfe
+%global date 20170807
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 #configure: WARNING: No package 'lua5.2' found, trying lua 5.1 instead
@@ -20,7 +20,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.0
-Release:    20%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
+Release:    21%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -343,7 +343,6 @@ fi
 %{_libdir}/%{name}/plugins/video_output/libglx_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libvdummy_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libvmem_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libvout_sdl_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libwl_shm_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libxcb_x11_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libxcb_window_plugin.so
@@ -393,7 +392,6 @@ fi
 %dir %{_libdir}/%{name}/plugins/visualization
 %{_libdir}/*.so.*
 %{_libdir}/%{name}/*.so*
-%{_libdir}/%{name}/lua
 %{_libdir}/%{name}/plugins/access/libaccess_alsa_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_concat_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_imem_plugin.so
@@ -566,6 +564,7 @@ fi
 %{_libdir}/%{name}/plugins/demux/libmp4_plugin.so
 %{_libdir}/%{name}/plugins/demux/libmpc_plugin.so
 %{_libdir}/%{name}/plugins/demux/libmpgv_plugin.so
+%{_libdir}/%{name}/plugins/demux/libnoseek_plugin.so
 %{_libdir}/%{name}/plugins/demux/libnsc_plugin.so
 %{_libdir}/%{name}/plugins/demux/libnsv_plugin.so
 %{_libdir}/%{name}/plugins/demux/libnuv_plugin.so
@@ -661,6 +660,7 @@ fi
 %{_libdir}/%{name}/plugins/stream_filter/libinflate_plugin.so
 %{_libdir}/%{name}/plugins/stream_filter/libprefetch_plugin.so
 %{_libdir}/%{name}/plugins/stream_filter/librecord_plugin.so
+%{_libdir}/%{name}/plugins/stream_filter/libskiptags_plugin.so
 %{_libdir}/%{name}/plugins/stream_extractor/libarchive_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_autodel_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_bridge_plugin.so
@@ -686,7 +686,6 @@ fi
 %{_libdir}/%{name}/plugins/text_renderer/libfreetype_plugin.so
 %{_libdir}/%{name}/plugins/text_renderer/libsvg_plugin.so
 %{_libdir}/%{name}/plugins/text_renderer/libtdummy_plugin.so
-%{_libdir}/%{name}/plugins/vaapi/libvaapi_chroma_plugin.so
 %{_libdir}/%{name}/plugins/vaapi/libvaapi_filters_plugin.so
 %{_libdir}/%{name}/plugins/vdpau/libvdpau_adjust_plugin.so
 %{_libdir}/%{name}/plugins/vdpau/libvdpau_avcodec_plugin.so
@@ -784,6 +783,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Tue Aug 08 2017 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-21.20170807gitc6cb7a3
+- Update to latest snapshot.
+
 * Sat Jun 24 2017 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-20.20170624git1601852
 - Update to latest snapshot.
 
