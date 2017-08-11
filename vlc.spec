@@ -69,7 +69,7 @@ BuildRequires:  pkgconfig(egl)
 BuildRequires:  pkgconfig(fdk-aac)
 BuildRequires:  pkgconfig(flac)
 BuildRequires:  pkgconfig(fluidsynth) >= 1.1.2
-%if 0%{?fedora} == 24 || 0%{?rhel} == 7
+%if 0%{?rhel} == 7
 BuildRequires:  pkgconfig(freerdp) >= 1.0.1
 %else
 BuildRequires:  pkgconfig(freerdp2)
@@ -273,13 +273,13 @@ rm -fr %{buildroot}%{_datadir}/macosx
 %post
 %{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name} &>/dev/null
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
-%if 0%{?fedora} == 24 || 0%{?rhel}
+%if 0%{?rhel}
 %{_bindir}/update-desktop-database &> /dev/null || :
 %endif
 
 %postun
 %{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name} &>/dev/null
-%if 0%{?fedora} == 24 || 0%{?rhel}
+%if 0%{?rhel}
 /usr/bin/update-desktop-database &> /dev/null || :
 %endif
 if [ $1 -eq 0 ] ; then
@@ -420,7 +420,7 @@ fi
 %{_libdir}/%{name}/plugins/access/liblinsys_sdi_plugin.so
 %{_libdir}/%{name}/plugins/access/liblive555_plugin.so
 %{_libdir}/%{name}/plugins/access/libpulsesrc_plugin.so
-%if 0%{?fedora} == 24 || 0%{?rhel} == 7
+%if 0%{?rhel} == 7
 %{_libdir}/%{name}/plugins/access/librdp_plugin.so
 %endif
 %{_libdir}/%{name}/plugins/access/librtp_plugin.so
