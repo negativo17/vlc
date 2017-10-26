@@ -1,12 +1,11 @@
-%global commit0 954ec0a4e9e3292353f5d35e3c98b37513579b2e
-%global date 20170822
+%global commit0 a55b0a51119264f3908ef9550aa0f8f866097d30
+%global date 20171025
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 #configure: WARNING: No package 'lua5.2' found, trying lua 5.1 instead
 #configure: WARNING: No package 'lua5.1' found, trying lua >= 5.1 instead
 #configure: WARNING: Library libdsm >= 0.2.0 needed for dsm was not found
 #configure: WARNING: Library libnfs >= 1.10.0 needed for nfs was not found
-#configure: WARNING: Blackmagic DeckLink SDI include files not found
 #configure: WARNING: No package 'libsidplay2' found (required for sid).
 #configure: WARNING: Library shine >= 3.0.0 needed for shine was not found
 #configure: WARNING: Library libdca >= 0.0.5 needed for dca was not found
@@ -20,7 +19,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.0
-Release:    22%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
+Release:    23%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -41,6 +40,7 @@ BuildRequires:  gettext-devel
 BuildRequires:  git
 #BuildRequires:  hostname
 BuildRequires:  kdelibs
+BuildRequires:  libappstream-glib
 BuildRequires:  libdvbpsi-devel
 BuildRequires:  libebml-devel >= 1.0.0
 BuildRequires:  libgcrypt-devel
@@ -124,9 +124,10 @@ BuildRequires:  pkgconfig(minizip)
 BuildRequires:  pkgconfig(ncursesw)
 BuildRequires:  pkgconfig(opus) >= 1.0.3
 BuildRequires:  pkgconfig(protobuf-lite) >= 2.5.0
-BuildRequires:  pkgconfig(Qt5Core) >= 5.2.0
-BuildRequires:  pkgconfig(Qt5Gui) >= 5.5
-BuildRequires:  pkgconfig(Qt5Widgets)
+BuildRequires:  pkgconfig(Qt5Core) >= 5.5.0
+BuildRequires:  pkgconfig(Qt5Gui) >= 5.5.0
+BuildRequires:  pkgconfig(Qt5Svg) >= 5.5.0
+BuildRequires:  pkgconfig(Qt5Widgets) >= 5.5.0
 BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  pkgconfig(samplerate)
 BuildRequires:  pkgconfig(schroedinger-1.0) >= 1.0.10
@@ -258,6 +259,7 @@ find %{buildroot} -name '*.a' -delete
 find %{buildroot} -name '*.la' -delete
 
 desktop-file-validate %{buildroot}%{_datadir}/applications/vlc.desktop
+#appstream-util validate %{buildroot}%{_datadir}/metainfo/vlc.appdata.xml
 
 # Remove installed fonts for skins2
 rm -fr %{buildroot}%{_datadir}/%{name}/skins2/fonts
@@ -320,9 +322,9 @@ fi
 %{_bindir}/qvlc
 %{_bindir}/svlc
 %if 0%{?fedora}
-%{_datadir}/appdata/%{name}.appdata.xml
+%{_datadir}/metainfo/%{name}.appdata.xml
 %else
-%exclude %{_datadir}/appdata/%{name}.appdata.xml
+%exclude %{_datadir}/metainfo/%{name}.appdata.xml
 %endif
 %{_datadir}/applications/*
 %{_datadir}/kde4/apps/solid/actions/*
@@ -522,9 +524,8 @@ fi
 %{_libdir}/%{name}/plugins/codec/libttml_plugin.so
 %{_libdir}/%{name}/plugins/codec/libtwolame_plugin.so
 %{_libdir}/%{name}/plugins/codec/libuleaddvaudio_plugin.so
-%{_libdir}/%{name}/plugins/codec/libvaapi_dr_plugin.so
+%{_libdir}/%{name}/plugins/codec/libvaapi_plugin.so
 %{_libdir}/%{name}/plugins/codec/libvaapi_drm_plugin.so
-%{_libdir}/%{name}/plugins/codec/libvaapi_x11_plugin.so
 %{_libdir}/%{name}/plugins/codec/libvorbis_plugin.so
 %{_libdir}/%{name}/plugins/codec/libvpx_plugin.so
 %{_libdir}/%{name}/plugins/codec/libx264_plugin.so
@@ -675,7 +676,7 @@ fi
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_es_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_gather_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_mosaic_bridge_plugin.so
-%{_libdir}/%{name}/plugins/stream_out/libstream_out_raop_plugin.so
+#%{_libdir}/%{name}/plugins/stream_out/libstream_out_raop_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_record_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_rtp_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_setid_plugin.so
@@ -753,6 +754,10 @@ fi
 %{_libdir}/%{name}/plugins/video_filter/libtransform_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libvhs_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libwave_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libglconv_vaapi_drm_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libglconv_vaapi_wl_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libglconv_vaapi_x11_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libglconv_vdpau_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libwl_shell_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libxdg_shell_plugin.so
 %{_libdir}/%{name}/plugins/video_splitter/libclone_plugin.so
@@ -783,6 +788,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Wed Oct 25 2017 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-23.20171025gita55b0a5
+- Update to latest snapshot.
+
 * Wed Aug 23 2017 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-22.20170822git954ec0a
 - Update to latest snapshot.
 
