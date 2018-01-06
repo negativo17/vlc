@@ -1,5 +1,5 @@
-%global commit0 a55b0a51119264f3908ef9550aa0f8f866097d30
-%global date 20171025
+%global commit0 c5b41a60992555e2f054721580c257dfa301b010
+%global date 20171228
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 #configure: WARNING: No package 'lua5.2' found, trying lua 5.1 instead
@@ -19,7 +19,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.0
-Release:    23%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
+Release:    24%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -32,9 +32,11 @@ BuildRequires:  liba52-devel
 BuildRequires:  aalib-devel
 BuildRequires:  autoconf
 BuildRequires:  automake
+BuildRequires:  bison
 BuildRequires:  daala-devel
 BuildRequires:  desktop-file-utils
 BuildRequires:  faad2-devel
+BuildRequires:  flex
 BuildRequires:  game-music-emu-devel
 BuildRequires:  gettext-devel
 BuildRequires:  git
@@ -379,7 +381,6 @@ fi
 %dir %{_libdir}/%{name}/plugins/meta_engine
 %dir %{_libdir}/%{name}/plugins/misc
 %dir %{_libdir}/%{name}/plugins/mux
-%dir %{_libdir}/%{name}/plugins/notify
 %dir %{_libdir}/%{name}/plugins/packetizer
 %dir %{_libdir}/%{name}/plugins/services_discovery
 %dir %{_libdir}/%{name}/plugins/stream_extractor
@@ -437,7 +438,6 @@ fi
 %{_libdir}/%{name}/plugins/access/libv4l2_plugin.so
 %{_libdir}/%{name}/plugins/access/libvdr_plugin.so
 %{_libdir}/%{name}/plugins/access/libvnc_plugin.so
-%{_libdir}/%{name}/plugins/access/libwl_screenshooter_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_dummy_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_file_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_http_plugin.so
@@ -459,6 +459,7 @@ fi
 %{_libdir}/%{name}/plugins/audio_filter/libparam_eq_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libremap_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libsamplerate_plugin.so
+%{_libdir}/%{name}/plugins/audio_filter/libscaletempo_pitch_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libscaletempo_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libsimple_channel_mixer_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libsoxr_plugin.so
@@ -528,6 +529,7 @@ fi
 %{_libdir}/%{name}/plugins/codec/libvaapi_drm_plugin.so
 %{_libdir}/%{name}/plugins/codec/libvorbis_plugin.so
 %{_libdir}/%{name}/plugins/codec/libvpx_plugin.so
+%{_libdir}/%{name}/plugins/codec/libwebvtt_plugin.so
 %{_libdir}/%{name}/plugins/codec/libx264_plugin.so
 %{_libdir}/%{name}/plugins/codec/libx265_plugin.so
 %{_libdir}/%{name}/plugins/codec/libxwd_plugin.so
@@ -620,7 +622,6 @@ fi
 %{_libdir}/%{name}/plugins/mux/libmux_ps_plugin.so
 %{_libdir}/%{name}/plugins/mux/libmux_ts_plugin.so
 %{_libdir}/%{name}/plugins/mux/libmux_wav_plugin.so
-%{_libdir}/%{name}/plugins/notify/libnotify_plugin.so
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_a52_plugin.so
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_avparser_plugin.so
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_copy_plugin.so
@@ -788,6 +789,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Thu Dec 28 2017 Andrew Gunnerson <andrewgunnerson@gmail.com> - 1:3.0.0-24.20171228gitc5b41a6
+- Update to latest snapshot.
+
 * Wed Oct 25 2017 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-23.20171025gita55b0a5
 - Update to latest snapshot.
 

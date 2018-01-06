@@ -1,9 +1,9 @@
 #!/bin/sh
-git clone -v https://git.videolan.org/git/vlc.git vlc
+git clone -v https://git.videolan.org/git/vlc/vlc-3.0.git vlc
 
 cd vlc
 
-VERSION=$(grep AC_INIT configure.ac | sed -e 's/AC_INIT(vlc, //g' -e 's/-git)//g')
+VERSION=$(grep AC_INIT configure.ac | sed -e 's/AC_INIT(vlc, //g' -e 's/\(-git\|-rc[0-9]\+\)\?)//g')
 COMMIT=$(git rev-list HEAD -n1)
 SHORTCOMMIT=$(echo ${COMMIT:0:7})
 DATE=$(git log -1 --format=%cd --date=short | tr -d \-)
