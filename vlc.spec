@@ -1,25 +1,29 @@
-%global commit0 c5b41a60992555e2f054721580c257dfa301b010
-%global date 20171228
+%global commit0 0c462fc53e94949031dfe13741725f2ea2d22f01
+%global date 20180109
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
-#configure: WARNING: No package 'lua5.2' found, trying lua 5.1 instead
-#configure: WARNING: No package 'lua5.1' found, trying lua >= 5.1 instead
-#configure: WARNING: Library libdsm >= 0.2.0 needed for dsm was not found
-#configure: WARNING: Library libnfs >= 1.10.0 needed for nfs was not found
-#configure: WARNING: No package 'libsidplay2' found (required for sid).
-#configure: WARNING: Library shine >= 3.0.0 needed for shine was not found
-#configure: WARNING: Library libdca >= 0.0.5 needed for dca was not found
-#configure: WARNING: Library fluidlite needed for fluidlite was not found
-#configure: WARNING: Library aribb24 needed for aribsub was not found
-#configure: WARNING: Cannot find development headers for mmal...
-#configure: WARNING: Library libgoom2 needed for goom was not found
-#configure: WARNING: No package 'libvsxu' found.
-#configure: WARNING: Library microdns needed for microdns was not found
+# configure: WARNING: Package 'lua5.2', required by 'virtual:world', not found, trying lua 5.1 instead
+# configure: WARNING: Package 'lua5.1', required by 'virtual:world', not found, trying lua >= 5.1 instead
+# configure: WARNING: Library libdsm >= 0.2.0 needed for dsm was not found
+# configure: WARNING: Library libnfs >= 1.10.0 needed for nfs was not found
+# configure: WARNING: Blackmagic DeckLink SDI include files not found
+# configure: WARNING: Package 'libsidplay2', required by 'virtual:world', not found (required for sid).
+# configure: WARNING: Library shine >= 3.0.0 needed for shine was not found
+# configure: WARNING: Library aom needed for aom was not found
+# configure: WARNING: Library libdca >= 0.0.5 needed for dca was not found
+# configure: WARNING: Library spatialaudio needed for spatialaudio was not found
+# configure: WARNING: Library fluidlite needed for fluidlite was not found
+# configure: WARNING: Library aribb24 needed for aribsub was not found
+# configure: WARNING: Cannot find development headers for mmal...
+# configure: WARNING: Library srt >= 1.2.2 needed for srt was not found
+# configure: WARNING: Library libgoom2 needed for goom was not found
+# configure: WARNING: Package 'libvsxu', required by 'virtual:world', not found.
+# configure: WARNING: Library microdns needed for microdns was not found
 
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.0
-Release:    24%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
+Release:    25%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -71,18 +75,14 @@ BuildRequires:  pkgconfig(egl)
 BuildRequires:  pkgconfig(fdk-aac)
 BuildRequires:  pkgconfig(flac)
 BuildRequires:  pkgconfig(fluidsynth) >= 1.1.2
-%if 0%{?rhel} == 7
 BuildRequires:  pkgconfig(freerdp) >= 1.0.1
-%else
-BuildRequires:  pkgconfig(freerdp2)
-%endif
 BuildRequires:  pkgconfig(freetype2)
 BuildRequires:  pkgconfig(fribidi)
 BuildRequires:  pkgconfig(gl)
 BuildRequires:  pkgconfig(gnutls) >= 3.2.0
 BuildRequires:  pkgconfig(gstreamer-app-1.0)
 BuildRequires:  pkgconfig(gstreamer-video-1.0)
-BuildRequires:  pkgconfig(gtk+-2.0)
+BuildRequires:  pkgconfig(gtk+-3.0)
 BuildRequires:  pkgconfig(jack) >= 1.9.7
 BuildRequires:  pkgconfig(libarchive) >= 3.1.0
 BuildRequires:  pkgconfig(libass) >= 0.9.8
@@ -104,6 +104,7 @@ BuildRequires:  pkgconfig(libmtp) >= 1.0.0
 #BuildRequires:  pkgconfig(libnfs) >= 1.10.0
 BuildRequires:  pkgconfig(libnotify)
 BuildRequires:  pkgconfig(libpostproc)
+#BuildRequires:  pkgconfig(libplacebo) >= 0.2
 BuildRequires:  pkgconfig(libprojectM)
 BuildRequires:  pkgconfig(libpulse) >= 1.0
 BuildRequires:  pkgconfig(libraw1394) >= 2.0.1
@@ -141,6 +142,7 @@ BuildRequires:  pkgconfig(shout) >= 2.1
 BuildRequires:  pkgconfig(soxr) >= 0.1.2
 BuildRequires:  pkgconfig(speex) >= 1.0.5
 BuildRequires:  pkgconfig(speexdsp)
+#BuildRequires:  pkgconfig(srt) >= 1.2.2
 BuildRequires:  pkgconfig(taglib) >= 1.9
 BuildRequires:  pkgconfig(theoradec) >= 1.0
 BuildRequires:  pkgconfig(theoraenc)
@@ -261,7 +263,10 @@ find %{buildroot} -name '*.a' -delete
 find %{buildroot} -name '*.la' -delete
 
 desktop-file-validate %{buildroot}%{_datadir}/applications/vlc.desktop
-#appstream-util validate %{buildroot}%{_datadir}/metainfo/vlc.appdata.xml
+
+sed -i -e '/releases>/d' -e '/<release/d' \
+    %{buildroot}%{_datadir}/metainfo/%{name}.appdata.xml
+appstream-util validate-relax %{buildroot}%{_datadir}/metainfo/%{name}.appdata.xml
 
 # Remove installed fonts for skins2
 rm -fr %{buildroot}%{_datadir}/%{name}/skins2/fonts
@@ -423,9 +428,7 @@ fi
 %{_libdir}/%{name}/plugins/access/liblinsys_sdi_plugin.so
 %{_libdir}/%{name}/plugins/access/liblive555_plugin.so
 %{_libdir}/%{name}/plugins/access/libpulsesrc_plugin.so
-%if 0%{?rhel} == 7
 %{_libdir}/%{name}/plugins/access/librdp_plugin.so
-%endif
 %{_libdir}/%{name}/plugins/access/librtp_plugin.so
 %{_libdir}/%{name}/plugins/access/libsatip_plugin.so
 %{_libdir}/%{name}/plugins/access/libsdp_plugin.so
@@ -622,6 +625,7 @@ fi
 %{_libdir}/%{name}/plugins/mux/libmux_ps_plugin.so
 %{_libdir}/%{name}/plugins/mux/libmux_ts_plugin.so
 %{_libdir}/%{name}/plugins/mux/libmux_wav_plugin.so
+%{_libdir}/%{name}/plugins/notify/libnotify_plugin.so
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_a52_plugin.so
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_avparser_plugin.so
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_copy_plugin.so
@@ -677,7 +681,6 @@ fi
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_es_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_gather_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_mosaic_bridge_plugin.so
-#%{_libdir}/%{name}/plugins/stream_out/libstream_out_raop_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_record_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_rtp_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_setid_plugin.so
@@ -789,6 +792,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Wed Jan 10 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-25.20180109git0c462fc
+- Update VLC to latest snapshot from the vlc-3.0 branch (post rc5).
+
 * Thu Dec 28 2017 Andrew Gunnerson <andrewgunnerson@gmail.com> - 1:3.0.0-24.20171228gitc5b41a6
 - Update to latest snapshot.
 
