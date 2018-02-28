@@ -171,9 +171,12 @@ Requires:       dejavu-sans-mono-fonts
 Requires:       dejavu-serif-fonts
 Requires:       hicolor-icon-theme
 Requires:       kde-filesystem
-Requires:       vlc-core%{_isa} = %{?epoch}:%{version}-%{release}
 # For xdg-screensaver
 Requires:       xdg-utils
+
+Provides:       %{name}-core%{_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-core%{_isa} < %{?epoch:%{epoch}:}%{version}-%{release}
+
 
 %description
 VLC is a free and open source cross-platform multimedia player and framework
@@ -182,7 +185,7 @@ streaming protocols.
 
 %package devel
 Summary:        Development files for %{name}
-Requires:       %{name}-core%{_isa} = %{?epoch}:%{version}-%{release}
+Requires:       %{name}%{_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description devel
 VLC is a free and open source cross-platform multimedia player and framework
@@ -192,31 +195,20 @@ streaming protocols.
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-%package core
-Summary:        VLC media player core
-
-%description core
-VLC is a free and open source cross-platform multimedia player and framework
-that plays most multimedia files as well as DVDs, Audio CDs, VCDs, and various
-streaming protocols.
-
-This package contains the core components.
-
 %package extras
-Summary:        VLC media player with extras modules
-Requires:       vlc-core%{_isa} = %{?epoch}:%{version}-%{release}
-
+Summary:        VLC media player extra modules
+Requires:       %{name}%{_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description extras
 VLC is a free and open source cross-platform multimedia player and framework
 that plays most multimedia files as well as DVDs, Audio CDs, VCDs, and various
 streaming protocols.
 
-This package contains the extra modules.
+This package contains extra modules.
 
 %package plugin-jack
 Summary:        JACK audio plugin for VLC
-Requires:       vlc-core%{_isa} = %{?epoch}:%{version}-%{release}
+Requires:       %{name}%{_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description plugin-jack
 VLC is a free and open source cross-platform multimedia player and framework
@@ -224,7 +216,6 @@ that plays most multimedia files as well as DVDs, Audio CDs, VCDs, and various
 streaming protocols.
 
 This package contains the JACK audio plugin.
-
 
 %prep
 %autosetup
@@ -274,11 +265,17 @@ rm -fr %{buildroot}%{_datadir}/macosx
 %find_lang %{name}
 
 %post
+%{_bindir}/ldconfig
 %{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name} &>/dev/null
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 %if 0%{?rhel}
 %{_bindir}/update-desktop-database &> /dev/null || :
 %endif
+
+%preun
+if [ $1 -eq 0 ] ; then
+  rm -f %{_libdir}/%{name}/plugins/plugins*.dat &>/dev/null || :
+fi
 
 %postun
 %{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name} &>/dev/null
@@ -289,15 +286,10 @@ if [ $1 -eq 0 ] ; then
     /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
     /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 fi
+%{_bindir}/ldconfig
 
 %posttrans
 %{_bindir}/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
-
-%post core -p /sbin/ldconfig
-
-%postun core -p /sbin/ldconfig
-
-%posttrans core
 %{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name}/plugins &>/dev/null || :
 
 %post extras
@@ -312,16 +304,16 @@ fi
 %postun plugin-jack
 %{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name}/plugins &>/dev/null || :
 
-%preun core
-if [ $1 -eq 0 ] ; then
-  rm -f %{_libdir}/%{name}/plugins/plugins*.dat &>/dev/null || :
-fi
-
-%files
+%files -f %{name}.lang
 %license COPYING
 %doc AUTHORS NEWS README THANKS
+%{_bindir}/cvlc
+%{_bindir}/nvlc
 %{_bindir}/qvlc
+%{_bindir}/rvlc
 %{_bindir}/svlc
+%{_bindir}/%{name}
+%{_bindir}/%{name}-wrapper
 %if 0%{?fedora}
 %{_datadir}/metainfo/%{name}.appdata.xml
 %else
@@ -332,68 +324,17 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}*.png
 %{_datadir}/icons/hicolor/*/apps/%{name}*.xpm
 %{_datadir}/%{name}/skins2
-%{_libdir}/%{name}/plugins/access/libxcb_screen_plugin.so
-%{_libdir}/%{name}/plugins/audio_output/libpulse_plugin.so
-%{_libdir}/%{name}/plugins/gui/libqt_plugin.so
-%{_libdir}/%{name}/plugins/gui/libskins2_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libaa_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libcaca_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libegl_wl_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libegl_x11_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libfb_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libflaschen_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libgl_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libglx_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libvdummy_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libvmem_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libwl_shm_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libxcb_x11_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libxcb_window_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libxcb_xv_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libyuv_plugin.so
-
-%files core -f %{name}.lang
-%{_bindir}/%{name}
-%{_bindir}/cvlc
-%{_bindir}/nvlc
-%{_bindir}/rvlc
-%{_bindir}/%{name}-wrapper
 %dir %{_datadir}/%{name}/
 %{_datadir}/%{name}/lua
 %{_datadir}/%{name}/utils
 %{_datadir}/%{name}/%{name}.ico
-%ghost %{_libdir}/%{name}/plugins/plugins.dat
-%dir %{_libdir}/%{name}/
-%dir %{_libdir}/%{name}/plugins
-%dir %{_libdir}/%{name}/plugins/access
-%dir %{_libdir}/%{name}/plugins/access_output
-%dir %{_libdir}/%{name}/plugins/audio_filter
-%dir %{_libdir}/%{name}/plugins/audio_mixer
-%dir %{_libdir}/%{name}/plugins/audio_output
-%dir %{_libdir}/%{name}/plugins/codec
-%dir %{_libdir}/%{name}/plugins/control
-%dir %{_libdir}/%{name}/plugins/demux
-%dir %{_libdir}/%{name}/plugins/gui
-%dir %{_libdir}/%{name}/plugins/keystore
-%dir %{_libdir}/%{name}/plugins/logger
-%dir %{_libdir}/%{name}/plugins/lua
-%dir %{_libdir}/%{name}/plugins/meta_engine
-%dir %{_libdir}/%{name}/plugins/misc
-%dir %{_libdir}/%{name}/plugins/mux
-%dir %{_libdir}/%{name}/plugins/packetizer
-%dir %{_libdir}/%{name}/plugins/services_discovery
-%dir %{_libdir}/%{name}/plugins/stream_extractor
-%dir %{_libdir}/%{name}/plugins/stream_filter
-%dir %{_libdir}/%{name}/plugins/stream_out
-%dir %{_libdir}/%{name}/plugins/text_renderer
-%dir %{_libdir}/%{name}/plugins/vdpau
-%dir %{_libdir}/%{name}/plugins/video_chroma
-%dir %{_libdir}/%{name}/plugins/video_filter
-%dir %{_libdir}/%{name}/plugins/video_output
-%dir %{_libdir}/%{name}/plugins/video_splitter
-%dir %{_libdir}/%{name}/plugins/visualization
 %{_libdir}/*.so.*
+%ghost %{_libdir}/%{name}/plugins/plugins.dat
 %{_libdir}/%{name}/*.so*
+%{_libdir}/%{name}/%{name}-cache-gen
+%{_mandir}/man1/%{name}*.1*
+# Lua
+%dir %{_libdir}/%{name}/lua
 %{_libdir}/%{name}/lua/extensions/VLSub.luac
 %{_libdir}/%{name}/lua/intf/cli.luac
 %{_libdir}/%{name}/lua/intf/dummy.luac
@@ -430,6 +371,10 @@ fi
 %{_libdir}/%{name}/lua/playlist/youtube.luac
 %{_libdir}/%{name}/lua/sd/icecast.luac
 %{_libdir}/%{name}/lua/sd/jamendo.luac
+# Plugins
+%dir %{_libdir}/%{name}/
+%dir %{_libdir}/%{name}/plugins
+%dir %{_libdir}/%{name}/plugins/access
 %{_libdir}/%{name}/plugins/access/libaccess_alsa_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_concat_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_imem_plugin.so
@@ -471,12 +416,15 @@ fi
 %{_libdir}/%{name}/plugins/access/libv4l2_plugin.so
 %{_libdir}/%{name}/plugins/access/libvdr_plugin.so
 %{_libdir}/%{name}/plugins/access/libvnc_plugin.so
+%{_libdir}/%{name}/plugins/access/libxcb_screen_plugin.so
+%dir %{_libdir}/%{name}/plugins/access_output
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_dummy_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_file_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_http_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_livehttp_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_shout_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_udp_plugin.so
+%dir %{_libdir}/%{name}/plugins/audio_filter
 %{_libdir}/%{name}/plugins/audio_filter/libaudio_format_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libaudiobargraph_a_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libchorus_flanger_plugin.so
@@ -502,12 +450,16 @@ fi
 %{_libdir}/%{name}/plugins/audio_filter/libtospdif_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libtrivial_channel_mixer_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libugly_resampler_plugin.so
+%dir %{_libdir}/%{name}/plugins/audio_mixer
 %{_libdir}/%{name}/plugins/audio_mixer/libfloat_mixer_plugin.so
 %{_libdir}/%{name}/plugins/audio_mixer/libinteger_mixer_plugin.so
+%dir %{_libdir}/%{name}/plugins/audio_output
 %{_libdir}/%{name}/plugins/audio_output/libadummy_plugin.so
 %{_libdir}/%{name}/plugins/audio_output/libafile_plugin.so
 %{_libdir}/%{name}/plugins/audio_output/libalsa_plugin.so
 %{_libdir}/%{name}/plugins/audio_output/libamem_plugin.so
+%{_libdir}/%{name}/plugins/audio_output/libpulse_plugin.so
+%dir %{_libdir}/%{name}/plugins/codec
 %{_libdir}/%{name}/plugins/codec/liba52_plugin.so
 %{_libdir}/%{name}/plugins/codec/libadpcm_plugin.so
 %{_libdir}/%{name}/plugins/codec/libaes3_plugin.so
@@ -567,6 +519,7 @@ fi
 %{_libdir}/%{name}/plugins/codec/libx265_plugin.so
 %{_libdir}/%{name}/plugins/codec/libxwd_plugin.so
 %{_libdir}/%{name}/plugins/codec/libzvbi_plugin.so
+%dir %{_libdir}/%{name}/plugins/control
 %{_libdir}/%{name}/plugins/control/libdbus_plugin.so
 %{_libdir}/%{name}/plugins/control/libdummy_plugin.so
 %{_libdir}/%{name}/plugins/control/libgestures_plugin.so
@@ -576,6 +529,7 @@ fi
 %{_libdir}/%{name}/plugins/control/libnetsync_plugin.so
 %{_libdir}/%{name}/plugins/control/liboldrc_plugin.so
 %{_libdir}/%{name}/plugins/control/libxcb_hotkeys_plugin.so
+%dir %{_libdir}/%{name}/plugins/demux
 %{_libdir}/%{name}/plugins/demux/libadaptive_plugin.so
 %{_libdir}/%{name}/plugins/demux/libaiff_plugin.so
 %{_libdir}/%{name}/plugins/demux/libasf_plugin.so
@@ -622,18 +576,26 @@ fi
 %{_libdir}/%{name}/plugins/demux/libvoc_plugin.so
 %{_libdir}/%{name}/plugins/demux/libwav_plugin.so
 %{_libdir}/%{name}/plugins/demux/libxa_plugin.so
+%dir %{_libdir}/%{name}/plugins/gui
 %{_libdir}/%{name}/plugins/gui/libncurses_plugin.so
+%{_libdir}/%{name}/plugins/gui/libqt_plugin.so
+%{_libdir}/%{name}/plugins/gui/libskins2_plugin.so
+%dir %{_libdir}/%{name}/plugins/keystore
 %{_libdir}/%{name}/plugins/keystore/libfile_keystore_plugin.so
 %{_libdir}/%{name}/plugins/keystore/libkwallet_plugin.so
 %{_libdir}/%{name}/plugins/keystore/libmemory_keystore_plugin.so
 %{_libdir}/%{name}/plugins/keystore/libsecret_plugin.so
+%dir %{_libdir}/%{name}/plugins/logger
 %{_libdir}/%{name}/plugins/logger/libconsole_logger_plugin.so
 %{_libdir}/%{name}/plugins/logger/libfile_logger_plugin.so
 %{_libdir}/%{name}/plugins/logger/libsd_journal_plugin.so
 %{_libdir}/%{name}/plugins/logger/libsyslog_plugin.so
+%dir %{_libdir}/%{name}/plugins/lua
 %{_libdir}/%{name}/plugins/lua/liblua_plugin.so
+%dir %{_libdir}/%{name}/plugins/meta_engine
 %{_libdir}/%{name}/plugins/meta_engine/libfolder_plugin.so
 %{_libdir}/%{name}/plugins/meta_engine/libtaglib_plugin.so
+%dir %{_libdir}/%{name}/plugins/misc
 %{_libdir}/%{name}/plugins/misc/libaddonsfsstorage_plugin.so
 %{_libdir}/%{name}/plugins/misc/libaddonsvorepository_plugin.so
 %{_libdir}/%{name}/plugins/misc/libaudioscrobbler_plugin.so
@@ -646,6 +608,7 @@ fi
 %{_libdir}/%{name}/plugins/misc/libvod_rtsp_plugin.so
 %{_libdir}/%{name}/plugins/misc/libxdg_screensaver_plugin.so
 %{_libdir}/%{name}/plugins/misc/libxml_plugin.so
+%dir %{_libdir}/%{name}/plugins/mux
 %{_libdir}/%{name}/plugins/mux/libmux_asf_plugin.so
 %{_libdir}/%{name}/plugins/mux/libmux_avi_plugin.so
 %{_libdir}/%{name}/plugins/mux/libmux_dummy_plugin.so
@@ -655,7 +618,9 @@ fi
 %{_libdir}/%{name}/plugins/mux/libmux_ps_plugin.so
 %{_libdir}/%{name}/plugins/mux/libmux_ts_plugin.so
 %{_libdir}/%{name}/plugins/mux/libmux_wav_plugin.so
+%dir %{_libdir}/%{name}/plugins/notify
 %{_libdir}/%{name}/plugins/notify/libnotify_plugin.so
+%dir %{_libdir}/%{name}/plugins/packetizer
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_a52_plugin.so
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_avparser_plugin.so
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_copy_plugin.so
@@ -670,6 +635,7 @@ fi
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_mpegaudio_plugin.so
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_mpegvideo_plugin.so
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_vc1_plugin.so
+%dir %{_libdir}/%{name}/plugins/services_discovery
 %{_libdir}/%{name}/plugins/services_discovery/libavahi_plugin.so
 %{_libdir}/%{name}/plugins/services_discovery/libmediadirs_plugin.so
 %{_libdir}/%{name}/plugins/services_discovery/libmtp_plugin.so
@@ -679,6 +645,7 @@ fi
 %{_libdir}/%{name}/plugins/services_discovery/libudev_plugin.so
 %{_libdir}/%{name}/plugins/services_discovery/libupnp_plugin.so
 %{_libdir}/%{name}/plugins/services_discovery/libxcb_apps_plugin.so
+%dir %{_libdir}/%{name}/plugins/spu
 %{_libdir}/%{name}/plugins/spu/libaudiobargraph_v_plugin.so
 %{_libdir}/%{name}/plugins/spu/libdynamicoverlay_plugin.so
 %{_libdir}/%{name}/plugins/spu/liblogo_plugin.so
@@ -687,6 +654,7 @@ fi
 %{_libdir}/%{name}/plugins/spu/libremoteosd_plugin.so
 %{_libdir}/%{name}/plugins/spu/librss_plugin.so
 %{_libdir}/%{name}/plugins/spu/libsubsdelay_plugin.so
+%dir %{_libdir}/%{name}/plugins/stream_filter
 %{_libdir}/%{name}/plugins/stream_filter/libadf_plugin.so
 %{_libdir}/%{name}/plugins/stream_filter/libaribcam_plugin.so
 %{_libdir}/%{name}/plugins/stream_filter/libcache_block_plugin.so
@@ -697,7 +665,9 @@ fi
 %{_libdir}/%{name}/plugins/stream_filter/libprefetch_plugin.so
 %{_libdir}/%{name}/plugins/stream_filter/librecord_plugin.so
 %{_libdir}/%{name}/plugins/stream_filter/libskiptags_plugin.so
+%dir %{_libdir}/%{name}/plugins/stream_extractor
 %{_libdir}/%{name}/plugins/stream_extractor/libarchive_plugin.so
+%dir %{_libdir}/%{name}/plugins/stream_out
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_autodel_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_bridge_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_chromaprint_plugin.so
@@ -718,16 +688,20 @@ fi
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_standard_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_stats_plugin.so
 %{_libdir}/%{name}/plugins/stream_out/libstream_out_transcode_plugin.so
+%dir %{_libdir}/%{name}/plugins/text_renderer
 %{_libdir}/%{name}/plugins/text_renderer/libfreetype_plugin.so
 %{_libdir}/%{name}/plugins/text_renderer/libsvg_plugin.so
 %{_libdir}/%{name}/plugins/text_renderer/libtdummy_plugin.so
+%dir %{_libdir}/%{name}/plugins/vaapi
 %{_libdir}/%{name}/plugins/vaapi/libvaapi_filters_plugin.so
+%dir %{_libdir}/%{name}/plugins/vdpau
 %{_libdir}/%{name}/plugins/vdpau/libvdpau_adjust_plugin.so
 %{_libdir}/%{name}/plugins/vdpau/libvdpau_avcodec_plugin.so
 %{_libdir}/%{name}/plugins/vdpau/libvdpau_chroma_plugin.so
 %{_libdir}/%{name}/plugins/vdpau/libvdpau_deinterlace_plugin.so
 %{_libdir}/%{name}/plugins/vdpau/libvdpau_display_plugin.so
 %{_libdir}/%{name}/plugins/vdpau/libvdpau_sharpen_plugin.so
+%dir %{_libdir}/%{name}/plugins/video_chroma
 %{_libdir}/%{name}/plugins/video_chroma/libchain_plugin.so
 %{_libdir}/%{name}/plugins/video_chroma/libgrey_yuv_plugin.so
 %{_libdir}/%{name}/plugins/video_chroma/libi420_10_p010_plugin.so
@@ -747,6 +721,7 @@ fi
 %{_libdir}/%{name}/plugins/video_chroma/libyuvp_plugin.so
 %{_libdir}/%{name}/plugins/video_chroma/libyuy2_i420_plugin.so
 %{_libdir}/%{name}/plugins/video_chroma/libyuy2_i422_plugin.so
+%dir %{_libdir}/%{name}/plugins/video_filter
 %{_libdir}/%{name}/plugins/video_filter/libadjust_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libalphamask_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libanaglyph_plugin.so
@@ -788,20 +763,36 @@ fi
 %{_libdir}/%{name}/plugins/video_filter/libtransform_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libvhs_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libwave_plugin.so
+%dir %{_libdir}/%{name}/plugins/video_output
+%{_libdir}/%{name}/plugins/video_output/libaa_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libcaca_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libegl_wl_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libegl_x11_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libfb_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libflaschen_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libgl_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libglconv_vaapi_drm_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libglconv_vaapi_wl_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libglconv_vaapi_x11_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libglconv_vdpau_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libglx_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libvdummy_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libvmem_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libwl_shell_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libwl_shm_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libxcb_x11_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libxcb_window_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libxcb_xv_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libxdg_shell_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libyuv_plugin.so
+%dir %{_libdir}/%{name}/plugins/video_splitter
 %{_libdir}/%{name}/plugins/video_splitter/libclone_plugin.so
 %{_libdir}/%{name}/plugins/video_splitter/libpanoramix_plugin.so
 %{_libdir}/%{name}/plugins/video_splitter/libwall_plugin.so
+%dir %{_libdir}/%{name}/plugins/visualization
 %{_libdir}/%{name}/plugins/visualization/libglspectrum_plugin.so
 %{_libdir}/%{name}/plugins/visualization/libprojectm_plugin.so
 %{_libdir}/%{name}/plugins/visualization/libvisual_plugin.so
-%{_libdir}/%{name}/%{name}-cache-gen
-%{_mandir}/man1/%{name}*.1*
 
 %files plugin-jack
 %{_libdir}/%{name}/plugins/access/libaccess_jack_plugin.so
@@ -824,6 +815,7 @@ fi
 %changelog
 * Tue Feb 27 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-26
 - Update to final 3.0.0.
+- Reorganize spec file. Merge core into main package.
 
 * Wed Jan 10 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-25.20180109git0c462fc
 - Update VLC to latest snapshot from the vlc-3.0 branch (post rc5).
