@@ -1,7 +1,3 @@
-%global commit0 0c462fc53e94949031dfe13741725f2ea2d22f01
-%global date 20180109
-%global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
-
 # configure: WARNING: Package 'lua5.2', required by 'virtual:world', not found, trying lua 5.1 instead
 # configure: WARNING: Package 'lua5.1', required by 'virtual:world', not found, trying lua >= 5.1 instead
 # configure: WARNING: Library libdsm >= 0.2.0 needed for dsm was not found
@@ -23,14 +19,12 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.0
-Release:    25%{?shortcommit0:.%{date}git%{shortcommit0}}%{?dist}
+Release:    26%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
 
-#Source0:    http://download.videolan.org/pub/videolan/%{name}/%{version}/%{name}-%{version}.tar.xz
-Source0:    %{name}-%{version}-%{shortcommit0}.tar.xz
-Source1:    %{name}-snapshot.sh
+Source0:    http://download.videolan.org/pub/videolan/%{name}/%{version}/%{name}-%{version}.tar.xz
 
 BuildRequires:  liba52-devel
 BuildRequires:  aalib-devel
@@ -233,7 +227,7 @@ This package contains the JACK audio plugin.
 
 
 %prep
-%setup -q -n %{name}
+%autosetup
 
 %build
 # Calls autoreconf to generate m4 macros and prepare Makefiles
@@ -400,6 +394,42 @@ fi
 %dir %{_libdir}/%{name}/plugins/visualization
 %{_libdir}/*.so.*
 %{_libdir}/%{name}/*.so*
+%{_libdir}/%{name}/lua/extensions/VLSub.luac
+%{_libdir}/%{name}/lua/intf/cli.luac
+%{_libdir}/%{name}/lua/intf/dummy.luac
+%{_libdir}/%{name}/lua/intf/dumpmeta.luac
+%{_libdir}/%{name}/lua/intf/http.luac
+%{_libdir}/%{name}/lua/intf/luac.luac
+%{_libdir}/%{name}/lua/intf/modules/host.luac
+%{_libdir}/%{name}/lua/intf/modules/httprequests.luac
+%{_libdir}/%{name}/lua/intf/telnet.luac
+%{_libdir}/%{name}/lua/meta/art/00_musicbrainz.luac
+%{_libdir}/%{name}/lua/meta/art/01_googleimage.luac
+%{_libdir}/%{name}/lua/meta/art/02_frenchtv.luac
+%{_libdir}/%{name}/lua/meta/art/03_lastfm.luac
+%{_libdir}/%{name}/lua/meta/reader/filename.luac
+%{_libdir}/%{name}/lua/modules/common.luac
+%{_libdir}/%{name}/lua/modules/dkjson.luac
+%{_libdir}/%{name}/lua/modules/sandbox.luac
+%{_libdir}/%{name}/lua/modules/simplexml.luac
+%{_libdir}/%{name}/lua/playlist/anevia_streams.luac
+%{_libdir}/%{name}/lua/playlist/anevia_xml.luac
+%{_libdir}/%{name}/lua/playlist/appletrailers.luac
+%{_libdir}/%{name}/lua/playlist/bbc_co_uk.luac
+%{_libdir}/%{name}/lua/playlist/cue.luac
+%{_libdir}/%{name}/lua/playlist/dailymotion.luac
+%{_libdir}/%{name}/lua/playlist/jamendo.luac
+%{_libdir}/%{name}/lua/playlist/koreus.luac
+%{_libdir}/%{name}/lua/playlist/liveleak.luac
+%{_libdir}/%{name}/lua/playlist/newgrounds.luac
+%{_libdir}/%{name}/lua/playlist/rockbox_fm_presets.luac
+%{_libdir}/%{name}/lua/playlist/soundcloud.luac
+%{_libdir}/%{name}/lua/playlist/twitch.luac
+%{_libdir}/%{name}/lua/playlist/vimeo.luac
+%{_libdir}/%{name}/lua/playlist/vocaroo.luac
+%{_libdir}/%{name}/lua/playlist/youtube.luac
+%{_libdir}/%{name}/lua/sd/icecast.luac
+%{_libdir}/%{name}/lua/sd/jamendo.luac
 %{_libdir}/%{name}/plugins/access/libaccess_alsa_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_concat_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_imem_plugin.so
@@ -792,6 +822,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Tue Feb 27 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-26
+- Update to final 3.0.0.
+
 * Wed Jan 10 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-25.20180109git0c462fc
 - Update VLC to latest snapshot from the vlc-3.0 branch (post rc5).
 
