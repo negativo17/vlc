@@ -174,8 +174,8 @@ Requires:       kde-filesystem
 # For xdg-screensaver
 Requires:       xdg-utils
 
-Provides:       %{name}-core%{_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-Obsoletes:      %{name}-core%{_isa} < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:       %{name}-core = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-core < %{?epoch:%{epoch}:}%{version}-%{release}
 
 
 %description
