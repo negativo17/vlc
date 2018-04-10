@@ -18,8 +18,8 @@
 
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
-Version:    3.0.0
-Release:    26%{?dist}
+Version:    3.0.1
+Release:    1%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -144,11 +144,13 @@ BuildRequires:  pkgconfig(tiger) >= 0.3.1
 BuildRequires:  pkgconfig(twolame)
 BuildRequires:  pkgconfig(vdpau) >= 0.6
 BuildRequires:  pkgconfig(vorbis) >= 1.1
+%if 0%{?fedora}
 BuildRequires:  pkgconfig(vpx) >= 1.5.0
 BuildRequires:  pkgconfig(wayland-scanner)
 BuildRequires:  pkgconfig(wayland-client) >= 1.5.91
 BuildRequires:  pkgconfig(wayland-egl)
 BuildRequires:  pkgconfig(wayland-protocols)
+%endif
 #BuildRequires:  pkgconfig(x262)
 BuildRequires:  pkgconfig(x264) >= 0.86
 #BuildRequires:  pkgconfig(x26410b)
@@ -813,6 +815,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Tue Apr 10 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.1-1
+- Update to 3.0.1.
+
 * Tue Feb 27 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-26
 - Update to final 3.0.0.
 - Reorganize spec file. Merge core into main package.
