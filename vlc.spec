@@ -1,8 +1,6 @@
 # configure: WARNING: Package 'lua5.2', required by 'virtual:world', not found, trying lua 5.1 instead
 # configure: WARNING: Package 'lua5.1', required by 'virtual:world', not found, trying lua >= 5.1 instead
 # configure: WARNING: Library libdsm >= 0.2.0 needed for dsm was not found
-# configure: WARNING: Library libnfs >= 1.10.0 needed for nfs was not found
-# configure: WARNING: Blackmagic DeckLink SDI include files not found
 # configure: WARNING: Package 'libsidplay2', required by 'virtual:world', not found (required for sid).
 # configure: WARNING: Library shine >= 3.0.0 needed for shine was not found
 # configure: WARNING: Library aom needed for aom was not found
@@ -18,7 +16,7 @@
 
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
-Version:    3.0.1
+Version:    3.0.2
 Release:    1%{?dist}
 Epoch:      1
 License:    GPLv2+
@@ -32,6 +30,7 @@ BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  bison
 BuildRequires:  daala-devel
+BuildRequires:  decklink-devel
 BuildRequires:  desktop-file-utils
 BuildRequires:  faad2-devel
 BuildRequires:  flex
@@ -95,7 +94,7 @@ BuildRequires:  pkgconfig(libmodplug) > 0.8.8
 BuildRequires:  pkgconfig(libmpeg2) > 0.3.2
 BuildRequires:  pkgconfig(libmpg123)
 BuildRequires:  pkgconfig(libmtp) >= 1.0.0
-#BuildRequires:  pkgconfig(libnfs) >= 1.10.0
+BuildRequires:  pkgconfig(libnfs) >= 1.10.0
 BuildRequires:  pkgconfig(libnotify)
 BuildRequires:  pkgconfig(libpostproc)
 #BuildRequires:  pkgconfig(libplacebo) >= 0.2
@@ -404,6 +403,7 @@ fi
 %{_libdir}/%{name}/plugins/access/liblinsys_hdsdi_plugin.so
 %{_libdir}/%{name}/plugins/access/liblinsys_sdi_plugin.so
 %{_libdir}/%{name}/plugins/access/liblive555_plugin.so
+%{_libdir}/%{name}/plugins/access/libnfs_plugin.so
 %{_libdir}/%{name}/plugins/access/libpulsesrc_plugin.so
 %{_libdir}/%{name}/plugins/access/librdp_plugin.so
 %{_libdir}/%{name}/plugins/access/librtp_plugin.so
@@ -801,11 +801,13 @@ fi
 %{_libdir}/%{name}/plugins/audio_output/libjack_plugin.so
 
 %files extras
+%{_libdir}/%{name}/plugins/access/libdecklink_plugin.so
 %{_libdir}/%{name}/plugins/access/libvcd_plugin.so
 %{_libdir}/%{name}/plugins/codec/libfluidsynth_plugin.so
 %{_libdir}/%{name}/plugins/codec/libsvcdsub_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libopencv_example_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libopencv_wrapper_plugin.so
+%{_libdir}/%{name}/plugins/video_output/libdecklinkoutput_plugin.so
 
 %files devel
 %dir %{_includedir}/vlc
@@ -815,6 +817,10 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Thu Apr 26 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.2-1
+- Update to 3.0.2.
+- Enable DeckLink and libnfs.
+
 * Tue Apr 10 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.1-1
 - Update to 3.0.1.
 
