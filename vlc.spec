@@ -1,5 +1,3 @@
-# configure: WARNING: Package 'lua5.2', required by 'virtual:world', not found, trying lua 5.1 instead
-# configure: WARNING: Package 'lua5.1', required by 'virtual:world', not found, trying lua >= 5.1 instead
 # configure: WARNING: Library libdsm >= 0.2.0 needed for dsm was not found
 # configure: WARNING: Package 'libsidplay2', required by 'virtual:world', not found (required for sid).
 # configure: WARNING: Library shine >= 3.0.0 needed for shine was not found
@@ -17,7 +15,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.2
-Release:    1%{?dist}
+Release:    2%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -115,7 +113,10 @@ BuildRequires:  pkgconfig(libvncclient) >= 0.9.9
 #BuildRequires:  pkgconfig(libvsxu)
 BuildRequires:  pkgconfig(live555)
 BuildRequires:  pkgconfig(lua) >= 5.1
+%if 0%{?fedora} < 28
+# https://github.com/opencv/opencv/issues/10963
 BuildRequires:  pkgconfig(opencv) >= 2.0
+%endif
 BuildRequires:  pkgconfig(minizip)
 BuildRequires:  pkgconfig(ncursesw)
 BuildRequires:  pkgconfig(opus) >= 1.0.3
@@ -805,8 +806,10 @@ fi
 %{_libdir}/%{name}/plugins/access/libvcd_plugin.so
 %{_libdir}/%{name}/plugins/codec/libfluidsynth_plugin.so
 %{_libdir}/%{name}/plugins/codec/libsvcdsub_plugin.so
+%if 0%{?fedora} < 28
 %{_libdir}/%{name}/plugins/video_filter/libopencv_example_plugin.so
 %{_libdir}/%{name}/plugins/video_filter/libopencv_wrapper_plugin.so
+%endif
 %{_libdir}/%{name}/plugins/video_output/libdecklinkoutput_plugin.so
 
 %files devel
@@ -817,6 +820,10 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Mon Apr 30 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.2-2
+- Momentarily disable OpenCV support in Fedora 28:
+  https://github.com/opencv/opencv/issues/10963
+
 * Thu Apr 26 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.2-1
 - Update to 3.0.2.
 - Enable DeckLink and libnfs.
