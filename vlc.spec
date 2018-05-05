@@ -15,7 +15,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.2
-Release:    2%{?dist}
+Release:    3%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -288,7 +288,7 @@ if [ $1 -eq 0 ] ; then
     /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
     /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 fi
-%{_bindir}/ldconfig
+%{?ldconfig}
 
 %posttrans
 %{_bindir}/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
@@ -820,6 +820,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Sat May 05 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.2-3
+- Fix ldconfig invocations.
+
 * Mon Apr 30 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.2-2
 - Momentarily disable OpenCV support in Fedora 28:
   https://github.com/opencv/opencv/issues/10963
