@@ -15,12 +15,13 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.2
-Release:    4%{?dist}
+Release:    5%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
 
 Source0:    http://download.videolan.org/pub/videolan/%{name}/%{version}/%{name}-%{version}.tar.xz
+Patch0:     http://git.videolan.org/?p=vlc.git;a=patch;h=26e2d3906658c30f2f88f4b1bc9630ec43bf5525#/%{name}-fribidi.patch
 
 BuildRequires:  liba52-devel
 BuildRequires:  aalib-devel
@@ -220,7 +221,7 @@ streaming protocols.
 This package contains the JACK audio plugin.
 
 %prep
-%autosetup
+%autosetup -p1
 
 %build
 # Calls autoreconf to generate m4 macros and prepare Makefiles
@@ -822,6 +823,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Wed May 09 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.2-5
+- Add Fribidi 1.0 patch.
+
 * Wed May 09 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.2-4
 - Fix more scriptlets.
 
