@@ -15,7 +15,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.2
-Release:    3%{?dist}
+Release:    4%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -267,10 +267,10 @@ rm -fr %{buildroot}%{_datadir}/macosx
 %find_lang %{name}
 
 %post
-%{_bindir}/ldconfig
+%{?ldconfig}
 %{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name} &>/dev/null
-/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 %if 0%{?rhel}
+/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 %{_bindir}/update-desktop-database &> /dev/null || :
 %endif
 
@@ -283,15 +283,17 @@ fi
 %{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name} &>/dev/null
 %if 0%{?rhel}
 /usr/bin/update-desktop-database &> /dev/null || :
-%endif
 if [ $1 -eq 0 ] ; then
     /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
     /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 fi
+%endif
 %{?ldconfig}
 
 %posttrans
+%if 0%{?rhel}
 %{_bindir}/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+%endif
 %{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name}/plugins &>/dev/null || :
 
 %post extras
@@ -820,6 +822,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Wed May 09 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.2-4
+- Fix more scriptlets.
+
 * Sat May 05 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.2-3
 - Fix ldconfig invocations.
 
