@@ -15,7 +15,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.3
-Release:    1%{?dist}
+Release:    2%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -823,6 +823,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Mon Jul 16 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.3-2
+- Rebuild for updated dependencies.
+
 * Mon Jun 11 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.3-1
 - Update to 3.0.3.
 
