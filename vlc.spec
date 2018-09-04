@@ -1,27 +1,12 @@
-# configure: WARNING: Library libdsm >= 0.2.0 needed for dsm was not found
-# configure: WARNING: Package 'libsidplay2', required by 'virtual:world', not found (required for sid).
-# configure: WARNING: Library shine >= 3.0.0 needed for shine was not found
-# configure: WARNING: Library aom needed for aom was not found
-# configure: WARNING: Library libdca >= 0.0.5 needed for dca was not found
-# configure: WARNING: Library spatialaudio needed for spatialaudio was not found
-# configure: WARNING: Library fluidlite needed for fluidlite was not found
-# configure: WARNING: Library aribb24 needed for aribsub was not found
-# configure: WARNING: Cannot find development headers for mmal...
-# configure: WARNING: Library srt >= 1.2.2 needed for srt was not found
-# configure: WARNING: Library libgoom2 needed for goom was not found
-# configure: WARNING: Package 'libvsxu', required by 'virtual:world', not found.
-# configure: WARNING: Library microdns needed for microdns was not found
-
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
-Version:    3.0.3
-Release:    2%{?dist}
+Version:    3.0.4
+Release:    1%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
 
 Source0:    http://download.videolan.org/pub/videolan/%{name}/%{version}/%{name}-%{version}.tar.xz
-Patch0:     http://git.videolan.org/?p=vlc.git;a=patch;h=26e2d3906658c30f2f88f4b1bc9630ec43bf5525#/%{name}-fribidi.patch
 
 BuildRequires:  liba52-devel
 BuildRequires:  aalib-devel
@@ -95,6 +80,7 @@ BuildRequires:  pkgconfig(libmpg123)
 BuildRequires:  pkgconfig(libmtp) >= 1.0.0
 BuildRequires:  pkgconfig(libnfs) >= 1.10.0
 BuildRequires:  pkgconfig(libnotify)
+BuildRequires:  pkgconfig(libplacebo) >= 0.2.1
 BuildRequires:  pkgconfig(libpostproc)
 #BuildRequires:  pkgconfig(libplacebo) >= 0.2
 BuildRequires:  pkgconfig(libprojectM)
@@ -110,6 +96,7 @@ BuildRequires:  pkgconfig(libudev) >= 142
 BuildRequires:  pkgconfig(libupnp)
 BuildRequires:  pkgconfig(libva-drm)
 BuildRequires:  pkgconfig(libva-x11)
+BuildRequires:  pkgconfig(libva-wayland)
 BuildRequires:  pkgconfig(libvncclient) >= 0.9.9
 #BuildRequires:  pkgconfig(libvsxu)
 BuildRequires:  pkgconfig(live555)
@@ -145,13 +132,11 @@ BuildRequires:  pkgconfig(tiger) >= 0.3.1
 BuildRequires:  pkgconfig(twolame)
 BuildRequires:  pkgconfig(vdpau) >= 0.6
 BuildRequires:  pkgconfig(vorbis) >= 1.1
-%if 0%{?fedora}
 BuildRequires:  pkgconfig(vpx) >= 1.5.0
-BuildRequires:  pkgconfig(wayland-scanner)
 BuildRequires:  pkgconfig(wayland-client) >= 1.5.91
 BuildRequires:  pkgconfig(wayland-egl)
-BuildRequires:  pkgconfig(wayland-protocols)
-%endif
+BuildRequires:  pkgconfig(wayland-protocols) >= 1.4
+BuildRequires:  pkgconfig(wayland-scanner)
 #BuildRequires:  pkgconfig(x262)
 BuildRequires:  pkgconfig(x264) >= 0.86
 #BuildRequires:  pkgconfig(x26410b)
@@ -231,11 +216,15 @@ This package contains the JACK audio plugin.
     --disable-optimizations \
     --disable-rpath \
     --enable-aa \
+    --enable-bpg \
     --enable-daala \
     --enable-fdkaac \
     --enable-lirc \
     --enable-omxil \
     --enable-omxil-vout \
+    --enable-realrtsp \
+    --enable-tremor \
+    --enable-wayland \
     --with-default-font=%{_datadir}/fonts/dejavu/DejaVuSans.ttf \
     --with-default-font-family=DejaVuSans \
     --with-default-monospace-font=%{_datadir}/fonts/dejavu/DejaVuSansMono.ttf \
@@ -385,6 +374,7 @@ fi
 %{_libdir}/%{name}/plugins/access/libaccess_imem_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_mms_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_mtp_plugin.so
+%{_libdir}/%{name}/plugins/access/libaccess_realrtsp_plugin.so
 %{_libdir}/%{name}/plugins/access/libattachment_plugin.so
 %{_libdir}/%{name}/plugins/access/libavio_plugin.so
 %{_libdir}/%{name}/plugins/access/libcdda_plugin.so
@@ -823,6 +813,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Wed Aug 22 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.4-1
+- Update to 3.0.4.
+
 * Mon Jul 16 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.3-2
 - Rebuild for updated dependencies.
 
