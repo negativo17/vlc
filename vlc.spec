@@ -7,6 +7,7 @@ License:    GPLv2+
 URL:        http://www.videolan.org
 
 Source0:    http://download.videolan.org/pub/videolan/%{name}/%{version}/%{name}-%{version}.tar.xz
+Patch0:     http://git.videolan.org/?p=vlc.git;a=patch;h=a8953ba707cca1f2de372ca24513296bcfcdaaa8#/vlc-x264-bit-depth.patch
 
 BuildRequires:  liba52-devel
 BuildRequires:  aalib-devel
