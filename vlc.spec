@@ -1,7 +1,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.4
-Release:    2%{?dist}
+Release:    3%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -9,7 +9,6 @@ URL:        http://www.videolan.org
 Source0:    http://download.videolan.org/pub/videolan/%{name}/%{version}/%{name}-%{version}.tar.xz
 Patch0:     http://git.videolan.org/?p=vlc.git;a=patch;h=a8953ba707cca1f2de372ca24513296bcfcdaaa8#/vlc-x264-bit-depth.patch
 
-BuildRequires:  liba52-devel
 BuildRequires:  aalib-devel
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -24,14 +23,15 @@ BuildRequires:  gettext-devel
 BuildRequires:  git
 #BuildRequires:  hostname
 BuildRequires:  kdelibs
+BuildRequires:  liba52-devel
 BuildRequires:  libappstream-glib
 BuildRequires:  libdvbpsi-devel
-BuildRequires:  libebml-devel >= 1.0.0
+BuildRequires:  libebml-devel
 BuildRequires:  libgcrypt-devel
 BuildRequires:  libjpeg-turbo-devel
 BuildRequires:  libmad-devel
 #BuildRequires:  libmmal-devel
-BuildRequires:  libmatroska-devel >= 1.0.0
+BuildRequires:  libmatroska-devel
 BuildRequires:  libmpcdec-devel
 BuildRequires:  libtar-devel
 BuildRequires:  libtool
@@ -65,9 +65,6 @@ BuildRequires:  pkgconfig(jack) >= 1.9.7
 BuildRequires:  pkgconfig(libarchive) >= 3.1.0
 BuildRequires:  pkgconfig(libass) >= 0.9.8
 BuildRequires:  pkgconfig(libavc1394) >= 0.5.3
-BuildRequires:  pkgconfig(libavcodec) >= 57.64.100
-BuildRequires:  pkgconfig(libavformat) >= 57.37.100
-BuildRequires:  pkgconfig(libavutil) >= 55.24.100
 BuildRequires:  pkgconfig(libbluray) >= 0.6.2
 BuildRequires:  pkgconfig(libcddb) >= 0.9.5
 BuildRequires:  pkgconfig(libchromaprint) >= 0.6.0
@@ -92,7 +89,6 @@ BuildRequires:  pkgconfig(libsecret-1) >= 0.18
 #BuildRequires:  pkgconfig(libsidplay2)
 BuildRequires:  pkgconfig(libssh2)
 BuildRequires:  pkgconfig(libsystemd)
-BuildRequires:  pkgconfig(libswscale) >= 4.2.100
 BuildRequires:  pkgconfig(libudev) >= 142
 BuildRequires:  pkgconfig(libupnp)
 BuildRequires:  pkgconfig(libva-drm)
@@ -155,6 +151,18 @@ BuildRequires:  pkgconfig(xpm)
 BuildRequires:  pkgconfig(xproto)
 BuildRequires:  pkgconfig(zvbi-0.2) >= 0.2.28
 
+# Make sure we pick up the latest FFMpeg libraries
+BuildRequires:  pkgconfig(libavcodec) >= 58
+BuildRequires:  pkgconfig(libavformat) >= 58
+BuildRequires:  pkgconfig(libavutil) >= 56
+BuildRequires:  pkgconfig(libswscale) >= 5
+
+%if 0%{?rhel}
+BuildRequires:  devtoolset-7-gcc-c++
+%else
+BuildRequires:  gcc-c++
+%endif
+
 Requires:       dejavu-sans-fonts
 Requires:       dejavu-sans-mono-fonts
 Requires:       dejavu-serif-fonts
@@ -210,6 +218,10 @@ This package contains the JACK audio plugin.
 %autosetup -p1
 
 %build
+%if 0%{?rhel} == 7
+. /opt/rh/devtoolset-7/enable
+%endif
+
 # Calls autoreconf to generate m4 macros and prepare Makefiles
 ./bootstrap
 %configure \
@@ -242,9 +254,11 @@ find %{buildroot} -name '*.la' -delete
 
 desktop-file-validate %{buildroot}%{_datadir}/applications/vlc.desktop
 
+%if 0%{?fedora} || 0%{?rhel} >= 8
 sed -i -e '/releases>/d' -e '/<release/d' \
     %{buildroot}%{_datadir}/metainfo/%{name}.appdata.xml
 appstream-util validate-relax %{buildroot}%{_datadir}/metainfo/%{name}.appdata.xml
+%endif
 
 # Remove installed fonts for skins2
 rm -fr %{buildroot}%{_datadir}/%{name}/skins2/fonts
@@ -814,6 +828,10 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Mon Oct 01 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.4-3
+- Pick latest FFMpeg libraries at build time.
+- Add support for RHEL/CentOS 7.
+
 * Fri Sep 21 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.4-2
 - Rebuild for updated dependencies.
 
