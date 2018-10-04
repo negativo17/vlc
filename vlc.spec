@@ -8,6 +8,7 @@ URL:        http://www.videolan.org
 
 Source0:    http://download.videolan.org/pub/videolan/%{name}/%{version}/%{name}-%{version}.tar.xz
 Patch0:     http://git.videolan.org/?p=vlc.git;a=patch;h=a8953ba707cca1f2de372ca24513296bcfcdaaa8#/vlc-x264-bit-depth.patch
+Patch1:     http://git.videolan.org/?p=vlc/vlc-3.0.git;a=patch;h=cbc1a02c032945b8b86f08c6cf203ebcd1e8667e#/vlc-libplacebo-06.patch
 
 BuildRequires:  aalib-devel
 BuildRequires:  autoconf
@@ -828,9 +829,10 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
-* Mon Oct 01 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.4-3
+* Thu Oct 04 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.4-3
 - Pick latest FFMpeg libraries at build time.
 - Add support for RHEL/CentOS 7.
+- Add libplacebo 0.6 patch.
 
 * Fri Sep 21 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.4-2
 - Rebuild for updated dependencies.
