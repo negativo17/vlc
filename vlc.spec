@@ -1,7 +1,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.4
-Release:    3%{?dist}
+Release:    4%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -230,6 +230,7 @@ This package contains the JACK audio plugin.
     --disable-optimizations \
     --disable-rpath \
     --enable-aa \
+    --enable-asdcp \
     --enable-bpg \
     --enable-daala \
     --enable-fdkaac \
@@ -395,7 +396,7 @@ fi
 %{_libdir}/%{name}/plugins/access/libavio_plugin.so
 %{_libdir}/%{name}/plugins/access/libcdda_plugin.so
 %{_libdir}/%{name}/plugins/access/libdc1394_plugin.so
-%ifarch x86_64
+%if 0%{?fedora}
 %{_libdir}/%{name}/plugins/access/libdcp_plugin.so
 %endif
 %{_libdir}/%{name}/plugins/access/libdtv_plugin.so
@@ -433,7 +434,9 @@ fi
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_dummy_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_file_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_http_plugin.so
+%if 0%{?fedora}
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_livehttp_plugin.so
+%endif
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_shout_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_udp_plugin.so
 %dir %{_libdir}/%{name}/plugins/audio_filter
@@ -663,7 +666,9 @@ fi
 %{_libdir}/%{name}/plugins/spu/liblogo_plugin.so
 %{_libdir}/%{name}/plugins/spu/libmarq_plugin.so
 %{_libdir}/%{name}/plugins/spu/libmosaic_plugin.so
+%if 0%{?fedora}
 %{_libdir}/%{name}/plugins/spu/libremoteosd_plugin.so
+%endif
 %{_libdir}/%{name}/plugins/spu/librss_plugin.so
 %{_libdir}/%{name}/plugins/spu/libsubsdelay_plugin.so
 %dir %{_libdir}/%{name}/plugins/stream_filter
@@ -829,6 +834,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Fri Oct 19 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.4-4
+- Temporarily disable libdcp, livehttp and libremoteosd plugins on RHEL 7.
+
 * Thu Oct 04 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.4-3
 - Pick latest FFMpeg libraries at build time.
 - Add support for RHEL/CentOS 7.
