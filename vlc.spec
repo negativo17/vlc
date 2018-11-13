@@ -1,7 +1,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.4
-Release:    4%{?dist}
+Release:    5%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -834,6 +834,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Tue Nov 13 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.4-5
+- Rebuild for FFMpeg update.
+
 * Fri Oct 19 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.4-4
 - Temporarily disable libdcp, livehttp and libremoteosd plugins on RHEL 7.
 
