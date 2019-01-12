@@ -1,14 +1,12 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
-Version:    3.0.4
-Release:    5%{?dist}
+Version:    3.0.6
+Release:    1%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
 
 Source0:    http://download.videolan.org/pub/videolan/%{name}/%{version}/%{name}-%{version}.tar.xz
-Patch0:     http://git.videolan.org/?p=vlc.git;a=patch;h=a8953ba707cca1f2de372ca24513296bcfcdaaa8#/vlc-x264-bit-depth.patch
-Patch1:     http://git.videolan.org/?p=vlc/vlc-3.0.git;a=patch;h=cbc1a02c032945b8b86f08c6cf203ebcd1e8667e#/vlc-libplacebo-06.patch
 
 BuildRequires:  aalib-devel
 BuildRequires:  autoconf
@@ -531,6 +529,7 @@ fi
 %{_libdir}/%{name}/plugins/codec/libvpx_plugin.so
 %{_libdir}/%{name}/plugins/codec/libwebvtt_plugin.so
 %{_libdir}/%{name}/plugins/codec/libx264_plugin.so
+%{_libdir}/%{name}/plugins/codec/libx26410b_plugin.so
 %{_libdir}/%{name}/plugins/codec/libx265_plugin.so
 %{_libdir}/%{name}/plugins/codec/libxwd_plugin.so
 %{_libdir}/%{name}/plugins/codec/libzvbi_plugin.so
@@ -637,6 +636,7 @@ fi
 %{_libdir}/%{name}/plugins/notify/libnotify_plugin.so
 %dir %{_libdir}/%{name}/plugins/packetizer
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_a52_plugin.so
+%{_libdir}/%{name}/plugins/packetizer/libpacketizer_av1_plugin.so
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_avparser_plugin.so
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_copy_plugin.so
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_dirac_plugin.so
@@ -834,6 +834,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Sat Jan 12 2019 Simone Caronni <negativo17@gmail.com> - 1:3.0.6-1
+- Update to 3.0.6.
+
 * Tue Nov 13 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.4-5
 - Rebuild for FFMpeg update.
 
