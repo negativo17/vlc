@@ -529,7 +529,9 @@ fi
 %{_libdir}/%{name}/plugins/codec/libvpx_plugin.so
 %{_libdir}/%{name}/plugins/codec/libwebvtt_plugin.so
 %{_libdir}/%{name}/plugins/codec/libx264_plugin.so
+%if 0%{?fedora}
 %{_libdir}/%{name}/plugins/codec/libx26410b_plugin.so
+%endif
 %{_libdir}/%{name}/plugins/codec/libx265_plugin.so
 %{_libdir}/%{name}/plugins/codec/libxwd_plugin.so
 %{_libdir}/%{name}/plugins/codec/libzvbi_plugin.so
