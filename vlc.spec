@@ -1,13 +1,15 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.6
-Release:    2%{?dist}
+Release:    3%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
 
 Source0:    http://download.videolan.org/pub/videolan/%{name}/%{version}/%{name}-%{version}.tar.xz
 Patch0:     %{name}-%{version}-fdk-aac-v2.patch
+Patch1:     https://git.videolan.org/?p=vlc/vlc-3.0.git;a=patch;h=2688feb2742a6021ca211ae5c106b12c3d822946#/%{name}-%{version}-libvpx-1.8.patch
+Patch2:     https://git.videolan.org/?p=vlc.git;a=patch;h=11449b5cd8b415768e010d9b7c1d6ba3cea21f82#/%{name}-%{version}-sftp.patch
 
 BuildRequires:  aalib-devel
 BuildRequires:  autoconf
@@ -78,9 +80,8 @@ BuildRequires:  pkgconfig(libmpg123)
 BuildRequires:  pkgconfig(libmtp) >= 1.0.0
 BuildRequires:  pkgconfig(libnfs) >= 1.10.0
 BuildRequires:  pkgconfig(libnotify)
-BuildRequires:  pkgconfig(libplacebo) >= 0.2.1
+#BuildRequires:  pkgconfig(libplacebo) >= 0.2.1
 BuildRequires:  pkgconfig(libpostproc)
-#BuildRequires:  pkgconfig(libplacebo) >= 0.2
 BuildRequires:  pkgconfig(libprojectM)
 BuildRequires:  pkgconfig(libpulse) >= 1.0
 BuildRequires:  pkgconfig(libraw1394) >= 2.0.1
@@ -837,6 +838,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Wed May 01 2019 Simone Caronni <negativo17@gmail.com> - 1:3.0.6-3
+- Rebuild for updated dependencies.
+
 * Tue Feb 26 2019 Simone Caronni <negativo17@gmail.com> - 1:3.0.6-2
 - Rebuild for updated dependencies.
 
