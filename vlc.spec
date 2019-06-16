@@ -1,15 +1,13 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
-Version:    3.0.6
-Release:    4%{?dist}
+Version:    3.0.7
+Release:    1%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
 
 Source0:    http://download.videolan.org/pub/videolan/%{name}/%{version}/%{name}-%{version}.tar.xz
-Patch0:     %{name}-%{version}-fdk-aac-v2.patch
-Patch1:     https://git.videolan.org/?p=vlc/vlc-3.0.git;a=patch;h=2688feb2742a6021ca211ae5c106b12c3d822946#/%{name}-%{version}-libvpx-1.8.patch
-Patch2:     https://git.videolan.org/?p=vlc.git;a=patch;h=11449b5cd8b415768e010d9b7c1d6ba3cea21f82#/%{name}-%{version}-sftp.patch
+Patch0:     %{name}-fdk-aac-v2.patch
 
 BuildRequires:  aalib-devel
 BuildRequires:  autoconf
@@ -838,6 +836,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Sun Jun 16 2019 Simone Caronni <negativo17@gmail.com> - 1:3.0.7-1
+- Update to 3.0.7.
+
 * Mon May 27 2019 Simone Caronni <negativo17@gmail.com> - 1:3.0.6-4
 - Rebuild for updated dependencies.
 
