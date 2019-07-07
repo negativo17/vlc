@@ -1,6 +1,6 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
-Version:    3.0.7
+Version:    3.0.7.1
 Release:    1%{?dist}
 Epoch:      1
 License:    GPLv2+
@@ -836,6 +836,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Sun Jul 07 2019 Simone Caronni <negativo17@gmail.com> - 1:3.0.7.1-1
+- Update to 3.0.7.1.
+
 * Sun Jun 16 2019 Simone Caronni <negativo17@gmail.com> - 1:3.0.7-1
 - Update to 3.0.7.
 
