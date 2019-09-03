@@ -1,6 +1,6 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
-Version:    3.0.7.1
+Version:    3.0.8
 Release:    1%{?dist}
 Epoch:      1
 License:    GPLv2+
@@ -72,7 +72,7 @@ BuildRequires:  pkgconfig(libdc1394-2) >= 2.1.0
 BuildRequires:  pkgconfig(libidn)
 #BuildRequires:  pkgconfig(libgoom2)
 BuildRequires:  pkgconfig(libmfx)
-BuildRequires:  pkgconfig(libmodplug) > 0.8.8
+BuildRequires:  pkgconfig(libmodplug) > 0.8.9
 BuildRequires:  pkgconfig(libmpeg2) > 0.3.2
 BuildRequires:  pkgconfig(libmpg123)
 BuildRequires:  pkgconfig(libmtp) >= 1.0.0
@@ -836,6 +836,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Tue Sep 03 2019 Simone Caronni <negativo17@gmail.com> - 1:3.0.8-1
+- Update to 3.0.8.
+
 * Sun Jul 07 2019 Simone Caronni <negativo17@gmail.com> - 1:3.0.7.1-1
 - Update to 3.0.7.1.
 
