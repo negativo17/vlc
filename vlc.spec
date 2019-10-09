@@ -1,7 +1,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.8
-Release:    1%{?dist}
+Release:    2%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -53,7 +53,9 @@ BuildRequires:  pkgconfig(egl)
 BuildRequires:  pkgconfig(fdk-aac)
 BuildRequires:  pkgconfig(flac)
 BuildRequires:  pkgconfig(fluidsynth) >= 1.1.2
+%if 0%{?fedora} || 0%{?rhel} >= 8
 BuildRequires:  pkgconfig(freerdp) >= 1.0.1
+%endif
 BuildRequires:  pkgconfig(freetype2)
 BuildRequires:  pkgconfig(fribidi)
 BuildRequires:  pkgconfig(gl)
@@ -156,7 +158,7 @@ BuildRequires:  pkgconfig(libavformat) >= 58
 BuildRequires:  pkgconfig(libavutil) >= 56
 BuildRequires:  pkgconfig(libswscale) >= 5
 
-%if 0%{?rhel}
+%if 0%{?rhel} == 7
 BuildRequires:  devtoolset-7-gcc-c++
 %else
 BuildRequires:  gcc-c++
@@ -394,7 +396,7 @@ fi
 %{_libdir}/%{name}/plugins/access/libavio_plugin.so
 %{_libdir}/%{name}/plugins/access/libcdda_plugin.so
 %{_libdir}/%{name}/plugins/access/libdc1394_plugin.so
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?rhel} >= 8
 %{_libdir}/%{name}/plugins/access/libdcp_plugin.so
 %endif
 %{_libdir}/%{name}/plugins/access/libdtv_plugin.so
@@ -414,7 +416,9 @@ fi
 %{_libdir}/%{name}/plugins/access/liblive555_plugin.so
 %{_libdir}/%{name}/plugins/access/libnfs_plugin.so
 %{_libdir}/%{name}/plugins/access/libpulsesrc_plugin.so
+%if 0%{?fedora} || 0%{?rhel} >= 8
 %{_libdir}/%{name}/plugins/access/librdp_plugin.so
+%endif
 %{_libdir}/%{name}/plugins/access/librtp_plugin.so
 %{_libdir}/%{name}/plugins/access/libsatip_plugin.so
 %{_libdir}/%{name}/plugins/access/libsdp_plugin.so
@@ -432,7 +436,7 @@ fi
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_dummy_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_file_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_http_plugin.so
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?rhel} >= 8
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_livehttp_plugin.so
 %endif
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_shout_plugin.so
@@ -529,7 +533,7 @@ fi
 %{_libdir}/%{name}/plugins/codec/libvpx_plugin.so
 %{_libdir}/%{name}/plugins/codec/libwebvtt_plugin.so
 %{_libdir}/%{name}/plugins/codec/libx264_plugin.so
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?rhel} >= 8
 %{_libdir}/%{name}/plugins/codec/libx26410b_plugin.so
 %endif
 %{_libdir}/%{name}/plugins/codec/libx265_plugin.so
@@ -836,6 +840,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Fri Sep 06 2019 Simone Caronni <negativo17@gmail.com> - 1:3.0.8-2
+- Disable FreeRDP plugin on RHEL/CentOS 7, it requires FreeRDP older than 2.0.
+
 * Tue Sep 03 2019 Simone Caronni <negativo17@gmail.com> - 1:3.0.8-1
 - Update to 3.0.8.
 
