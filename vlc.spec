@@ -1,7 +1,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.8
-Release:    2%{?dist}
+Release:    3%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -840,6 +840,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Mon Oct 21 2019 Simone Caronni <negativo17@gmail.com> - 1:3.0.8-3
+- Rebuild for updated dependencies.
+
 * Fri Sep 06 2019 Simone Caronni <negativo17@gmail.com> - 1:3.0.8-2
 - Disable FreeRDP plugin on RHEL/CentOS 7, it requires FreeRDP older than 2.0.
 
