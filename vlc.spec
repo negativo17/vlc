@@ -98,10 +98,6 @@ BuildRequires:  pkgconfig(libvncclient) >= 0.9.9
 #BuildRequires:  pkgconfig(libvsxu)
 BuildRequires:  pkgconfig(live555)
 BuildRequires:  pkgconfig(lua) >= 5.1
-%if 0%{?fedora} < 28
-# https://github.com/opencv/opencv/issues/10963
-BuildRequires:  pkgconfig(opencv) >= 2.0
-%endif
 BuildRequires:  pkgconfig(minizip)
 BuildRequires:  pkgconfig(ncursesw)
 BuildRequires:  pkgconfig(opus) >= 1.0.3
@@ -324,7 +320,7 @@ fi
 %{_bindir}/svlc
 %{_bindir}/%{name}
 %{_bindir}/%{name}-wrapper
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?rhel} >= 8
 %{_datadir}/metainfo/%{name}.appdata.xml
 %else
 %exclude %{_datadir}/metainfo/%{name}.appdata.xml
@@ -824,10 +820,6 @@ fi
 %{_libdir}/%{name}/plugins/access/libvcd_plugin.so
 %{_libdir}/%{name}/plugins/codec/libfluidsynth_plugin.so
 %{_libdir}/%{name}/plugins/codec/libsvcdsub_plugin.so
-%if 0%{?fedora} < 28
-%{_libdir}/%{name}/plugins/video_filter/libopencv_example_plugin.so
-%{_libdir}/%{name}/plugins/video_filter/libopencv_wrapper_plugin.so
-%endif
 %{_libdir}/%{name}/plugins/video_output/libdecklinkoutput_plugin.so
 
 %files devel
