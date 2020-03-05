@@ -1,7 +1,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.8
-Release:    4%{?dist}
+Release:    5%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -16,7 +16,6 @@ BuildRequires:  bison
 BuildRequires:  daala-devel
 BuildRequires:  decklink-devel
 BuildRequires:  desktop-file-utils
-BuildRequires:  faad2-devel
 BuildRequires:  flex
 BuildRequires:  game-music-emu-devel
 BuildRequires:  gettext-devel
@@ -489,7 +488,6 @@ fi
 %{_libdir}/%{name}/plugins/codec/libddummy_plugin.so
 %{_libdir}/%{name}/plugins/codec/libdvbsub_plugin.so
 %{_libdir}/%{name}/plugins/codec/libedummy_plugin.so
-%{_libdir}/%{name}/plugins/codec/libfaad_plugin.so
 %{_libdir}/%{name}/plugins/codec/libfdkaac_plugin.so
 %{_libdir}/%{name}/plugins/codec/libflac_plugin.so
 %{_libdir}/%{name}/plugins/codec/libg711_plugin.so
@@ -840,6 +838,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Thu Mar 05 2020 Simone Caronni <negativo17@gmail.com> - 1:3.0.8-5
+- Disable FAAC Decoder as it creates more problems than anything.
+
 * Sun Jan 19 2020 Simone Caronni <negativo17@gmail.com> - 1:3.0.8-4
 - Rebuild for updated dependencies.
 
