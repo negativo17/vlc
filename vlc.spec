@@ -1,7 +1,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.8
-Release:    5%{?dist}
+Release:    6%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -830,6 +830,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Tue Mar 17 2020 Simone Caronni <negativo17@gmail.com> - 1:3.0.8-6
+- Rebuild for updated dependencies.
+
 * Thu Mar 05 2020 Simone Caronni <negativo17@gmail.com> - 1:3.0.8-5
 - Disable FAAC Decoder as it creates more problems than anything.
 
