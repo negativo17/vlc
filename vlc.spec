@@ -1,3 +1,5 @@
+%define _legacy_common_support 1
+
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.8
