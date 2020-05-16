@@ -2,7 +2,7 @@
 
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
-Version:    3.0.9.2
+Version:    3.0.10
 Release:    1%{?dist}
 Epoch:      1
 License:    GPLv2+
@@ -47,6 +47,7 @@ BuildRequires:  pkgconfig(asdcplib)
 %endif
 BuildRequires:  pkgconfig(caca) >= 0.99.beta14
 BuildRequires:  pkgconfig(cairo) >= 1.13.1
+BuildRequires:  pkgconfig(dav1d)
 BuildRequires:  pkgconfig(dbus-1) >= 1.6.0
 BuildRequires:  pkgconfig(dvdnav) > 4.9.0
 BuildRequires:  pkgconfig(dvdread) > 4.9.0
@@ -156,7 +157,7 @@ BuildRequires:  pkgconfig(libavutil) >= 56
 BuildRequires:  pkgconfig(libswscale) >= 5
 
 %if 0%{?rhel} == 7
-BuildRequires:  devtoolset-7-gcc-c++
+BuildRequires:  devtoolset-8-gcc-c++
 %else
 BuildRequires:  gcc-c++
 %endif
@@ -217,7 +218,7 @@ This package contains the JACK audio plugin.
 
 %build
 %if 0%{?rhel} == 7
-. /opt/rh/devtoolset-7/enable
+. /opt/rh/devtoolset-8/enable
 %endif
 
 # Calls autoreconf to generate m4 macros and prepare Makefiles
@@ -483,6 +484,7 @@ fi
 %{_libdir}/%{name}/plugins/codec/libcdg_plugin.so
 %{_libdir}/%{name}/plugins/codec/libcvdsub_plugin.so
 %{_libdir}/%{name}/plugins/codec/libdaala_plugin.so
+%{_libdir}/%{name}/plugins/codec/libdav1d_plugin.so
 %{_libdir}/%{name}/plugins/codec/libddummy_plugin.so
 %{_libdir}/%{name}/plugins/codec/libdvbsub_plugin.so
 %{_libdir}/%{name}/plugins/codec/libedummy_plugin.so
@@ -529,9 +531,7 @@ fi
 %{_libdir}/%{name}/plugins/codec/libvpx_plugin.so
 %{_libdir}/%{name}/plugins/codec/libwebvtt_plugin.so
 %{_libdir}/%{name}/plugins/codec/libx264_plugin.so
-%if 0%{?fedora} || 0%{?rhel} >= 8
 %{_libdir}/%{name}/plugins/codec/libx26410b_plugin.so
-%endif
 %{_libdir}/%{name}/plugins/codec/libx265_plugin.so
 %{_libdir}/%{name}/plugins/codec/libxwd_plugin.so
 %{_libdir}/%{name}/plugins/codec/libzvbi_plugin.so
@@ -832,6 +832,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Sat May 16 2020 Simone Caronni <negativo17@gmail.com> - 1:3.0.10-1
+- Update to 3.0.10.
+
 * Fri Apr 24 2020 Simone Caronni <negativo17@gmail.com> - 1:3.0.9.2-1
 - Update to 3.0.9.2.
 
