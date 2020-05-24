@@ -3,7 +3,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.10
-Release:    1%{?dist}
+Release:    2%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -16,7 +16,7 @@ BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  bison
 BuildRequires:  daala-devel
-BuildRequires:  decklink-devel
+#BuildRequires:  decklink-devel
 BuildRequires:  desktop-file-utils
 BuildRequires:  flex
 BuildRequires:  game-music-emu-devel
@@ -818,11 +818,11 @@ fi
 %{_libdir}/%{name}/plugins/audio_output/libjack_plugin.so
 
 %files extras
-%{_libdir}/%{name}/plugins/access/libdecklink_plugin.so
+#%{_libdir}/%{name}/plugins/access/libdecklink_plugin.so
 %{_libdir}/%{name}/plugins/access/libvcd_plugin.so
 %{_libdir}/%{name}/plugins/codec/libfluidsynth_plugin.so
 %{_libdir}/%{name}/plugins/codec/libsvcdsub_plugin.so
-%{_libdir}/%{name}/plugins/video_output/libdecklinkoutput_plugin.so
+#%{_libdir}/%{name}/plugins/video_output/libdecklinkoutput_plugin.so
 
 %files devel
 %dir %{_includedir}/vlc
@@ -832,6 +832,9 @@ fi
 %{_libdir}/pkgconfig/libvlc.pc
 
 %changelog
+* Sun May 24 2020 Simone Caronni <negativo17@gmail.com> - 1:3.0.10-2
+- Momentarily disable Decklink plugin.
+
 * Sat May 16 2020 Simone Caronni <negativo17@gmail.com> - 1:3.0.10-1
 - Update to 3.0.10.
 
