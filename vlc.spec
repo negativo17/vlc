@@ -39,9 +39,10 @@ BuildRequires:  libtool
 BuildRequires:  lirc-devel
 BuildRequires:  yasm
 
-BuildRequires:  pkgconfig(avahi-client) >= 0.6
 BuildRequires:  pkgconfig(alsa) >= 1.0.24
+BuildRequires:  pkgconfig(aom)
 BuildRequires:  pkgconfig(aribb25) >= 0.2.6
+BuildRequires:  pkgconfig(avahi-client) >= 0.6
 BuildRequires:  pkgconfig(caca) >= 0.99.beta14
 BuildRequires:  pkgconfig(cairo) >= 1.13.1
 BuildRequires:  pkgconfig(dav1d)
@@ -224,6 +225,7 @@ This package contains the JACK audio plugin.
 %configure \
     --disable-silent-rules \
     --disable-optimizations \
+    --disable-opencv \
     --disable-rpath \
     --enable-aa \
 %ifarch x86_64
@@ -424,6 +426,7 @@ fi
 %{_libdir}/%{name}/plugins/codec/liba52_plugin.so
 %{_libdir}/%{name}/plugins/codec/libadpcm_plugin.so
 %{_libdir}/%{name}/plugins/codec/libaes3_plugin.so
+%{_libdir}/%{name}/plugins/codec/libaom_plugin.so
 %{_libdir}/%{name}/plugins/codec/libaraw_plugin.so
 %{_libdir}/%{name}/plugins/codec/libavcodec_plugin.so
 %{_libdir}/%{name}/plugins/codec/libcc_plugin.so
@@ -764,6 +767,8 @@ fi
 - Update to 3.0.11.
 - Update SPEC file.
 - Disable FreeRDP plugin until FreeRDP 2.x support is available.
+- Trim changelog.
+- Enable AOM/av1 plugin.
 
 * Sun May 24 2020 Simone Caronni <negativo17@gmail.com> - 1:3.0.10-2
 - Momentarily disable Decklink plugin.
@@ -809,155 +814,3 @@ fi
 
 * Sat Jan 12 2019 Simone Caronni <negativo17@gmail.com> - 1:3.0.6-1
 - Update to 3.0.6.
-
-* Tue Nov 13 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.4-5
-- Rebuild for FFMpeg update.
-
-* Fri Oct 19 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.4-4
-- Temporarily disable libdcp, livehttp and libremoteosd plugins on RHEL 7.
-
-* Thu Oct 04 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.4-3
-- Pick latest FFMpeg libraries at build time.
-- Add support for RHEL/CentOS 7.
-- Add libplacebo 0.6 patch.
-
-* Fri Sep 21 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.4-2
-- Rebuild for updated dependencies.
-
-* Wed Aug 22 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.4-1
-- Update to 3.0.4.
-
-* Mon Jul 16 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.3-2
-- Rebuild for updated dependencies.
-
-* Mon Jun 11 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.3-1
-- Update to 3.0.3.
-
-* Wed May 09 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.2-5
-- Add Fribidi 1.0 patch.
-
-* Wed May 09 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.2-4
-- Fix more scriptlets.
-
-* Sat May 05 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.2-3
-- Fix ldconfig invocations.
-
-* Mon Apr 30 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.2-2
-- Momentarily disable OpenCV support in Fedora 28:
-  https://github.com/opencv/opencv/issues/10963
-
-* Thu Apr 26 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.2-1
-- Update to 3.0.2.
-- Enable DeckLink and libnfs.
-
-* Tue Apr 10 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.1-1
-- Update to 3.0.1.
-
-* Tue Feb 27 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-26
-- Update to final 3.0.0.
-- Reorganize spec file. Merge core into main package.
-
-* Wed Jan 10 2018 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-25.20180109git0c462fc
-- Update VLC to latest snapshot from the vlc-3.0 branch (post rc5).
-
-* Thu Dec 28 2017 Andrew Gunnerson <andrewgunnerson@gmail.com> - 1:3.0.0-24.20171228gitc5b41a6
-- Update to latest snapshot.
-
-* Wed Oct 25 2017 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-23.20171025gita55b0a5
-- Update to latest snapshot.
-
-* Wed Aug 23 2017 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-22.20170822git954ec0a
-- Update to latest snapshot.
-
-* Tue Aug 08 2017 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-21.20170807gitc6cb7a3
-- Update to latest snapshot.
-
-* Sat Jun 24 2017 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-20.20170624git1601852
-- Update to latest snapshot.
-
-* Sun May 14 2017 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-19.20170514git6fd55ac
-- Update to latest snapshot.
-
-* Thu Mar 23 2017 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-18.20170322git9513f34
-- Update to latest snapshot.
-
-* Thu Feb 23 2017 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-17.20170223gitb67f92d
-- Update to latest snapshot.
-
-* Tue Jan 03 2017 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-16.20170103git8d997bc
-- Update to latest snapshot.
-
-* Thu Dec 22 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-15.20161221git634cd2e
-- Fix compilation on Fedora 24.
-
-* Wed Dec 21 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-14.20161221git6807b05
-- Update to latest snapshot.
-- Enable asdcplib support for x86_64.
-
-* Fri Dec 16 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-13.20161216gitac68b13
-- Update to latest snapshot.
-
-* Tue Nov 29 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-12.20161129git2b860fc
-- Update to latest sources.
-
-* Sat Nov 19 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-11.20161118git5d48ad3
-- Require components from FFmpeg 3.2 to avoid pulling in compat-ffmpeg at build.
-
-* Fri Nov 18 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-10.20161118git5d48ad3
-- Update to latest snapshot.
-- Enable Daala.
-
-* Thu Nov 17 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-9.20161117gitae0cb07
-- Update to latest snapshot.
-
-* Wed Oct 12 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-8.20161012git756dbb7
-- Update to latest snapshot.
-
-* Sat Oct 08 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-7.20161008gitc910cc6
-- Update to latest sources.
-- Rebuild for fdk-aac update.
-
-* Sun Oct 02 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-6.20160930git1dcb06c
-- Rebuild for x265 update.
-
-* Sun Oct 02 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-5.20160930git1dcb06c
-- Update to latest snapshot.
-- Add AppData support for Fedora (metadata from upstream).
-- Update package release according to package guidelines.
-
-* Sun Aug 21 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-4.749293f
-- Update to latest snapshot.
-- Enable FreeRDP, leave it disabled for Fedora 25 (FreeRDP 2.x snapshot).
-- Fix vlc-cache-gen call in scriptlets.
-- Do not run update-desktop-database on Fedora 25+ as per packaging guidelines.
-
-* Fri Jul 22 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-3.9d27766
-- Update to latest snapshot.
-- Enable aribb25, soxr, libarchive, live555, libnfs plugins.
-
-* Thu Jul 14 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-2.6cb361c
-- Update to latest snapshot.
-- Enable libmpeg2, libsecret and protobuf-lite (Chromecast) plugins.
-
-* Tue May 24 2016 Simone Caronni <negativo17@gmail.com> - 1:3.0.0-1.b016524
-- Update to a 3.0.0 snapshot.
-- Remove Gnome VFS, rdp and libmpeg2 support.
-- Enable QT 5.5 interface.
-- Enable Wayland output.
-- Disable RDP support until FreeRDP decides to make a release and VLC does
-  support it.
-
-* Wed Apr 20 2016 Simone Caronni <negativo17@gmail.com> - 1:2.2.2-5
-- Rebuild for libprojectM bump.
-
-* Mon Apr 04 2016 Simone Caronni <negativo17@gmail.com> - 1:2.2.2-4
-- Rebuild for libva bump.
-
-* Fri Mar 18 2016 Simone Caronni <negativo17@gmail.com> - 1:2.2.2-3
-- Fix Matroska build.
-
-* Wed Mar 16 2016 Simone Caronni <negativo17@gmail.com> - 1:2.2.2-2
-- Lower gettext requirements for RHEL/CentOS 7.
-
-* Sat Jan 30 2016 Simone Caronni <negativo17@gmail.com> - 1:2.2.2-1
-- First build.
