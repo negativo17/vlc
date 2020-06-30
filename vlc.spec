@@ -52,9 +52,6 @@ BuildRequires:  pkgconfig(egl)
 BuildRequires:  pkgconfig(fdk-aac)
 BuildRequires:  pkgconfig(flac)
 BuildRequires:  pkgconfig(fluidsynth) >= 1.1.2
-%if 0%{?fedora} || 0%{?rhel} >= 8
-BuildRequires:  pkgconfig(freerdp) >= 1.0.1
-%endif
 BuildRequires:  pkgconfig(freetype2)
 BuildRequires:  pkgconfig(fribidi)
 BuildRequires:  pkgconfig(gl)
@@ -742,7 +739,6 @@ fi
 %ifarch x86_64
 %{_libdir}/%{name}/plugins/access/libdcp_plugin.so
 %endif
-%{_libdir}/%{name}/plugins/access/librdp_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_livehttp_plugin.so
 %{_libdir}/%{name}/plugins/spu/libremoteosd_plugin.so
 %endif
@@ -764,9 +760,10 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
-* Sun Jun 28 2020 Simone Caronni <negativo17@gmail.com> - 1:3.0.11-1
+* Tue Jun 30 2020 Simone Caronni <negativo17@gmail.com> - 1:3.0.11-1
 - Update to 3.0.11.
 - Update SPEC file.
+- Disable FreeRDP plugin until FreeRDP 2.x support is available.
 
 * Sun May 24 2020 Simone Caronni <negativo17@gmail.com> - 1:3.0.10-2
 - Momentarily disable Decklink plugin.
