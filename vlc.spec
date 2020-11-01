@@ -1,15 +1,15 @@
-%define _legacy_common_support 1
-
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.11.1
-Release:    1%{?dist}
+Release:    2%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
 
 Source0:    http://download.videolan.org/pub/videolan/%{name}/%{version}/%{name}-%{version}.tar.xz
 Patch0:     %{name}-fdk-aac-v2.patch
+Patch1:     http://git.videolan.org/?p=vlc/vlc-3.0.git;a=patch;h=85aa32db726559743d08d2fcafbb90fc923c43ff#/vlc-qt-headers-1.patch
+Patch2:     http://git.videolan.org/?p=vlc/vlc-3.0.git;a=patch;h=4f899efc13a3a8f5259ce260655dfdd6f4830299#/vlc-qt-headers-2.patch
 
 BuildRequires:  aalib-devel
 BuildRequires:  autoconf
@@ -37,6 +37,9 @@ BuildRequires:  libmpcdec-devel
 BuildRequires:  libtar-devel
 BuildRequires:  libtool
 BuildRequires:  lirc-devel
+%if 0%{?fedora} >= 33
+BuildRequires:	qt5-qtbase-private-devel
+%endif
 BuildRequires:  yasm
 
 BuildRequires:  pkgconfig(alsa) >= 1.0.24
@@ -763,6 +766,9 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Sun Nov 01 2020 Simone Caronni <negativo17@gmail.com> - 1:3.0.11.1-2
+- Add patches to compile with latest QT.
+
 * Sun Aug 16 2020 Simone Caronni <negativo17@gmail.com> - 1:3.0.11.1-1
 - Update to 3.0.11.1.
 
