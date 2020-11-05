@@ -97,7 +97,6 @@ BuildRequires:  pkgconfig(libva-wayland)
 BuildRequires:  pkgconfig(libvncclient) >= 0.9.9
 #BuildRequires:  pkgconfig(libvsxu)
 BuildRequires:  pkgconfig(live555)
-BuildRequires:  pkgconfig(lua) >= 5.1
 BuildRequires:  pkgconfig(minizip)
 BuildRequires:  pkgconfig(ncursesw)
 BuildRequires:  pkgconfig(opus) >= 1.0.3
@@ -156,6 +155,13 @@ BuildRequires:  pkgconfig(libswscale) >= 5
 %ifarch x86_64
 BuildRequires:  pkgconfig(asdcplib)
 BuildRequires:  pkgconfig(libmfx)
+%endif
+
+%if 0%{?fedora} || 0%{?rhel} >= 8
+BuildRequires:  compat-lua
+BuildRequires:  pkgconfig(lua-5.1)
+%else
+BuildRequires:  pkgconfig(lua) >= 5.1
 %endif
 
 %if 0%{?rhel} == 7
@@ -217,6 +223,12 @@ This package contains the JACK audio plugin.
 
 %prep
 %autosetup -p1
+%if 0%{?fedora} || 0%{?rhel} >= 8
+sed -i \
+    -e 's/lua5.1/lua-5.1/g' \
+    -e 's/luac/luac-5.1/g' \
+    configure.ac
+%endif
 
 %build
 %if 0%{?rhel} == 7
@@ -768,6 +780,7 @@ fi
 %changelog
 * Sun Nov 01 2020 Simone Caronni <negativo17@gmail.com> - 1:3.0.11.1-2
 - Add patches to compile with latest QT.
+- Use LUA 5.1 on Fedora and RHEL/CentOS 8+.
 
 * Sun Aug 16 2020 Simone Caronni <negativo17@gmail.com> - 1:3.0.11.1-1
 - Update to 3.0.11.1.
