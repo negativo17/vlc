@@ -242,16 +242,21 @@ sed -i \
     --disable-optimizations \
     --disable-opencv \
     --disable-rpath \
-    --enable-aa \
 %ifarch x86_64
     --enable-asdcp \
 %endif
+%ifarch aarch64
+	--enable-omxil \
+	--enable-omxil-vout \
+	--enable-rpi-omxil \
+	--enable-mmal \
+	--enable-mmal-avcodec \
+%endif
+    --enable-aa \
     --enable-bpg \
     --enable-daala \
     --enable-fdkaac \
     --enable-lirc \
-    --enable-omxil \
-    --enable-omxil-vout \
     --enable-realrtsp \
     --enable-tremor \
     --enable-wayland \
@@ -289,7 +294,7 @@ rm -fr %{buildroot}%{_datadir}/macosx
 %check
 desktop-file-validate %{buildroot}%{_datadir}/applications/vlc.desktop
 %if 0%{?fedora} || 0%{?rhel} >= 8
-appstream-util validate-relax %{buildroot}%{_metainfodir}/%{name}.appdata.xml
+appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/%{name}.appdata.xml
 %endif
 
 %post
@@ -463,8 +468,10 @@ fi
 %{_libdir}/%{name}/plugins/codec/liblpcm_plugin.so
 %{_libdir}/%{name}/plugins/codec/libmpg123_plugin.so
 %{_libdir}/%{name}/plugins/codec/liboggspots_plugin.so
+%ifarch aarch64
 %{_libdir}/%{name}/plugins/codec/libomxil_plugin.so
 %{_libdir}/%{name}/plugins/codec/libomxil_vout_plugin.so
+%endif
 %{_libdir}/%{name}/plugins/codec/libopus_plugin.so
 %{_libdir}/%{name}/plugins/codec/libpng_plugin.so
 %{_libdir}/%{name}/plugins/codec/librawvideo_plugin.so
@@ -781,6 +788,7 @@ fi
 * Sun Nov 01 2020 Simone Caronni <negativo17@gmail.com> - 1:3.0.11.1-2
 - Add patches to compile with latest QT.
 - Use LUA 5.1 on Fedora and RHEL/CentOS 8+.
+- Adjust build options for ARM 64.
 
 * Sun Aug 16 2020 Simone Caronni <negativo17@gmail.com> - 1:3.0.11.1-1
 - Update to 3.0.11.1.
