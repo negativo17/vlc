@@ -1,12 +1,22 @@
+#global commit0 196cb1b2296ab46e9e9558108ec91b645de7370f
+#global date 20201104
+#global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
+%global tag %{version}
+
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.11.1
-Release:    3%{?dist}
+Release:    3%{!?tag:.%{date}git%{shortcommit0}}%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
 
+%if 0%{?tag:1}
 Source0:    http://download.videolan.org/pub/videolan/%{name}/%{version}/%{name}-%{version}.tar.xz
+%else
+Source0:    https://code.videolan.org/videolan/vlc-3.0/-/archive/%{commit0}/vlc-%{shortcommit0}.tar.gz
+%endif
+
 Patch0:     %{name}-fdk-aac-v2.patch
 Patch1:     http://git.videolan.org/?p=vlc/vlc-3.0.git;a=patch;h=85aa32db726559743d08d2fcafbb90fc923c43ff#/vlc-qt-headers-1.patch
 Patch2:     http://git.videolan.org/?p=vlc/vlc-3.0.git;a=patch;h=4f899efc13a3a8f5259ce260655dfdd6f4830299#/vlc-qt-headers-2.patch
@@ -222,7 +232,13 @@ streaming protocols.
 This package contains the JACK audio plugin.
 
 %prep
+%if 0%{?tag:1}
 %autosetup -p1
+%else
+%autosetup -p1 -n %{name}-3.0-%{commit0}
+touch src/revision.txt
+%endif
+
 %if 0%{?fedora} || 0%{?rhel} >= 8
 sed -i \
     -e 's/lua5.1/lua-5.1/g' \
@@ -787,6 +803,7 @@ fi
 %changelog
 * Sun Dec 06 2020 Simone Caronni <negativo17@gmail.com> - 1:3.0.11.1-3
 - Rebuild for updated dependencies.
+- Allow specifying snapshots in the SPEC file.
 
 * Sun Nov 01 2020 Simone Caronni <negativo17@gmail.com> - 1:3.0.11.1-2
 - Add patches to compile with latest QT.
