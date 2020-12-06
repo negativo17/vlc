@@ -1,7 +1,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.11.1
-Release:    2%{?dist}
+Release:    3%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -785,6 +785,9 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Sun Dec 06 2020 Simone Caronni <negativo17@gmail.com> - 1:3.0.11.1-3
+- Rebuild for updated dependencies.
+
 * Sun Nov 01 2020 Simone Caronni <negativo17@gmail.com> - 1:3.0.11.1-2
 - Add patches to compile with latest QT.
 - Use LUA 5.1 on Fedora and RHEL/CentOS 8+.
