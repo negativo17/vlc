@@ -2,24 +2,23 @@
 #global date 20201104
 #global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 %global tag %{version}
+%global branch 3.0
 
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
-Version:    3.0.11.1
-Release:    3%{!?tag:.%{date}git%{shortcommit0}}%{?dist}
+Version:    3.0.12.1
+Release:    1%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
 
 %if 0%{?tag:1}
-Source0:    http://download.videolan.org/pub/videolan/%{name}/%{version}/%{name}-%{version}.tar.xz
+Source0:    https://code.videolan.org/videolan/%{name}-%{branch}/-/archive/%{version}/%{name}-%{branch}-%{version}.tar.bz2
 %else
-Source0:    https://code.videolan.org/videolan/vlc-3.0/-/archive/%{commit0}/vlc-%{shortcommit0}.tar.gz
+Source0:    https://code.videolan.org/videolan/%{name}-%{branch}/-/archive/%{commit0}/%{name}-%{branch}-%{commit0}.tar.bz2
 %endif
 
 Patch0:     %{name}-fdk-aac-v2.patch
-Patch1:     http://git.videolan.org/?p=vlc/vlc-3.0.git;a=patch;h=85aa32db726559743d08d2fcafbb90fc923c43ff#/vlc-qt-headers-1.patch
-Patch2:     http://git.videolan.org/?p=vlc/vlc-3.0.git;a=patch;h=4f899efc13a3a8f5259ce260655dfdd6f4830299#/vlc-qt-headers-2.patch
 
 BuildRequires:  aalib-devel
 BuildRequires:  autoconf
@@ -233,11 +232,12 @@ This package contains the JACK audio plugin.
 
 %prep
 %if 0%{?tag:1}
-%autosetup -p1
+%autosetup -p1 -n %{name}-%{branch}-%{version}
 %else
-%autosetup -p1 -n %{name}-3.0-%{commit0}
-touch src/revision.txt
+%autosetup -p1 -n %{name}-%{branch}-%{commit0}
 %endif
+
+touch src/revision.txt
 
 %if 0%{?fedora} || 0%{?rhel} >= 8
 sed -i \
@@ -409,6 +409,7 @@ fi
 %{_libdir}/%{name}/plugins/access/liblive555_plugin.so
 %{_libdir}/%{name}/plugins/access/libnfs_plugin.so
 %{_libdir}/%{name}/plugins/access/libpulsesrc_plugin.so
+%{_libdir}/%{name}/plugins/access/librist_plugin.so
 %{_libdir}/%{name}/plugins/access/librtp_plugin.so
 %{_libdir}/%{name}/plugins/access/libsatip_plugin.so
 %{_libdir}/%{name}/plugins/access/libsdp_plugin.so
@@ -425,6 +426,7 @@ fi
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_dummy_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_file_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_http_plugin.so
+%{_libdir}/%{name}/plugins/access_output/libaccess_output_rist_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_shout_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_udp_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libaudio_format_plugin.so
@@ -801,6 +803,10 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Tue Jan  5 2021 Simone Caronni <negativo17@gmail.com> - 1:3.0.12.1-1
+- Update to 3.0.12.1.
+- Switch source to Gitlab.
+
 * Sun Dec 06 2020 Simone Caronni <negativo17@gmail.com> - 1:3.0.11.1-3
 - Rebuild for updated dependencies.
 - Allow specifying snapshots in the SPEC file.
