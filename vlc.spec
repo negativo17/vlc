@@ -19,6 +19,7 @@ Source0:    https://code.videolan.org/videolan/%{name}-%{branch}/-/archive/%{com
 %endif
 
 Patch0:     %{name}-fdk-aac-v2.patch
+Patch1:     %{name}-rpi-path.patch
 
 BuildRequires:  aalib-devel
 BuildRequires:  autoconf
@@ -40,7 +41,6 @@ BuildRequires:  libebml-devel
 BuildRequires:  libgcrypt-devel
 BuildRequires:  libjpeg-turbo-devel
 BuildRequires:  libmad-devel
-#BuildRequires:  libmmal-devel
 BuildRequires:  libmatroska-devel
 BuildRequires:  libmpcdec-devel
 BuildRequires:  libtar-devel
@@ -179,6 +179,11 @@ BuildRequires:  devtoolset-8-gcc-c++
 BuildRequires:  gcc-c++
 %endif
 
+%ifarch aarch64
+BuildRequires:  pkgconfig(mmal)
+BuildRequires:  pkgconfig(openmaxil)
+%endif
+
 Requires:       dejavu-sans-fonts
 Requires:       dejavu-sans-mono-fonts
 Requires:       dejavu-serif-fonts
@@ -266,7 +271,6 @@ sed -i \
 	--enable-omxil-vout \
 	--enable-rpi-omxil \
 	--enable-mmal \
-	--enable-mmal-avcodec \
 %endif
     --enable-aa \
     --enable-bpg \
@@ -806,6 +810,7 @@ fi
 * Tue Jan  5 2021 Simone Caronni <negativo17@gmail.com> - 1:3.0.12.1-1
 - Update to 3.0.12.1.
 - Switch source to Gitlab.
+- Fix aarch64 build.
 
 * Sun Dec 06 2020 Simone Caronni <negativo17@gmail.com> - 1:3.0.11.1-3
 - Rebuild for updated dependencies.
