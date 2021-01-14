@@ -7,7 +7,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.12.1
-Release:    1%{?dist}
+Release:    2%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -79,6 +79,7 @@ BuildRequires:  pkgconfig(libavc1394) >= 0.5.3
 BuildRequires:  pkgconfig(libbluray) >= 0.6.2
 BuildRequires:  pkgconfig(libcddb) >= 0.9.5
 BuildRequires:  pkgconfig(libchromaprint) >= 0.6.0
+BuildRequires:  pkgconfig(libdca) >= 0.0.5
 BuildRequires:  pkgconfig(libdc1394-2) >= 2.1.0
 BuildRequires:  pkgconfig(libidn)
 #BuildRequires:  pkgconfig(libgoom2)
@@ -476,6 +477,7 @@ fi
 %{_libdir}/%{name}/plugins/codec/libcvdsub_plugin.so
 %{_libdir}/%{name}/plugins/codec/libdaala_plugin.so
 %{_libdir}/%{name}/plugins/codec/libdav1d_plugin.so
+%{_libdir}/%{name}/plugins/codec/libdca_plugin.so
 %{_libdir}/%{name}/plugins/codec/libddummy_plugin.so
 %{_libdir}/%{name}/plugins/codec/libdvbsub_plugin.so
 %{_libdir}/%{name}/plugins/codec/libedummy_plugin.so
@@ -807,6 +809,9 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Thu Jan 14 2021 Simone Caronni <negativo17@gmail.com> - 1:3.0.12.1-2
+- Enable DTS plugin.
+
 * Tue Jan  5 2021 Simone Caronni <negativo17@gmail.com> - 1:3.0.12.1-1
 - Update to 3.0.12.1.
 - Switch source to Gitlab.
