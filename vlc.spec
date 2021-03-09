@@ -33,7 +33,11 @@ BuildRequires:  game-music-emu-devel
 BuildRequires:  gettext-devel
 BuildRequires:  git
 #BuildRequires:  hostname
+%if 0%{?fedora} || 0%{?rhel} == 7
 BuildRequires:  kdelibs
+%else
+BuildRequires:  kf5-kdelibs4support-libs
+%endif
 BuildRequires:  liba52-devel
 BuildRequires:  libappstream-glib
 BuildRequires:  libdvbpsi-devel
@@ -120,7 +124,10 @@ BuildRequires:  pkgconfig(samplerate)
 BuildRequires:  pkgconfig(schroedinger-1.0) >= 1.0.10
 BuildRequires:  pkgconfig(sdl) >= 1.2.10
 BuildRequires:  pkgconfig(smbclient)
+# SDL_image isn't built for EPEL 8
+%if 0%{?fedora} || 0%{?rhel} == 7
 BuildRequires:  pkgconfig(SDL_image) >= 1.2.10
+%endif
 #BuildRequires:  pkgconfig(shine) >= 3.0.0
 BuildRequires:  pkgconfig(shout) >= 2.1
 BuildRequires:  pkgconfig(soxr) >= 0.1.2
@@ -503,7 +510,9 @@ fi
 %{_libdir}/%{name}/plugins/codec/libschroedinger_plugin.so
 %{_libdir}/%{name}/plugins/codec/libscte18_plugin.so
 %{_libdir}/%{name}/plugins/codec/libscte27_plugin.so
+%if 0%{?fedora} || 0%{?rhel} == 7
 %{_libdir}/%{name}/plugins/codec/libsdl_image_plugin.so
+%endif
 %{_libdir}/%{name}/plugins/codec/libspeex_plugin.so
 %{_libdir}/%{name}/plugins/codec/libspdif_plugin.so
 %{_libdir}/%{name}/plugins/codec/libspudec_plugin.so
@@ -809,6 +818,9 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Tue Mar 09 2021 Jean-Marc Liger <ligenix@iscp.fr>- 1:3.0.12.1-3
+- Fix RHEL/CentOS 8 build.
+
 * Thu Jan 14 2021 Simone Caronni <negativo17@gmail.com> - 1:3.0.12.1-2
 - Enable DTS plugin.
 
