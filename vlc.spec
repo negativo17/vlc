@@ -7,7 +7,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.12.1
-Release:    2%{?dist}
+Release:    3%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -818,7 +818,7 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
-* Tue Mar 09 2021 Jean-Marc Liger <ligenix@iscp.fr>- 1:3.0.12.1-3
+* Tue Mar 09 2021 Jean-Marc Liger <ligenix@iscp.fr> - 1:3.0.12.1-3
 - Fix RHEL/CentOS 8 build.
 
 * Thu Jan 14 2021 Simone Caronni <negativo17@gmail.com> - 1:3.0.12.1-2
