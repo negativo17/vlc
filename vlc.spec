@@ -20,6 +20,7 @@ Source0:    https://code.videolan.org/videolan/%{name}-%{branch}/-/archive/%{com
 
 Patch0:     %{name}-fdk-aac-v2.patch
 Patch1:     %{name}-rpi-path.patch
+Patch2:     0001-Add-missing-include-limits-to-file-using-std.patch
 
 BuildRequires:  aalib-devel
 BuildRequires:  autoconf
