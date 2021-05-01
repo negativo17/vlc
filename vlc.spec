@@ -6,8 +6,8 @@
 
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
-Version:    3.0.12.1
-Release:    5%{?dist}
+Version:    3.0.13
+Release:    1%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -20,7 +20,6 @@ Source0:    https://code.videolan.org/videolan/%{name}-%{branch}/-/archive/%{com
 
 Patch0:     %{name}-fdk-aac-v2.patch
 Patch1:     %{name}-rpi-path.patch
-Patch2:     0001-Add-missing-include-limits-to-file-using-std.patch
 
 BuildRequires:  aalib-devel
 BuildRequires:  autoconf
@@ -819,6 +818,9 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Sat May 01 2021 Simone Caronni <negativo17@gmail.com> - 1:3.0.13-1
+- Update to 3.0.13.
+
 * Sat Apr 17 2021 Simone Caronni <negativo17@gmail.com> - 1:3.0.12.1-5
 - Fix build on Fedora 34.
 
