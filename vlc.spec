@@ -6,20 +6,21 @@
 
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
-Version:    3.0.14
+Version:    3.0.16
 Release:    1%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
 
 %if 0%{?tag:1}
-Source0:    https://code.videolan.org/videolan/%{name}-%{branch}/-/archive/%{version}/%{name}-%{branch}-%{version}.tar.bz2
+Source0:    http://get.videolan.org/%{name}/%{version}/%{name}-%{version}.tar.xz
 %else
-Source0:    https://code.videolan.org/videolan/%{name}-%{branch}/-/archive/%{commit0}/%{name}-%{branch}-%{commit0}.tar.bz2
+Source0:    https://code.videolan.org/videolan/%{name}/-/archive/%{commit0}/%{name}-%{branch}-%{commit0}.tar.bz2
 %endif
 
 Patch0:     %{name}-fdk-aac-v2.patch
 Patch1:     %{name}-rpi-path.patch
+Patch2:     %{name}-dvdread.patch
 
 BuildRequires:  aalib-devel
 BuildRequires:  autoconf
@@ -245,7 +246,7 @@ This package contains the JACK audio plugin.
 
 %prep
 %if 0%{?tag:1}
-%autosetup -p1 -n %{name}-%{branch}-%{version}
+%autosetup -p1
 %else
 %autosetup -p1 -n %{name}-%{branch}-%{commit0}
 %endif
@@ -818,6 +819,9 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Sun Jun 20 2021 Simone Caronni <negativo17@gmail.com> - 1:3.0.16-1
+- Update to 3.0.16.
+
 * Sun May 23 2021 Simone Caronni <negativo17@gmail.com> - 1:3.0.14-1
 - Update to 3.0.14.
 
