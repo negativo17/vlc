@@ -7,7 +7,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.16
-Release:    3%{?dist}
+Release:    4%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -188,7 +188,7 @@ BuildRequires:  devtoolset-8-gcc-c++
 BuildRequires:  gcc-c++
 %endif
 
-%ifarch aarch64
+%ifarch armv7hl
 BuildRequires:  pkgconfig(mmal)
 BuildRequires:  pkgconfig(openmaxil)
 %endif
@@ -275,7 +275,7 @@ sed -i \
 %ifarch x86_64
     --enable-asdcp \
 %endif
-%ifarch aarch64
+%ifarch armv7hl
 	--enable-omxil \
 	--enable-omxil-vout \
 	--enable-rpi-omxil \
@@ -500,7 +500,7 @@ fi
 %{_libdir}/%{name}/plugins/codec/liblpcm_plugin.so
 %{_libdir}/%{name}/plugins/codec/libmpg123_plugin.so
 %{_libdir}/%{name}/plugins/codec/liboggspots_plugin.so
-%ifarch aarch64
+%ifarch armv7hl
 %{_libdir}/%{name}/plugins/codec/libomxil_plugin.so
 %{_libdir}/%{name}/plugins/codec/libomxil_vout_plugin.so
 %endif
@@ -819,6 +819,9 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Sun Oct 03 2021 Simone Caronni <negativo17@gmail.com> - 1:3.0.16-4
+- Enable Raspberry Pi support only for 32 bit.
+
 * Tue Jul 27 2021 Simone Caronni <negativo17@gmail.com> - 1:3.0.16-3
 - Rebuild for updated dependencies.
 
