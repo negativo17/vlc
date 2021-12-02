@@ -7,7 +7,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.16
-Release:    4%{?dist}
+Release:    5%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -51,7 +51,7 @@ BuildRequires:  libmpcdec-devel
 BuildRequires:  libtar-devel
 BuildRequires:  libtool
 BuildRequires:  lirc-devel
-%if 0%{?fedora} >= 33
+%if 0%{?fedora} || 0%{?rhel} >= 8
 BuildRequires:	qt5-qtbase-private-devel
 %endif
 BuildRequires:  yasm
@@ -819,6 +819,10 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Thu Dec 02 2021 Simone Caronni <negativo17@gmail.com> - 1:3.0.16-5
+- Rebuild for updated depdendencies.
+- Fix build with recent CentOS/RHEL 8 updates.
+
 * Sun Oct 03 2021 Simone Caronni <negativo17@gmail.com> - 1:3.0.16-4
 - Enable Raspberry Pi support only for 32 bit.
 
