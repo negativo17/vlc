@@ -7,7 +7,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.16
-Release:    5%{?dist}
+Release:    6%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -112,6 +112,7 @@ BuildRequires:  pkgconfig(libva-wayland)
 BuildRequires:  pkgconfig(libvncclient) >= 0.9.9
 #BuildRequires:  pkgconfig(libvsxu)
 BuildRequires:  pkgconfig(live555)
+BuildRequires:  pkgconfig(microdns) >= 0.1.2
 BuildRequires:  pkgconfig(minizip)
 BuildRequires:  pkgconfig(ncursesw)
 BuildRequires:  pkgconfig(opus) >= 1.0.3
@@ -647,6 +648,7 @@ fi
 %{_libdir}/%{name}/plugins/packetizer/libpacketizer_vc1_plugin.so
 %{_libdir}/%{name}/plugins/services_discovery/libavahi_plugin.so
 %{_libdir}/%{name}/plugins/services_discovery/libmediadirs_plugin.so
+%{_libdir}/%{name}/plugins/services_discovery/libmicrodns_plugin.so
 %{_libdir}/%{name}/plugins/services_discovery/libmtp_plugin.so
 %{_libdir}/%{name}/plugins/services_discovery/libpodcast_plugin.so
 %{_libdir}/%{name}/plugins/services_discovery/libpulselist_plugin.so
@@ -819,6 +821,9 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Sat Mar 12 2022 Simone Caronni <negativo17@gmail.com> - 1:3.0.16-6
+- Enable MicroDNS plugin.
+
 * Thu Dec 02 2021 Simone Caronni <negativo17@gmail.com> - 1:3.0.16-5
 - Rebuild for updated depdendencies.
 - Fix build with recent CentOS/RHEL 8 updates.
