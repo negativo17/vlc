@@ -204,9 +204,10 @@ Requires:       kde-filesystem
 # For xdg-screensaver
 Requires:       xdg-utils
 
-Provides:       %{name}-core = %{?epoch:%{epoch}:}%{version}-%{release}
-Obsoletes:      %{name}-core < %{?epoch:%{epoch}:}%{version}-%{release}
-
+Provides:       %{name}-plugin-jack = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-plugin-jack < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:       %{name}-extras = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-extras < %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description
 VLC is a free and open source cross-platform multimedia player and framework
@@ -224,28 +225,6 @@ streaming protocols.
 
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
-
-%package extras
-Summary:        VLC media player extra modules
-Requires:       %{name}%{_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-
-%description extras
-VLC is a free and open source cross-platform multimedia player and framework
-that plays most multimedia files as well as DVDs, Audio CDs, VCDs, and various
-streaming protocols.
-
-This package contains extra modules.
-
-%package plugin-jack
-Summary:        JACK audio plugin for VLC
-Requires:       %{name}%{_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-
-%description plugin-jack
-VLC is a free and open source cross-platform multimedia player and framework
-that plays most multimedia files as well as DVDs, Audio CDs, VCDs, and various
-streaming protocols.
-
-This package contains the JACK audio plugin.
 
 %prep
 %if 0%{?tag:1}
@@ -359,18 +338,6 @@ fi
 %endif
 %{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name}/plugins &>/dev/null || :
 
-%post extras
-%{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name}/plugins &>/dev/null || :
-
-%postun extras
-%{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name}/plugins &>/dev/null || :
-
-%post plugin-jack
-%{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name}/plugins &>/dev/null || :
-
-%postun plugin-jack
-%{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name}/plugins &>/dev/null || :
-
 %files -f %{name}.lang
 %license COPYING
 %doc AUTHORS NEWS README THANKS
@@ -401,6 +368,7 @@ fi
 %{_libdir}/%{name}/plugins/access/libaccess_alsa_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_concat_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_imem_plugin.so
+%{_libdir}/%{name}/plugins/access/libaccess_jack_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_mms_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_mtp_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_realrtsp_plugin.so
@@ -408,6 +376,7 @@ fi
 %{_libdir}/%{name}/plugins/access/libavio_plugin.so
 %{_libdir}/%{name}/plugins/access/libcdda_plugin.so
 %{_libdir}/%{name}/plugins/access/libdc1394_plugin.so
+#%{_libdir}/%{name}/plugins/access/libdecklink_plugin.so
 %{_libdir}/%{name}/plugins/access/libdtv_plugin.so
 %{_libdir}/%{name}/plugins/access/libdv1394_plugin.so
 %{_libdir}/%{name}/plugins/access/libdvb_plugin.so
@@ -436,6 +405,7 @@ fi
 %{_libdir}/%{name}/plugins/access/libtimecode_plugin.so
 %{_libdir}/%{name}/plugins/access/libudp_plugin.so
 %{_libdir}/%{name}/plugins/access/libv4l2_plugin.so
+%{_libdir}/%{name}/plugins/access/libvcd_plugin.so
 %{_libdir}/%{name}/plugins/access/libvdr_plugin.so
 %{_libdir}/%{name}/plugins/access/libvnc_plugin.so
 %{_libdir}/%{name}/plugins/access/libxcb_screen_plugin.so
@@ -476,6 +446,7 @@ fi
 %{_libdir}/%{name}/plugins/audio_output/libafile_plugin.so
 %{_libdir}/%{name}/plugins/audio_output/libalsa_plugin.so
 %{_libdir}/%{name}/plugins/audio_output/libamem_plugin.so
+%{_libdir}/%{name}/plugins/audio_output/libjack_plugin.so
 %{_libdir}/%{name}/plugins/audio_output/libpulse_plugin.so
 %{_libdir}/%{name}/plugins/codec/liba52_plugin.so
 %{_libdir}/%{name}/plugins/codec/libadpcm_plugin.so
@@ -494,6 +465,7 @@ fi
 %{_libdir}/%{name}/plugins/codec/libedummy_plugin.so
 %{_libdir}/%{name}/plugins/codec/libfdkaac_plugin.so
 %{_libdir}/%{name}/plugins/codec/libflac_plugin.so
+%{_libdir}/%{name}/plugins/codec/libfluidsynth_plugin.so
 %{_libdir}/%{name}/plugins/codec/libg711_plugin.so
 %{_libdir}/%{name}/plugins/codec/libgstdecode_plugin.so
 %{_libdir}/%{name}/plugins/codec/libjpeg_plugin.so
@@ -524,6 +496,7 @@ fi
 %{_libdir}/%{name}/plugins/codec/libsubsdec_plugin.so
 %{_libdir}/%{name}/plugins/codec/libsubstx3g_plugin.so
 %{_libdir}/%{name}/plugins/codec/libsubsusf_plugin.so
+%{_libdir}/%{name}/plugins/codec/libsvcdsub_plugin.so
 %{_libdir}/%{name}/plugins/codec/libsvgdec_plugin.so
 %{_libdir}/%{name}/plugins/codec/libt140_plugin.so
 %{_libdir}/%{name}/plugins/codec/libtelx_plugin.so
@@ -762,6 +735,7 @@ fi
 %{_libdir}/%{name}/plugins/video_filter/libwave_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libaa_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libcaca_plugin.so
+#%{_libdir}/%{name}/plugins/video_output/libdecklinkoutput_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libegl_wl_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libegl_x11_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libfb_plugin.so
@@ -806,17 +780,6 @@ fi
 %{_libdir}/%{name}/plugins/spu/libremoteosd_plugin.so
 %endif
 
-%files plugin-jack
-%{_libdir}/%{name}/plugins/access/libaccess_jack_plugin.so
-%{_libdir}/%{name}/plugins/audio_output/libjack_plugin.so
-
-%files extras
-#%{_libdir}/%{name}/plugins/access/libdecklink_plugin.so
-%{_libdir}/%{name}/plugins/access/libvcd_plugin.so
-%{_libdir}/%{name}/plugins/codec/libfluidsynth_plugin.so
-%{_libdir}/%{name}/plugins/codec/libsvcdsub_plugin.so
-#%{_libdir}/%{name}/plugins/video_output/libdecklinkoutput_plugin.so
-
 %files devel
 %{_includedir}/vlc
 %{_libdir}/*.so
@@ -825,6 +788,7 @@ fi
 %changelog
 * Mon Mar 21 2022 Simone Caronni <negativo17@gmail.com> - 1:3.0.17.3-1
 - Update to 3.0.17.3.
+- Drop extras and Jack plugin subpackages.
 
 * Sat Mar 12 2022 Simone Caronni <negativo17@gmail.com> - 1:3.0.16-6
 - Enable MicroDNS plugin.
