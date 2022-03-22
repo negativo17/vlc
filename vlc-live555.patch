@@ -1,0 +1,43 @@
+diff -Naur vlc-3.0.17.3.old/modules/access/live555.cpp vlc-3.0.17.3/modules/access/live555.cpp
+--- vlc-3.0.17.3.old/modules/access/live555.cpp	2022-03-22 09:28:48.619845027 +0100
++++ vlc-3.0.17.3/modules/access/live555.cpp	2022-03-22 09:46:35.784000960 +0100
+@@ -59,6 +59,7 @@
+ #include <liveMedia.hh>
+ #include <liveMedia_version.hh>
+ #include <Base64.hh>
++#include <NetAddress.hh>
+ 
+ extern "C" {
+ #include "../access/mms/asf.h"  /* Who said ugly ? */
+@@ -730,7 +731,8 @@
+     unsigned const thresh = 200000; /* RTP reorder threshold .2 second (default .1) */
+     const char     *p_sess_lang = NULL;
+     const char     *p_lang;
+-
++    struct sockaddr_storage addr;
++    
+     b_rtsp_tcp    = var_CreateGetBool( p_demux, "rtsp-tcp" ) ||
+                     var_GetBool( p_demux, "rtsp-http" );
+     i_client_port = var_InheritInteger( p_demux, "rtp-client-port" );
+@@ -853,7 +855,8 @@
+             if( !p_sys->b_multicast )
+             {
+                 /* We need different rollover behaviour for multicast */
+-                p_sys->b_multicast = IsMulticastAddress( sub->connectionEndpointAddress() );
++                sub->getConnectionEndpointAddress(addr);
++                p_sys->b_multicast = IsMulticastAddress( addr );
+             }
+ 
+             tk = (live_track_t*)malloc( sizeof( live_track_t ) );
+diff -Naur vlc-3.0.17.3.old/modules/access/Makefile.am vlc-3.0.17.3/modules/access/Makefile.am
+--- vlc-3.0.17.3.old/modules/access/Makefile.am	2022-03-22 09:28:48.619845027 +0100
++++ vlc-3.0.17.3/modules/access/Makefile.am	2022-03-22 09:46:20.539746539 +0100
+@@ -318,7 +318,7 @@
+ liblive555_plugin_la_SOURCES = access/live555.cpp access/mms/asf.c access/mms/buffer.c \
+                                access/live555_dtsgen.h codec/opus_header.c codec/opus_header.h
+ liblive555_plugin_la_CXXFLAGS = $(AM_CXXFLAGS) $(CXXFLAGS_live555)
+-liblive555_plugin_la_LIBADD = $(LIBS_live555) $(SOCKET_LIBS)
++liblive555_plugin_la_LIBADD = $(LIBS_live555) $(SOCKET_LIBS) -lssl -lcrypto
+ liblive555_plugin_la_LDFLAGS = $(AM_LDFLAGS) -rpath '$(accessdir)' \
+ 	$(LDFLAGS_live555)
+ access_LTLIBRARIES += $(LTLIBlive555)

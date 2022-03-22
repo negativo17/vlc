@@ -6,8 +6,8 @@
 
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
-Version:    3.0.16
-Release:    6%{?dist}
+Version:    3.0.17.3
+Release:    1%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -21,6 +21,8 @@ Source0:    https://code.videolan.org/videolan/%{name}/-/archive/%{commit0}/%{na
 Patch0:     %{name}-fdk-aac-v2.patch
 Patch1:     %{name}-rpi-path.patch
 Patch2:     %{name}-dvdread.patch
+# https://code.videolan.org/videolan/vlc/-/issues/25473
+Patch3:     %{name}-live555.patch
 
 BuildRequires:  aalib-devel
 BuildRequires:  autoconf
@@ -821,6 +823,9 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Mon Mar 21 2022 Simone Caronni <negativo17@gmail.com> - 1:3.0.17.3-1
+- Update to 3.0.17.3.
+
 * Sat Mar 12 2022 Simone Caronni <negativo17@gmail.com> - 1:3.0.16-6
 - Enable MicroDNS plugin.
 
