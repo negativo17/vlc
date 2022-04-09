@@ -6,14 +6,14 @@
 
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
-Version:    3.0.17.3
+Version:    3.0.17.4
 Release:    1%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
 
 %if 0%{?tag:1}
-Source0:    http://get.videolan.org/%{name}/%{version}/%{name}-%{version}.tar.xz
+Source0:    https://code.videolan.org/videolan/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
 %else
 Source0:    https://code.videolan.org/videolan/%{name}/-/archive/%{commit0}/%{name}-%{branch}-%{commit0}.tar.bz2
 %endif
@@ -23,6 +23,8 @@ Patch1:     %{name}-rpi-path.patch
 Patch2:     %{name}-dvdread.patch
 # https://code.videolan.org/videolan/vlc/-/issues/25473
 Patch3:     %{name}-live555.patch
+# https://code.videolan.org/videolan/vlc/-/commit/2c7b5e004f1a968077973b4105d7d65dca7539e9
+Patch4:     %{name}-caca.patch
 
 BuildRequires:  aalib-devel
 BuildRequires:  autoconf
@@ -167,11 +169,17 @@ BuildRequires:  pkgconfig(xpm)
 BuildRequires:  pkgconfig(xproto)
 BuildRequires:  pkgconfig(zvbi-0.2) >= 0.2.28
 
-# Make sure we pick up the latest FFMpeg libraries
+# FFMpeg 5 is not supported:
 BuildRequires:  pkgconfig(libavcodec) >= 58
+BuildRequires:  pkgconfig(libavcodec) < 59
 BuildRequires:  pkgconfig(libavformat) >= 58
+BuildRequires:  pkgconfig(libavformat) < 59
 BuildRequires:  pkgconfig(libavutil) >= 56
+BuildRequires:  pkgconfig(libavutil) < 57
+BuildRequires:  pkgconfig(libpostproc) >= 55
+BuildRequires:  pkgconfig(libpostproc) < 56
 BuildRequires:  pkgconfig(libswscale) >= 5
+BuildRequires:  pkgconfig(libswscale) < 6
 
 %ifarch x86_64
 BuildRequires:  pkgconfig(asdcplib)
@@ -186,7 +194,7 @@ BuildRequires:  pkgconfig(lua) >= 5.1
 %endif
 
 %if 0%{?rhel} == 7
-BuildRequires:  devtoolset-8-gcc-c++
+BuildRequires:  devtoolset-9-gcc-c++
 %else
 BuildRequires:  gcc-c++
 %endif
@@ -244,7 +252,7 @@ sed -i \
 
 %build
 %if 0%{?rhel} == 7
-. /opt/rh/devtoolset-8/enable
+. /opt/rh/devtoolset-9/enable
 %endif
 
 # Calls autoreconf to generate m4 macros and prepare Makefiles
@@ -786,6 +794,9 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Sat Apr 09 2022 Simone Caronni <negativo17@gmail.com> - 1:3.0.17.4-1
+- Update to 3.0.17.4.
+
 * Mon Mar 21 2022 Simone Caronni <negativo17@gmail.com> - 1:3.0.17.3-1
 - Update to 3.0.17.3.
 - Drop extras and Jack plugin subpackages.
