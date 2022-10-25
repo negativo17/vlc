@@ -1,7 +1,7 @@
-diff -Naur vlc-3.0-3.0.12.1.old/configure.ac vlc-3.0-3.0.12.1/configure.ac
---- vlc-3.0-3.0.12.1.old/configure.ac	2021-01-06 08:48:11.178012965 +0100
-+++ vlc-3.0-3.0.12.1/configure.ac	2021-01-06 10:47:19.830919131 +0100
-@@ -3479,14 +3479,14 @@
+diff -Naur vlc-3.0.18.old/configure.ac vlc-3.0.18/configure.ac
+--- vlc-3.0.18.old/configure.ac	2022-10-25 12:56:20.422454335 +0200
++++ vlc-3.0.18/configure.ac	2022-10-25 12:56:31.756655709 +0200
+@@ -3448,14 +3448,14 @@
      [Multi-Media Abstraction Layer (MMAL) hardware plugin (default enable)]))
  if test "${enable_mmal}" != "no"; then
    VLC_SAVE_FLAGS

@@ -1,7 +1,7 @@
-diff -Naur vlc-3.0.16.old/modules/access/dvdnav.c vlc-3.0.16/modules/access/dvdnav.c
---- vlc-3.0.16.old/modules/access/dvdnav.c	2021-06-21 09:20:45.677111222 +0200
-+++ vlc-3.0.16/modules/access/dvdnav.c	2021-06-21 09:27:17.725088022 +0200
-@@ -371,14 +371,7 @@
+diff -Naur vlc-3.0.18.old/modules/access/dvdnav.c vlc-3.0.18/modules/access/dvdnav.c
+--- vlc-3.0.18.old/modules/access/dvdnav.c	2022-10-25 13:46:10.582638329 +0200
++++ vlc-3.0.18/modules/access/dvdnav.c	2022-10-25 13:47:30.781066163 +0200
+@@ -376,14 +376,7 @@
          goto bailout;
  
      /* Open dvdnav */
@@ -16,7 +16,7 @@ diff -Naur vlc-3.0.16.old/modules/access/dvdnav.c vlc-3.0.16/modules/access/dvdn
  #if DVDNAV_VERSION >= 60100
      dvdnav_logger_cb cbs;
      cbs.pf_log = DvdNavLog;
-@@ -397,10 +390,8 @@
+@@ -402,10 +395,8 @@
  
  bailout:
      free( psz_file );
@@ -27,9 +27,9 @@ diff -Naur vlc-3.0.16.old/modules/access/dvdnav.c vlc-3.0.16/modules/access/dvdn
      return i_ret;
  }
  
-diff -Naur vlc-3.0.16.old/modules/access/dvdread.c vlc-3.0.16/modules/access/dvdread.c
---- vlc-3.0.16.old/modules/access/dvdread.c	2021-06-21 09:20:45.682111311 +0200
-+++ vlc-3.0.16/modules/access/dvdread.c	2021-06-21 09:27:31.004324337 +0200
+diff -Naur vlc-3.0.18.old/modules/access/dvdread.c vlc-3.0.18/modules/access/dvdread.c
+--- vlc-3.0.18.old/modules/access/dvdread.c	2022-10-25 13:46:10.582638329 +0200
++++ vlc-3.0.18/modules/access/dvdread.c	2022-10-25 13:47:30.781066163 +0200
 @@ -212,14 +212,7 @@
      }
  
