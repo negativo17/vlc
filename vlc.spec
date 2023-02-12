@@ -7,7 +7,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.18
-Release:    2%{?dist}
+Release:    3%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -26,19 +26,16 @@ BuildRequires:  aalib-devel
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  bison
+BuildRequires:  compat-lua
 BuildRequires:  daala-devel
 #BuildRequires:  decklink-devel
 BuildRequires:  desktop-file-utils
 BuildRequires:  flex
 BuildRequires:  game-music-emu-devel
+BuildRequires:  gcc-c++
 BuildRequires:  gettext-devel
 BuildRequires:  git
-#BuildRequires:  hostname
-%if 0%{?fedora} || 0%{?rhel} == 7
-BuildRequires:  kdelibs
-%else
 BuildRequires:  kf5-kdelibs4support-libs
-%endif
 BuildRequires:  liba52-devel
 BuildRequires:  libappstream-glib
 BuildRequires:  libdvbpsi-devel
@@ -51,9 +48,7 @@ BuildRequires:  libmpcdec-devel
 BuildRequires:  libtar-devel
 BuildRequires:  libtool
 BuildRequires:  lirc-devel
-%if 0%{?fedora} || 0%{?rhel} >= 8
 BuildRequires:	qt5-qtbase-private-devel
-%endif
 BuildRequires:  yasm
 
 BuildRequires:  pkgconfig(alsa) >= 1.0.24
@@ -112,6 +107,7 @@ BuildRequires:  pkgconfig(libva-wayland)
 BuildRequires:  pkgconfig(libvncclient) >= 0.9.9
 #BuildRequires:  pkgconfig(libvsxu)
 BuildRequires:  pkgconfig(live555)
+BuildRequires:  pkgconfig(lua-5.1)
 BuildRequires:  pkgconfig(microdns) >= 0.1.2
 BuildRequires:  pkgconfig(minizip)
 BuildRequires:  pkgconfig(ncursesw)
@@ -126,10 +122,7 @@ BuildRequires:  pkgconfig(samplerate)
 BuildRequires:  pkgconfig(schroedinger-1.0) >= 1.0.10
 BuildRequires:  pkgconfig(sdl) >= 1.2.10
 BuildRequires:  pkgconfig(smbclient)
-# SDL_image isn't built for EPEL 8
-%if 0%{?fedora} || 0%{?rhel} == 7
 BuildRequires:  pkgconfig(SDL_image) >= 1.2.10
-%endif
 #BuildRequires:  pkgconfig(shine) >= 3.0.0
 BuildRequires:  pkgconfig(shout) >= 2.1
 BuildRequires:  pkgconfig(soxr) >= 0.1.2
@@ -182,19 +175,6 @@ BuildRequires:  pkgconfig(asdcplib)
 BuildRequires:  pkgconfig(libmfx)
 %endif
 
-%if 0%{?fedora} || 0%{?rhel} >= 8
-BuildRequires:  compat-lua
-BuildRequires:  pkgconfig(lua-5.1)
-%else
-BuildRequires:  pkgconfig(lua) >= 5.1
-%endif
-
-%if 0%{?rhel} == 7
-BuildRequires:  devtoolset-9-gcc-c++
-%else
-BuildRequires:  gcc-c++
-%endif
-
 %ifarch armv7hl
 BuildRequires:  pkgconfig(mmal)
 BuildRequires:  pkgconfig(openmaxil)
@@ -239,18 +219,12 @@ developing applications that use %{name}.
 
 touch src/revision.txt
 
-%if 0%{?fedora} || 0%{?rhel} >= 8
 sed -i \
     -e 's/lua5.1/lua-5.1/g' \
     -e 's/luac/luac-5.1/g' \
     configure.ac
-%endif
 
 %build
-%if 0%{?rhel} == 7
-. /opt/rh/devtoolset-9/enable
-%endif
-
 # Calls autoreconf to generate m4 macros and prepare Makefiles
 ./bootstrap
 %configure \
@@ -289,12 +263,6 @@ sed -i \
 find %{buildroot} -name '*.a' -delete
 find %{buildroot} -name '*.la' -delete
 
-%if 0%{?fedora} || 0%{?rhel} >= 8
-sed -i -e '/releases>/d' -e '/<release/d' %{buildroot}%{_metainfodir}/%{name}.appdata.xml
-%else
-rm -f %{buildroot}%{_datadir}/metainfo/%{name}.appdata.xml
-%endif
-
 # Remove installed fonts for skins2
 rm -fr %{buildroot}%{_datadir}/%{name}/skins2/fonts
 
@@ -308,17 +276,10 @@ rm -fr %{buildroot}%{_datadir}/macosx
 
 %check
 desktop-file-validate %{buildroot}%{_datadir}/applications/vlc.desktop
-%if 0%{?fedora} || 0%{?rhel} >= 8
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/%{name}.appdata.xml
-%endif
 
 %post
-%{?ldconfig}
 %{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name} &>/dev/null
-%if 0%{?rhel}
-/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
-%{_bindir}/update-desktop-database &> /dev/null || :
-%endif
 
 %preun
 if [ $1 -eq 0 ] ; then
@@ -327,19 +288,8 @@ fi
 
 %postun
 %{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name} &>/dev/null
-%if 0%{?rhel} == 7
-/usr/bin/update-desktop-database &> /dev/null || :
-if [ $1 -eq 0 ] ; then
-    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
-    /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
-fi
-%endif
-%{?ldconfig}
 
 %posttrans
-%if 0%{?rhel} == 7
-%{_bindir}/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
-%endif
 %{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name}/plugins &>/dev/null || :
 
 %files -f %{name}.lang
@@ -358,9 +308,7 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}*.xpm
 %{_datadir}/%{name}
 %{_mandir}/man1/%{name}*.1*
-%if 0%{?fedora} || 0%{?rhel} >= 8
 %{_metainfodir}/%{name}.appdata.xml
-%endif
 %{_libdir}/*.so.*
 %ghost %{_libdir}/%{name}/plugins/plugins.dat
 %{_libdir}/%{name}/*.so*
@@ -416,6 +364,7 @@ fi
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_dummy_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_file_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_http_plugin.so
+%{_libdir}/%{name}/plugins/access_output/libaccess_output_livehttp_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_rist_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_shout_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_udp_plugin.so
@@ -479,10 +428,6 @@ fi
 %{_libdir}/%{name}/plugins/codec/liblpcm_plugin.so
 %{_libdir}/%{name}/plugins/codec/libmpg123_plugin.so
 %{_libdir}/%{name}/plugins/codec/liboggspots_plugin.so
-%ifarch armv7hl
-%{_libdir}/%{name}/plugins/codec/libomxil_plugin.so
-%{_libdir}/%{name}/plugins/codec/libomxil_vout_plugin.so
-%endif
 %{_libdir}/%{name}/plugins/codec/libopus_plugin.so
 %{_libdir}/%{name}/plugins/codec/libpng_plugin.so
 %{_libdir}/%{name}/plugins/codec/librawvideo_plugin.so
@@ -490,9 +435,7 @@ fi
 %{_libdir}/%{name}/plugins/codec/libschroedinger_plugin.so
 %{_libdir}/%{name}/plugins/codec/libscte18_plugin.so
 %{_libdir}/%{name}/plugins/codec/libscte27_plugin.so
-%if 0%{?fedora} || 0%{?rhel} == 7
 %{_libdir}/%{name}/plugins/codec/libsdl_image_plugin.so
-%endif
 %{_libdir}/%{name}/plugins/codec/libspeex_plugin.so
 %{_libdir}/%{name}/plugins/codec/libspdif_plugin.so
 %{_libdir}/%{name}/plugins/codec/libspudec_plugin.so
@@ -640,6 +583,7 @@ fi
 %{_libdir}/%{name}/plugins/spu/liblogo_plugin.so
 %{_libdir}/%{name}/plugins/spu/libmarq_plugin.so
 %{_libdir}/%{name}/plugins/spu/libmosaic_plugin.so
+%{_libdir}/%{name}/plugins/spu/libremoteosd_plugin.so
 %{_libdir}/%{name}/plugins/spu/librss_plugin.so
 %{_libdir}/%{name}/plugins/spu/libsubsdelay_plugin.so
 %{_libdir}/%{name}/plugins/stream_filter/libadf_plugin.so
@@ -766,7 +710,13 @@ fi
 %{_libdir}/%{name}/plugins/visualization/libprojectm_plugin.so
 %{_libdir}/%{name}/plugins/visualization/libvisual_plugin.so
 
+%ifarch armv7hl
+%{_libdir}/%{name}/plugins/codec/libomxil_plugin.so
+%{_libdir}/%{name}/plugins/codec/libomxil_vout_plugin.so
+%endif
+
 %ifarch x86_64
+%{_libdir}/%{name}/plugins/access/libdcp_plugin.so
 %{_libdir}/%{name}/plugins/codec/libqsv_plugin.so
 %{_libdir}/%{name}/plugins/video_chroma/libi420_rgb_mmx_plugin.so
 %{_libdir}/%{name}/plugins/video_chroma/libi420_rgb_sse2_plugin.so
@@ -776,20 +726,15 @@ fi
 %{_libdir}/%{name}/plugins/video_chroma/libi422_yuy2_sse2_plugin.so
 %endif
 
-%if 0%{?fedora} || 0%{?rhel} >= 8
-%ifarch x86_64
-%{_libdir}/%{name}/plugins/access/libdcp_plugin.so
-%endif
-%{_libdir}/%{name}/plugins/access_output/libaccess_output_livehttp_plugin.so
-%{_libdir}/%{name}/plugins/spu/libremoteosd_plugin.so
-%endif
-
 %files devel
 %{_includedir}/vlc
 %{_libdir}/*.so
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Sun Feb 12 2023 Simone Caronni <negativo17@gmail.com> - 1:3.0.18-3
+- Split SPEC file per distribution.
+
 * Thu Jan 05 2023 Simone Caronni <negativo17@gmail.com> - 1:3.0.18-2
 - Rebuild for updated dependencies.
 
