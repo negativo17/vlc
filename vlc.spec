@@ -7,7 +7,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.18
-Release:    3%{?dist}
+Release:    4%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -128,7 +128,7 @@ BuildRequires:  pkgconfig(shout) >= 2.1
 BuildRequires:  pkgconfig(soxr) >= 0.1.2
 BuildRequires:  pkgconfig(speex) >= 1.0.5
 BuildRequires:  pkgconfig(speexdsp)
-#BuildRequires:  pkgconfig(srt) >= 1.2.2
+BuildRequires:  pkgconfig(srt) >= 1.3.0
 BuildRequires:  pkgconfig(taglib) >= 1.9
 BuildRequires:  pkgconfig(theoradec) >= 1.0
 BuildRequires:  pkgconfig(theoraenc)
@@ -324,6 +324,7 @@ fi
 %{_libdir}/%{name}/plugins/access/libaccess_mms_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_mtp_plugin.so
 %{_libdir}/%{name}/plugins/access/libaccess_realrtsp_plugin.so
+%{_libdir}/%{name}/plugins/access/libaccess_srt_plugin.so
 %{_libdir}/%{name}/plugins/access/libattachment_plugin.so
 %{_libdir}/%{name}/plugins/access/libavio_plugin.so
 %{_libdir}/%{name}/plugins/access/libcdda_plugin.so
@@ -367,6 +368,7 @@ fi
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_livehttp_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_rist_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_shout_plugin.so
+%{_libdir}/%{name}/plugins/access_output/libaccess_output_srt_plugin.so
 %{_libdir}/%{name}/plugins/access_output/libaccess_output_udp_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libaudio_format_plugin.so
 %{_libdir}/%{name}/plugins/audio_filter/libaudiobargraph_a_plugin.so
@@ -732,6 +734,9 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Thu Mar 16 2023 Simone Caronni <negativo17@gmail.com> - 1:3.0.18-4
+- Enable SRT plugin.
+
 * Sun Feb 12 2023 Simone Caronni <negativo17@gmail.com> - 1:3.0.18-3
 - Split SPEC file per distribution.
 
