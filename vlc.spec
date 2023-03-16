@@ -1,22 +1,12 @@
-#global commit0 196cb1b2296ab46e9e9558108ec91b645de7370f
-#global date 20201104
-#global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
-%global tag %{version}
-%global branch 3.0
-
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.18
-Release:    3%{?dist}
+Release:    4%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
 
-%if 0%{?tag:1}
 Source0:    https://code.videolan.org/videolan/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
-%else
-Source0:    https://code.videolan.org/videolan/%{name}/-/archive/%{commit0}/%{name}-%{branch}-%{commit0}.tar.bz2
-%endif
 
 Patch0:     %{name}-fdk-aac-v2.patch
 Patch1:     %{name}-rpi-path.patch
@@ -27,14 +17,12 @@ BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  bison
 BuildRequires:  daala-devel
-#BuildRequires:  decklink-devel
 BuildRequires:  desktop-file-utils
 BuildRequires:  devtoolset-9-gcc-c++
 BuildRequires:  flex
 BuildRequires:  game-music-emu-devel
 BuildRequires:  gettext-devel
 BuildRequires:  git
-#BuildRequires:  hostname
 BuildRequires:  kdelibs
 BuildRequires:  liba52-devel
 BuildRequires:  libappstream-glib
@@ -81,21 +69,18 @@ BuildRequires:  pkgconfig(libchromaprint) >= 0.6.0
 BuildRequires:  pkgconfig(libdca) >= 0.0.5
 BuildRequires:  pkgconfig(libdc1394-2) >= 2.1.0
 BuildRequires:  pkgconfig(libidn)
-#BuildRequires:  pkgconfig(libgoom2)
 BuildRequires:  pkgconfig(libmodplug) > 0.8.9
 BuildRequires:  pkgconfig(libmpeg2) > 0.3.2
 BuildRequires:  pkgconfig(libmpg123)
 BuildRequires:  pkgconfig(libmtp) >= 1.0.0
 BuildRequires:  pkgconfig(libnfs) >= 1.10.0
 BuildRequires:  pkgconfig(libnotify)
-#BuildRequires:  pkgconfig(libplacebo) >= 0.2.1
 BuildRequires:  pkgconfig(libpostproc)
 BuildRequires:  pkgconfig(libprojectM)
 BuildRequires:  pkgconfig(libpulse) >= 1.0
 BuildRequires:  pkgconfig(libraw1394) >= 2.0.1
 BuildRequires:  pkgconfig(librsvg-2.0) >= 2.9.0
 BuildRequires:  pkgconfig(libsecret-1) >= 0.18
-#BuildRequires:  pkgconfig(libsidplay2)
 BuildRequires:  pkgconfig(libssh2)
 BuildRequires:  pkgconfig(libsystemd)
 BuildRequires:  pkgconfig(libudev) >= 142
@@ -104,7 +89,6 @@ BuildRequires:  pkgconfig(libva-drm)
 BuildRequires:  pkgconfig(libva-x11)
 BuildRequires:  pkgconfig(libva-wayland)
 BuildRequires:  pkgconfig(libvncclient) >= 0.9.9
-#BuildRequires:  pkgconfig(libvsxu)
 BuildRequires:  pkgconfig(live555)
 BuildRequires:  pkgconfig(lua) >= 5.1
 BuildRequires:  pkgconfig(microdns) >= 0.1.2
@@ -122,12 +106,10 @@ BuildRequires:  pkgconfig(schroedinger-1.0) >= 1.0.10
 BuildRequires:  pkgconfig(sdl) >= 1.2.10
 BuildRequires:  pkgconfig(smbclient)
 BuildRequires:  pkgconfig(SDL_image) >= 1.2.10
-#BuildRequires:  pkgconfig(shine) >= 3.0.0
 BuildRequires:  pkgconfig(shout) >= 2.1
 BuildRequires:  pkgconfig(soxr) >= 0.1.2
 BuildRequires:  pkgconfig(speex) >= 1.0.5
 BuildRequires:  pkgconfig(speexdsp)
-#BuildRequires:  pkgconfig(srt) >= 1.2.2
 BuildRequires:  pkgconfig(taglib) >= 1.9
 BuildRequires:  pkgconfig(theoradec) >= 1.0
 BuildRequires:  pkgconfig(theoraenc)
@@ -140,9 +122,7 @@ BuildRequires:  pkgconfig(wayland-client) >= 1.5.91
 BuildRequires:  pkgconfig(wayland-egl)
 BuildRequires:  pkgconfig(wayland-protocols) >= 1.4
 BuildRequires:  pkgconfig(wayland-scanner)
-#BuildRequires:  pkgconfig(x262)
 BuildRequires:  pkgconfig(x264) >= 0.86
-#BuildRequires:  pkgconfig(x26410b)
 BuildRequires:  pkgconfig(x265)
 BuildRequires:  pkgconfig(xcb) >= 1.6
 BuildRequires:  pkgconfig(xcb-composite)
@@ -210,11 +190,7 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
-%if 0%{?tag:1}
 %autosetup -p1
-%else
-%autosetup -p1 -n %{name}-%{branch}-%{commit0}
-%endif
 
 touch src/revision.txt
 
@@ -333,7 +309,6 @@ fi
 %{_libdir}/%{name}/plugins/access/libavio_plugin.so
 %{_libdir}/%{name}/plugins/access/libcdda_plugin.so
 %{_libdir}/%{name}/plugins/access/libdc1394_plugin.so
-#%{_libdir}/%{name}/plugins/access/libdecklink_plugin.so
 %{_libdir}/%{name}/plugins/access/libdtv_plugin.so
 %{_libdir}/%{name}/plugins/access/libdv1394_plugin.so
 %{_libdir}/%{name}/plugins/access/libdvb_plugin.so
@@ -690,7 +665,6 @@ fi
 %{_libdir}/%{name}/plugins/video_filter/libwave_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libaa_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libcaca_plugin.so
-#%{_libdir}/%{name}/plugins/video_output/libdecklinkoutput_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libegl_wl_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libegl_x11_plugin.so
 %{_libdir}/%{name}/plugins/video_output/libfb_plugin.so
@@ -733,6 +707,9 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Thu Mar 16 2023 Simone Caronni <negativo17@gmail.com> - 1:3.0.18-4
+- Rebuild for updated dependencies.
+
 * Sun Feb 12 2023 Simone Caronni <negativo17@gmail.com> - 1:3.0.18-3
 - Split SPEC file per distribution.
 
