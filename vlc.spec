@@ -7,7 +7,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.18
-Release:    4%{?dist}
+Release:    5%{?dist}
 Epoch:      1
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -171,7 +171,6 @@ BuildRequires:  pkgconfig(libswscale) >= 5
 BuildRequires:  pkgconfig(libswscale) < 6
 
 %ifarch x86_64
-BuildRequires:  pkgconfig(asdcplib)
 BuildRequires:  pkgconfig(libmfx)
 %endif
 
@@ -232,9 +231,6 @@ sed -i \
     --disable-optimizations \
     --disable-opencv \
     --disable-rpath \
-%ifarch x86_64
-    --enable-asdcp \
-%endif
 %ifarch armv7hl
 	--enable-omxil \
 	--enable-omxil-vout \
@@ -718,7 +714,6 @@ fi
 %endif
 
 %ifarch x86_64
-%{_libdir}/%{name}/plugins/access/libdcp_plugin.so
 %{_libdir}/%{name}/plugins/codec/libqsv_plugin.so
 %{_libdir}/%{name}/plugins/video_chroma/libi420_rgb_mmx_plugin.so
 %{_libdir}/%{name}/plugins/video_chroma/libi420_rgb_sse2_plugin.so
@@ -734,6 +729,9 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Fri Apr 21 2023 Simone Caronni <negativo17@gmail.com> - 1:3.0.18-5
+- Disable DCP plugin.
+
 * Thu Mar 16 2023 Simone Caronni <negativo17@gmail.com> - 1:3.0.18-4
 - Enable SRT plugin.
 
