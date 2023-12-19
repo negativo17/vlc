@@ -7,8 +7,8 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.20
-Release:    1%{?dist}
-Epoch:      1
+Release:    2%{?dist}
+Epoch:      2
 License:    GPLv2+
 URL:        http://www.videolan.org
 
@@ -193,6 +193,52 @@ Provides:       %{name}-plugin-jack = %{?epoch:%{epoch}:}%{version}-%{release}
 Obsoletes:      %{name}-plugin-jack < %{?epoch:%{epoch}:}%{version}-%{release}
 Provides:       %{name}-extras = %{?epoch:%{epoch}:}%{version}-%{release}
 Obsoletes:      %{name}-extras < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:       %{name}-cli = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-cli < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:       %{name}-devel = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-devel < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:       %{name}-gui-ncurses = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-gui-ncurses < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:       %{name}-gui-qt = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-gui-qt < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:       %{name}-gui-skins2 = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-gui-skins2 < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:       %{name}-libs = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-libs < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:       %{name}-plugin-crystalhd = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-plugin-crystalhd < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:       %{name}-plugin-ffmpeg = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-plugin-ffmpeg < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:       %{name}-plugin-fluidsynth = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-plugin-fluidsynth < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:       %{name}-plugin-gnome = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-plugin-gnome < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:       %{name}-plugin-gstreamer = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-plugin-gstreamer < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:       %{name}-plugin-ieee1394 = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-plugin-ieee1394 < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:       %{name}-plugin-jack = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-plugin-jack < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:       %{name}-plugin-kde = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-plugin-kde < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:       %{name}-plugin-lua = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-plugin-lua < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:       %{name}-plugin-notify = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-plugin-notify < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:       %{name}-plugin-pulseaudio = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-plugin-pulseaudio < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:       %{name}-plugin-samba = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-plugin-samba < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:       %{name}-plugin-svg = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-plugin-svg < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:       %{name}-plugin-visualization = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-plugin-visualization < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:       %{name}-plugin-vnc = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-plugin-vnc < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:       %{name}-plugins-base = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-plugins-base < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:       %{name}-plugins-video-out = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-plugins-video-out < %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description
 VLC is a free and open source cross-platform multimedia player and framework
@@ -735,6 +781,10 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Tue Dec 19 2023 Simone Caronni <negativo17@gmail.com> - 2:3.0.20-2
+- Update Epoch.
+- Obsolete/provide current split packages just introduced in Fedora.
+
 * Thu Nov 23 2023 Simone Caronni <negativo17@gmail.com> - 1:3.0.20-1
 - Update to 3.0.20.
 
