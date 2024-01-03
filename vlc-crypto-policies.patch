@@ -1,0 +1,18 @@
+diff -Naur vlc-3.0.20.old/modules/misc/gnutls.c vlc-3.0.20/modules/misc/gnutls.c
+--- vlc-3.0.20.old/modules/misc/gnutls.c	2024-01-03 09:50:17.147934856 +0100
++++ vlc-3.0.20/modules/misc/gnutls.c	2024-01-03 09:50:25.185209333 +0100
+@@ -768,12 +768,14 @@
+     "hash functions and compression methods can be selected. " \
+     "Refer to GNU TLS documentation for detailed syntax.")
+ static const char *const priorities_values[] = {
++    "@SYSTEM",
+     "PERFORMANCE",
+     "NORMAL",
+     "SECURE128",
+     "SECURE256",
+ };
+ static const char *const priorities_text[] = {
++    N_("System (default to system crypto ciphers policy)"),
+     N_("Performance (prioritize faster ciphers)"),
+     N_("Normal"),
+     N_("Secure 128-bits (exclude 256-bits ciphers)"),
