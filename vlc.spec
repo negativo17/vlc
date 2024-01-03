@@ -7,7 +7,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.20
-Release:    2%{?dist}
+Release:    3%{?dist}
 Epoch:      2
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -19,8 +19,8 @@ Source0:    https://code.videolan.org/videolan/%{name}/-/archive/%{commit0}/%{na
 %endif
 
 Patch0:     %{name}-fdk-aac-v2.patch
-Patch1:     %{name}-rpi-path.patch
-Patch2:     %{name}-dvdread.patch
+Patch1:     %{name}-dvdread.patch
+Patch2:     %{name}-crypto-policies.patch
 
 BuildRequires:  aalib-devel
 BuildRequires:  autoconf
@@ -195,8 +195,6 @@ Provides:       %{name}-extras = %{?epoch:%{epoch}:}%{version}-%{release}
 Obsoletes:      %{name}-extras < %{?epoch:%{epoch}:}%{version}-%{release}
 Provides:       %{name}-cli = %{?epoch:%{epoch}:}%{version}-%{release}
 Obsoletes:      %{name}-cli < %{?epoch:%{epoch}:}%{version}-%{release}
-Provides:       %{name}-devel = %{?epoch:%{epoch}:}%{version}-%{release}
-Obsoletes:      %{name}-devel < %{?epoch:%{epoch}:}%{version}-%{release}
 Provides:       %{name}-gui-ncurses = %{?epoch:%{epoch}:}%{version}-%{release}
 Obsoletes:      %{name}-gui-ncurses < %{?epoch:%{epoch}:}%{version}-%{release}
 Provides:       %{name}-gui-qt = %{?epoch:%{epoch}:}%{version}-%{release}
@@ -781,6 +779,10 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Wed Jan 03 2024 Simone Caronni <negativo17@gmail.com> - 2:3.0.20-3
+- Fix typo, main package should not provide devel subpackage.
+- Drop Raspberry PI patch and add crypto policies patch.
+
 * Tue Dec 19 2023 Simone Caronni <negativo17@gmail.com> - 2:3.0.20-2
 - Update Epoch.
 - Obsolete/provide current split packages just introduced in Fedora.
