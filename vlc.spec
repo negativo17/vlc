@@ -2,12 +2,11 @@
 #global date 20201104
 #global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 %global tag %{version}
-%global branch 3.0
 
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.20
-Release:    3%{?dist}
+Release:    4%{?dist}
 Epoch:      2
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -15,12 +14,14 @@ URL:        http://www.videolan.org
 %if 0%{?tag:1}
 Source0:    https://code.videolan.org/videolan/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
 %else
-Source0:    https://code.videolan.org/videolan/%{name}/-/archive/%{commit0}/%{name}-%{branch}-%{commit0}.tar.bz2
+Source0:    https://code.videolan.org/videolan/%{name}/-/archive/%{commit0}/%{name}-%{commit0}.tar.bz2#/%{name}-%{shortcommit0}.tar.bz2
 %endif
 
 Patch0:     %{name}-fdk-aac-v2.patch
 Patch1:     %{name}-dvdread.patch
 Patch2:     %{name}-crypto-policies.patch
+Patch3:     https://src.fedoraproject.org/rpms/vlc/raw/rawhide/f/oneVPL.patch
+Patch4:     https://src.fedoraproject.org/rpms/vlc/raw/rawhide/f/vaapi-without-ffmepg4.patch
 
 BuildRequires:  aalib-devel
 BuildRequires:  autoconf
@@ -35,7 +36,6 @@ BuildRequires:  game-music-emu-devel
 BuildRequires:  gcc-c++
 BuildRequires:  gettext-devel
 BuildRequires:  git
-#BuildRequires:  hostname
 BuildRequires:  kf5-kdelibs4support-libs
 BuildRequires:  liba52-devel
 BuildRequires:  libappstream-glib
@@ -77,6 +77,9 @@ BuildRequires:  pkgconfig(jack) >= 1.9.7
 BuildRequires:  pkgconfig(libarchive) >= 3.1.0
 BuildRequires:  pkgconfig(libass) >= 0.9.8
 BuildRequires:  pkgconfig(libavc1394) >= 0.5.3
+BuildRequires:	pkgconfig(libavcodec) >= 57.37.100
+BuildRequires:	pkgconfig(libavformat) >= 53.21.0
+BuildRequires:	pkgconfig(libavutil) >= 52.0.0
 BuildRequires:  pkgconfig(libbluray) >= 0.6.2
 BuildRequires:  pkgconfig(libcddb) >= 0.9.5
 BuildRequires:  pkgconfig(libchromaprint) >= 0.6.0
@@ -99,6 +102,7 @@ BuildRequires:  pkgconfig(librsvg-2.0) >= 2.9.0
 BuildRequires:  pkgconfig(libsecret-1) >= 0.18
 #BuildRequires:  pkgconfig(libsidplay2)
 BuildRequires:  pkgconfig(libssh2)
+BuildRequires:  pkgconfig(libswscale)
 BuildRequires:  pkgconfig(libsystemd)
 BuildRequires:  pkgconfig(libudev) >= 142
 BuildRequires:  pkgconfig(libupnp)
@@ -159,21 +163,9 @@ BuildRequires:  pkgconfig(xpm)
 BuildRequires:  pkgconfig(xproto)
 BuildRequires:  pkgconfig(zvbi-0.2) >= 0.2.28
 
-# FFMpeg 5 is not supported:
-BuildRequires:  pkgconfig(libavcodec) >= 58
-BuildRequires:  pkgconfig(libavcodec) < 59
-BuildRequires:  pkgconfig(libavformat) >= 58
-BuildRequires:  pkgconfig(libavformat) < 59
-BuildRequires:  pkgconfig(libavutil) >= 56
-BuildRequires:  pkgconfig(libavutil) < 57
-BuildRequires:  pkgconfig(libpostproc) >= 55
-BuildRequires:  pkgconfig(libpostproc) < 56
-BuildRequires:  pkgconfig(libswscale) >= 5
-BuildRequires:  pkgconfig(libswscale) < 6
-
 %ifarch x86_64
 BuildRequires:  pkgconfig(asdcplib)
-BuildRequires:  pkgconfig(libmfx)
+BuildRequires:  pkgconfig(vpl)
 %endif
 
 %ifarch armv7hl
@@ -259,7 +251,7 @@ developing applications that use %{name}.
 %if 0%{?tag:1}
 %autosetup -p1
 %else
-%autosetup -p1 -n %{name}-%{branch}-%{commit0}
+%autosetup -p1 -n %{name}-%{commit0}
 %endif
 
 touch src/revision.txt
@@ -499,8 +491,8 @@ fi
 %{_libdir}/%{name}/plugins/codec/libttml_plugin.so
 %{_libdir}/%{name}/plugins/codec/libtwolame_plugin.so
 %{_libdir}/%{name}/plugins/codec/libuleaddvaudio_plugin.so
-%{_libdir}/%{name}/plugins/codec/libvaapi_plugin.so
-%{_libdir}/%{name}/plugins/codec/libvaapi_drm_plugin.so
+#%{_libdir}/%{name}/plugins/codec/libvaapi_plugin.so
+#%{_libdir}/%{name}/plugins/codec/libvaapi_drm_plugin.so
 %{_libdir}/%{name}/plugins/codec/libvorbis_plugin.so
 %{_libdir}/%{name}/plugins/codec/libvpx_plugin.so
 %{_libdir}/%{name}/plugins/codec/libwebvtt_plugin.so
@@ -779,6 +771,11 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Sat Apr 06 2024 Simone Caronni <negativo17@gmail.com> - 2:3.0.20-4
+- Clean up SPEC file.
+- Switch from Intel MediaSDK to VPL.
+- Disable codec/vaapi (leave only video output) as in Fedora to drop ffmpeg4.
+
 * Wed Jan 03 2024 Simone Caronni <negativo17@gmail.com> - 2:3.0.20-3
 - Fix typo, main package should not provide devel subpackage.
 - Drop Raspberry PI patch and add crypto policies patch.
