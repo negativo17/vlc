@@ -1,7 +1,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.20
-Release:    3%{?dist}
+Release:    4%{?dist}
 Epoch:      2
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -10,6 +10,8 @@ Source0:    https://code.videolan.org/videolan/%{name}/-/archive/%{version}/%{na
 
 Patch0:     %{name}-fdk-aac-v2.patch
 Patch1:     %{name}-dvdread.patch
+Patch2:     https://src.fedoraproject.org/rpms/vlc/raw/rawhide/f/oneVPL.patch
+Patch3:     https://src.fedoraproject.org/rpms/vlc/raw/rawhide/f/vaapi-without-ffmepg4.patch
 
 BuildRequires:  aalib-devel
 BuildRequires:  autoconf
@@ -62,6 +64,9 @@ BuildRequires:  pkgconfig(jack) >= 1.9.7
 BuildRequires:  pkgconfig(libarchive) >= 3.1.0
 BuildRequires:  pkgconfig(libass) >= 0.9.8
 BuildRequires:  pkgconfig(libavc1394) >= 0.5.3
+BuildRequires:  pkgconfig(libavcodec) >= 57.37.100
+BuildRequires:  pkgconfig(libavformat) >= 53.21.0
+BuildRequires:  pkgconfig(libavutil) >= 52.0.0
 BuildRequires:  pkgconfig(libbluray) >= 0.6.2
 BuildRequires:  pkgconfig(libcddb) >= 0.9.5
 BuildRequires:  pkgconfig(libchromaprint) >= 0.6.0
@@ -81,6 +86,7 @@ BuildRequires:  pkgconfig(libraw1394) >= 2.0.1
 BuildRequires:  pkgconfig(librsvg-2.0) >= 2.9.0
 BuildRequires:  pkgconfig(libsecret-1) >= 0.18
 BuildRequires:  pkgconfig(libssh2)
+BuildRequires:  pkgconfig(libswscale)
 BuildRequires:  pkgconfig(libsystemd)
 BuildRequires:  pkgconfig(libudev) >= 142
 BuildRequires:  pkgconfig(libupnp)
@@ -136,21 +142,9 @@ BuildRequires:  pkgconfig(xpm)
 BuildRequires:  pkgconfig(xproto)
 BuildRequires:  pkgconfig(zvbi-0.2) >= 0.2.28
 
-# FFMpeg 5 is not supported:
-BuildRequires:  pkgconfig(libavcodec) >= 58
-BuildRequires:  pkgconfig(libavcodec) < 59
-BuildRequires:  pkgconfig(libavformat) >= 58
-BuildRequires:  pkgconfig(libavformat) < 59
-BuildRequires:  pkgconfig(libavutil) >= 56
-BuildRequires:  pkgconfig(libavutil) < 57
-BuildRequires:  pkgconfig(libpostproc) >= 55
-BuildRequires:  pkgconfig(libpostproc) < 56
-BuildRequires:  pkgconfig(libswscale) >= 5
-BuildRequires:  pkgconfig(libswscale) < 6
-
 %ifarch x86_64
 BuildRequires:  pkgconfig(asdcplib)
-BuildRequires:  pkgconfig(libmfx)
+BuildRequires:  pkgconfig(vpl)
 %endif
 
 %ifarch armv7hl
@@ -478,8 +472,8 @@ fi
 %{_libdir}/%{name}/plugins/codec/libttml_plugin.so
 %{_libdir}/%{name}/plugins/codec/libtwolame_plugin.so
 %{_libdir}/%{name}/plugins/codec/libuleaddvaudio_plugin.so
-%{_libdir}/%{name}/plugins/codec/libvaapi_plugin.so
-%{_libdir}/%{name}/plugins/codec/libvaapi_drm_plugin.so
+#%{_libdir}/%{name}/plugins/codec/libvaapi_plugin.so
+#%{_libdir}/%{name}/plugins/codec/libvaapi_drm_plugin.so
 %{_libdir}/%{name}/plugins/codec/libvorbis_plugin.so
 %{_libdir}/%{name}/plugins/codec/libvpx_plugin.so
 %{_libdir}/%{name}/plugins/codec/libwebvtt_plugin.so
@@ -750,6 +744,11 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Sat Apr 06 2024 Simone Caronni <negativo17@gmail.com> - 2:3.0.20-4
+- Clean up SPEC file.
+- Switch from Intel MediaSDK to VPL.
+- Disable codec/vaapi (leave only video output) as in Fedora to drop ffmpeg4.
+
 * Wed Jan 03 2024 Simone Caronni <negativo17@gmail.com> - 2:3.0.20-3
 - Fix typo, main package should not provide devel subpackage.
 - Drop Raspberry PI patch.
