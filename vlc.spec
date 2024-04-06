@@ -20,6 +20,10 @@ Source0:    https://code.videolan.org/videolan/%{name}/-/archive/%{commit0}/%{na
 Patch0:     %{name}-fdk-aac-v2.patch
 Patch1:     %{name}-dvdread.patch
 Patch2:     %{name}-crypto-policies.patch
+Patch3:     https://src.fedoraproject.org/rpms/vlc/raw/rawhide/f/oneVPL.patch
+Patch4:     https://code.videolan.org/videolan/vlc/-/merge_requests/4645.patch
+Patch5:     https://code.videolan.org/videolan/vlc/-/merge_requests/4665.patch
+Patch6:     https://src.fedoraproject.org/rpms/vlc/raw/rawhide/f/vaapi-without-ffmepg4.patch
 
 BuildRequires:  aalib-devel
 BuildRequires:  autoconf
@@ -162,7 +166,7 @@ BuildRequires:  pkgconfig(xproto)
 BuildRequires:  pkgconfig(zvbi-0.2) >= 0.2.28
 
 %ifarch x86_64
-BuildRequires:  pkgconfig(libmfx)
+BuildRequires:  pkgconfig(vpl)
 %endif
 
 %ifarch armv7hl
@@ -485,8 +489,8 @@ fi
 %{_libdir}/%{name}/plugins/codec/libttml_plugin.so
 %{_libdir}/%{name}/plugins/codec/libtwolame_plugin.so
 %{_libdir}/%{name}/plugins/codec/libuleaddvaudio_plugin.so
-%{_libdir}/%{name}/plugins/codec/libvaapi_plugin.so
-%{_libdir}/%{name}/plugins/codec/libvaapi_drm_plugin.so
+#%{_libdir}/%{name}/plugins/codec/libvaapi_plugin.so
+#%{_libdir}/%{name}/plugins/codec/libvaapi_drm_plugin.so
 %{_libdir}/%{name}/plugins/codec/libvorbis_plugin.so
 %{_libdir}/%{name}/plugins/codec/libvpx_plugin.so
 %{_libdir}/%{name}/plugins/codec/libwebvtt_plugin.so
@@ -766,6 +770,8 @@ fi
 %changelog
 * Sat Apr 06 2024 Simone Caronni <negativo17@gmail.com> - 2:3.0.20-4
 - Clean up SPEC file.
+- Switch from Intel MediaSDK to VPL.
+- Disable codec/vaapi (leave only video output) as in Fedora to drop ffmpeg4.
 
 * Wed Jan 03 2024 Simone Caronni <negativo17@gmail.com> - 2:3.0.20-3
 - Fix typo, main package should not provide devel subpackage.
