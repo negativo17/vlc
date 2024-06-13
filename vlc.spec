@@ -1,7 +1,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
-Version:    3.0.20
-Release:    4%{?dist}
+Version:    3.0.21
+Release:    1%{?dist}
 Epoch:      2
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -744,6 +744,9 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Thu Jun 13 2024 Simone Caronni <negativo17@gmail.com> - 2:3.0.21-1
+- Update to 3.0.21.
+
 * Sat Apr 06 2024 Simone Caronni <negativo17@gmail.com> - 2:3.0.20-4
 - Clean up SPEC file.
 - Switch from Intel MediaSDK to VPL.
