@@ -6,7 +6,7 @@
 Summary:    The cross-platform open-source multimedia framework, player and server
 Name:       vlc
 Version:    3.0.21
-Release:    1%{!?tag:.%{date}git%{shortcommit0}}%{?dist}
+Release:    3%{!?tag:.%{date}git%{shortcommit0}}%{?dist}
 Epoch:      2
 License:    GPLv2+
 URL:        http://www.videolan.org
@@ -322,9 +322,6 @@ appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/%{name}.appdat
 if [ $1 -eq 0 ] ; then
   rm -f %{_libdir}/%{name}/plugins/plugins*.dat &>/dev/null || :
 fi
-
-%postun
-%{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name} &>/dev/null
 
 %posttrans
 %{_libdir}/%{name}/vlc-cache-gen %{_libdir}/%{name}/plugins &>/dev/null || :
@@ -771,6 +768,12 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Fri Nov 22 2024 Simone Caronni <negativo17@gmail.com> - 2:3.0.21-3
+- Rebuild for updated dependencies.
+
+* Sun Jun 16 2024 Simone Caronni <negativo17@gmail.com> - 2:3.0.21-2
+- Rebuild for updated depdendencies.
+
 * Thu Jun 13 2024 Simone Caronni <negativo17@gmail.com> - 2:3.0.21-1
 - Update to 3.0.21.
 
