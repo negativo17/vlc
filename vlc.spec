@@ -21,7 +21,7 @@
 Name:		vlc
 Epoch:		2
 Version:	3.0.21
-Release:	3%{?dist}
+Release:	4%{?dist}
 Summary:	The cross-platform open-source multimedia framework, player and server
 License:	GPL-2.0-or-later AND LGPL-2.1-or-later AND BSD-2-Clause AND BSD-3-Clause
 URL:		https://www.videolan.org
@@ -1246,6 +1246,9 @@ make check
 
 
 %changelog
+* Tue Dec 03 2024 Simone Caronni <negativo17@gmail.com> - 2:3.0.21-4
+- Rebuild for updated dependencies.
+
 * Mon Oct 21 2024 Simone Caronni <negativo17@gmail.com> - 1:3.0.21-3
 - Switch to freeworld build of Fedora package.
 - Trim changelog.
