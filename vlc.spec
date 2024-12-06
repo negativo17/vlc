@@ -21,7 +21,7 @@
 Name:		vlc
 Epoch:		2
 Version:	3.0.21
-Release:	4%{?dist}
+Release:	5%{?dist}
 Summary:	The cross-platform open-source multimedia framework, player and server
 License:	GPL-2.0-or-later AND LGPL-2.1-or-later AND BSD-2-Clause AND BSD-3-Clause
 URL:		https://www.videolan.org
@@ -35,10 +35,6 @@ Patch:		https://code.videolan.org/videolan/vlc/-/merge_requests/5590.patch
 ## upstreamable patches
 # add support for ffmpeg 7.0
 Patch:		https://code.videolan.org/videolan/vlc/-/merge_requests/5574.patch
-
-## upstreamable patches
-# add support for x265 4.0
-Patch:      https://code.videolan.org/videolan/vlc/-/merge_requests/6167.patch
 
 ## downstream patches
 # https://fedoraproject.org/wiki/Changes/CryptoPolicy
@@ -1246,6 +1242,9 @@ make check
 
 
 %changelog
+* Fri Dec 06 2024 Simone Caronni <negativo17@gmail.com> - 2:3.0.21-5
+- Rebuild for updated dependencies.
+
 * Tue Dec 03 2024 Simone Caronni <negativo17@gmail.com> - 2:3.0.21-4
 - Rebuild for updated dependencies.
 
