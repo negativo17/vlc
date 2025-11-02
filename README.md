@@ -1,3 +1,0 @@
-# vlc
-
-The vlc package

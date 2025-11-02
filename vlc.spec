@@ -1,3 +1,8 @@
+# codecs which cannot be shipped in Fedora proper
+%bcond freeworld 1
+%bcond x264 %{with freeworld}
+%bcond x265 %{with freeworld}
+
 # not compatible with asdcplib-2.12
 %bcond asdcp %[!(0%{?fedora} >= 38 || 0%{?rhel} >= 10)]
 # not compatible with opencv 3.4 or 4.0
@@ -9,8 +14,15 @@
 # disabled due to various issues
 %bcond projectm 0
 
+# some dependencies are not yet in EPEL 10
+%bcond daala %{undefined el10}
+%bcond lirc 1
+%bcond schro %[!(0%{?rhel} >= 10)]
+%bcond sdl %[!(0%{?rhel} >= 10)]
+
 %ifnarch s390x
-%bcond crystalhd %[0%{?fedora} || 0%{?rhel} < 9]
+# retired from F43, was never in EPEL 9+
+%bcond crystalhd 0
 %bcond ieee1394 1
 %endif
 
@@ -21,7 +33,7 @@
 Name:		vlc
 Epoch:		2
 Version:	3.0.21
-Release:	6%{?dist}
+Release:	7%{?dist}
 Summary:	The cross-platform open-source multimedia framework, player and server
 License:	GPL-2.0-or-later AND LGPL-2.1-or-later AND BSD-2-Clause AND BSD-3-Clause
 URL:		https://www.videolan.org
@@ -31,18 +43,18 @@ Source:		macros.vlc
 ## upstream patches
 # opus_header: fix channel mapping family 1 parsing (rhbz#2307919)
 Patch:		https://code.videolan.org/videolan/vlc/-/merge_requests/5590.patch
+# add support for ffmpeg 7.0 (without VAAPI)
+Patch:		https://code.videolan.org/videolan/vlc/-/merge_requests/5574.patch
+# mux: avformat: fix avio callbacks signature with ffmpeg 6.1
+Patch:		https://code.videolan.org/videolan/vlc/-/merge_requests/6168.patch
+# ffmpeg: backport more channel checks
+Patch:		https://code.videolan.org/videolan/vlc/-/merge_requests/6273.patch
+# avcodec: vaapi: support VAAPI with latest FFmpeg
+Patch:		https://code.videolan.org/videolan/vlc/-/merge_requests/6606.patch
+# nfs: fix libnfs API v2 support (rhbz#2341791)
+Patch:		https://code.videolan.org/videolan/vlc/-/merge_requests/6527.patch
 
 ## upstreamable patches
-# add support for ffmpeg 7.0 (without VAAPI)
-Patch:         https://code.videolan.org/videolan/vlc/-/merge_requests/5574.patch
-# mux: avformat: fix avio callbacks signature with ffmpeg 6.1
-Patch:         https://code.videolan.org/videolan/vlc/-/merge_requests/6168.patch
-# ffmpeg: backport more channel checks
-Patch:         https://code.videolan.org/videolan/vlc/-/merge_requests/6273.patch
-# avcodec: vaapi: support VAAPI with latest FFmpeg
-Patch:         https://code.videolan.org/videolan/vlc/-/merge_requests/6606.patch
-# nfs: fix libnfs API v2 support (rhbz#2341791)
-Patch:         https://code.videolan.org/videolan/vlc/-/merge_requests/6527.patch
 
 ## downstream patches
 # https://fedoraproject.org/wiki/Changes/CryptoPolicy
@@ -60,9 +72,9 @@ Patch:		lua-math.patch
 # update to freerdp2 api; backport from master
 Patch:		freerdp2.patch
 # fix build with live555-2024.11.28
-Patch:         live555.patch
+Patch:		live555.patch
 # avoid "stale plugin cache" warnings in flatpaks
-Patch:         flatpak-cache.patch
+Patch:		flatpak-cache.patch
 
 %{load:%{S:1}}
 %global __provides_exclude_from ^%{vlc_plugindir}/.*$
@@ -77,9 +89,7 @@ BuildRequires:	libappstream-glib
 
 BuildRequires:	a52dec-devel
 BuildRequires:	aalib-devel
-%if %{with faad2}
 BuildRequires:	faad2-devel
-%endif
 BuildRequires:	hostname
 BuildRequires:	kernel-headers
 %if %{with crystalhd}
@@ -90,7 +100,9 @@ BuildRequires:	libjpeg-devel
 BuildRequires:	libmad-devel
 BuildRequires:	libmpcdec-devel
 BuildRequires:	libpng-devel
+%if %{with lirc}
 BuildRequires:	lirc-devel
+%endif
 BuildRequires:	live555-devel
 BuildRequires:	lua-devel
 BuildRequires:	pkgconfig(alsa) >= 1.0.24
@@ -103,8 +115,10 @@ BuildRequires:	pkgconfig(asdcplib)
 BuildRequires:	pkgconfig(avahi-client) >= 0.6
 #BuildRequires:	pkgconfig(breakpad-client)
 BuildRequires:	pkgconfig(caca) >= 0.99.beta14
+%if %{with daala}
 BuildRequires:	pkgconfig(daaladec)
 BuildRequires:	pkgconfig(daalaenc)
+%endif
 BuildRequires:	pkgconfig(dav1d)
 BuildRequires:	pkgconfig(dbus-1)
 BuildRequires:	pkgconfig(dvdnav) > 4.9.0
@@ -194,8 +208,12 @@ BuildRequires:	pkgconfig(Qt5Svg) >= 5.5
 BuildRequires:	pkgconfig(Qt5Widgets) >= 5.5
 BuildRequires:	pkgconfig(Qt5X11Extras) >= 5.5
 BuildRequires:	pkgconfig(samplerate)
+%if %{with schro}
 BuildRequires:	pkgconfig(schroedinger-1.0) >= 1.0.10
+%endif
+%if %{with sdl}
 BuildRequires:	pkgconfig(SDL_image) >= 1.2.10
+%endif
 #BuildRequires:	pkgconfig(shine) >= 3.0.0
 BuildRequires:	pkgconfig(shout) >= 2.1
 BuildRequires:	pkgconfig(smbclient)
@@ -221,8 +239,12 @@ BuildRequires:	pkgconfig(wayland-client) >= 1.5.91
 BuildRequires:	pkgconfig(wayland-egl)
 BuildRequires:	pkgconfig(wayland-protocols)
 #BuildRequires:	pkgconfig(x262)
+%if %{with x264}
 BuildRequires:	pkgconfig(x264) >= 0.153
+%endif
+%if %{with x265}
 BuildRequires:	pkgconfig(x265)
+%endif
 BuildRequires:	pkgconfig(xcb) >= 1.6
 BuildRequires:	pkgconfig(xcb-composite)
 BuildRequires:	pkgconfig(xcb-keysyms) >= 0.3.4
@@ -360,6 +382,16 @@ Requires:	google-noto-serif-vf-fonts
 %endif
 Recommends:	libv4l%{?_isa}
 Conflicts:	%{name}-core < %{epoch}:%{version}-%{release}
+%if %{without crystalhd}
+Obsoletes:	%{name}-plugin-crystalhd < %{epoch}:%{version}-%{release}
+%endif
+%if %{without ieee1394}
+Obsoletes:	%{name}-plugin-ieee1394 < %{epoch}:%{version}-%{release}
+%endif
+%if %{without opencv}
+Obsoletes:	%{name}-plugin-opencv < %{epoch}:%{version}-%{release}
+%endif
+
 %description plugins-base
 VLC media player core components
 
@@ -387,7 +419,7 @@ Crystal HD plugin for VLC media player
 Summary:	VLC media player FFmpeg plugins
 Requires:	%{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
 Requires:	%{name}-plugins-base%{?_isa} = %{epoch}:%{version}-%{release}
-Requires:      %{name}-plugins-video-out%{?_isa} = %{epoch}:%{version}-%{release}
+Requires:	%{name}-plugins-video-out%{?_isa} = %{epoch}:%{version}-%{release}
 %description plugin-ffmpeg
 FFmpeg support plugins for VLC media player
 
@@ -621,7 +653,7 @@ export LIVE555_PREFIX=%{_prefix}
 	--enable-avformat					\
 	--enable-swscale					\
 	--enable-postproc					\
-	--enable-faad%{!?with_faad2:=no}			\
+	--enable-faad						\
 	--enable-aom						\
 	--enable-dav1d						\
 	--enable-vpx						\
@@ -638,15 +670,15 @@ export LIVE555_PREFIX=%{_prefix}
 	--enable-spatialaudio					\
 	--enable-theora						\
 	--enable-oggspots					\
-	--enable-daala						\
-	--enable-schroedinger					\
+	--enable-daala%{!?with_daala:=no}			\
+	--enable-schroedinger%{!?with_schro:=no}		\
 	--enable-png						\
 	--enable-jpeg						\
 	--disable-bpg						\
 	--disable-x262						\
-	--enable-x265				\
-	--enable-x264				\
-	--enable-x26410b			\
+	--enable-x265%{!?with_x265:=no}				\
+	--enable-x264%{!?with_x264:=no}				\
+	--enable-x26410b%{!?with_x264:=no}			\
 	--enable-vpl%{!?with_vpl:=no}				\
 	--enable-fluidsynth					\
 	--disable-fluidlite					\
@@ -664,7 +696,7 @@ export LIVE555_PREFIX=%{_prefix}
 	--enable-xvideo						\
 	--enable-vdpau						\
 	--enable-wayland					\
-	--enable-sdl-image					\
+	--enable-sdl-image%{!?with_sdl:=no}			\
 	--enable-freetype					\
 	--enable-fribidi					\
 	--enable-harfbuzz					\
@@ -689,7 +721,7 @@ export LIVE555_PREFIX=%{_prefix}
 	--enable-qt						\
 	--enable-skins2						\
 	--disable-libtar					\
-	--enable-lirc						\
+	--enable-lirc%{!?with_lirc:=no}				\
 	--enable-srt						\
 								\
 	--disable-goom						\
@@ -914,6 +946,7 @@ make check
 %{vlc_plugindir}/codec/libddummy_plugin.so
 %{vlc_plugindir}/codec/libdvbsub_plugin.so
 %{vlc_plugindir}/codec/libedummy_plugin.so
+%{vlc_plugindir}/codec/libfaad_plugin.so
 %{vlc_plugindir}/codec/libfdkaac_plugin.so
 %{vlc_plugindir}/codec/libflac_plugin.so
 %{vlc_plugindir}/codec/libg711_plugin.so
@@ -941,14 +974,16 @@ make check
 %{vlc_plugindir}/codec/libttml_plugin.so
 %{vlc_plugindir}/codec/libtwolame_plugin.so
 %{vlc_plugindir}/codec/libuleaddvaudio_plugin.so
-%{vlc_plugindir}/codec/libvaapi_drm_plugin.so
-%{vlc_plugindir}/codec/libvaapi_plugin.so
 %{vlc_plugindir}/codec/libvorbis_plugin.so
 %{vlc_plugindir}/codec/libvpx_plugin.so
 %{vlc_plugindir}/codec/libwebvtt_plugin.so
+%if %{with x264}
 %{vlc_plugindir}/codec/libx26410b_plugin.so
 %{vlc_plugindir}/codec/libx264_plugin.so
+%endif
+%if %{with x265}
 %{vlc_plugindir}/codec/libx265_plugin.so
+%endif
 %{vlc_plugindir}/codec/libxwd_plugin.so
 %{vlc_plugindir}/control/libdbus_plugin.so
 %{vlc_plugindir}/control/libdummy_plugin.so
@@ -1114,7 +1149,9 @@ make check
 %{vlc_plugindir}/audio_filter/libspeex_resampler_plugin.so
 %{vlc_plugindir}/codec/libaom_plugin.so
 %{vlc_plugindir}/codec/libaribsub_plugin.so
+%if %{with daala}
 %{vlc_plugindir}/codec/libdaala_plugin.so
+%endif
 %{vlc_plugindir}/codec/libdca_plugin.so
 %{vlc_plugindir}/codec/libkate_plugin.so
 %{vlc_plugindir}/codec/liblibass_plugin.so
@@ -1122,10 +1159,16 @@ make check
 %if %{with vpl}
 %{vlc_plugindir}/codec/libqsv_plugin.so
 %endif
+%if %{with schro}
 %{vlc_plugindir}/codec/libschroedinger_plugin.so
+%endif
+%if %{with sdl}
 %{vlc_plugindir}/codec/libsdl_image_plugin.so
+%endif
 %{vlc_plugindir}/codec/libzvbi_plugin.so
+%if %{with lirc}
 %{vlc_plugindir}/control/liblirc_plugin.so
+%endif
 %{vlc_plugindir}/demux/libgme_plugin.so
 %{vlc_plugindir}/demux/libmpc_plugin.so
 %{vlc_plugindir}/demux/libmkv_plugin.so
@@ -1152,6 +1195,8 @@ make check
 %files plugin-ffmpeg
 %{vlc_plugindir}/access/libavio_plugin.so
 %{vlc_plugindir}/codec/libavcodec_plugin.so
+%{vlc_plugindir}/codec/libvaapi_drm_plugin.so
+%{vlc_plugindir}/codec/libvaapi_plugin.so
 %{vlc_plugindir}/demux/libavformat_plugin.so
 %{vlc_plugindir}/packetizer/libpacketizer_avparser_plugin.so
 %{vlc_plugindir}/stream_out/libstream_out_chromaprint_plugin.so
@@ -1255,6 +1300,9 @@ make check
 
 
 %changelog
+* Sun Nov 02 2025 Simone Caronni <negativo17@gmail.com> - 2:3.0.21-7
+- Merge in changes from Fedora.
+
 * Tue Apr 01 2025 Simone Caronni <negativo17@gmail.com> - 2:3.0.21-6
 - Merge in latest changes from Fedora.
 
