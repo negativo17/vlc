@@ -21,7 +21,7 @@
 Name:		vlc
 Epoch:		2
 Version:	3.0.21
-Release:	5%{?dist}
+Release:	6%{?dist}
 Summary:	The cross-platform open-source multimedia framework, player and server
 License:	GPL-2.0-or-later AND LGPL-2.1-or-later AND BSD-2-Clause AND BSD-3-Clause
 URL:		https://www.videolan.org
@@ -33,16 +33,22 @@ Source:		macros.vlc
 Patch:		https://code.videolan.org/videolan/vlc/-/merge_requests/5590.patch
 
 ## upstreamable patches
-# add support for ffmpeg 7.0
-Patch:		https://code.videolan.org/videolan/vlc/-/merge_requests/5574.patch
+# add support for ffmpeg 7.0 (without VAAPI)
+Patch:         https://code.videolan.org/videolan/vlc/-/merge_requests/5574.patch
+# mux: avformat: fix avio callbacks signature with ffmpeg 6.1
+Patch:         https://code.videolan.org/videolan/vlc/-/merge_requests/6168.patch
+# ffmpeg: backport more channel checks
+Patch:         https://code.videolan.org/videolan/vlc/-/merge_requests/6273.patch
+# avcodec: vaapi: support VAAPI with latest FFmpeg
+Patch:         https://code.videolan.org/videolan/vlc/-/merge_requests/6606.patch
+# nfs: fix libnfs API v2 support (rhbz#2341791)
+Patch:         https://code.videolan.org/videolan/vlc/-/merge_requests/6527.patch
 
 ## downstream patches
 # https://fedoraproject.org/wiki/Changes/CryptoPolicy
 Patch:		0001-Use-SYSTEM-wide-ciphers-for-gnutls.patch
 # Fix building with fdk-aac-2.0; backport for 3.0 from flathub
 Patch:		fdk-aac2.patch
-# separate avcodec-vaapi conditional from other vaapi modules
-Patch:		vaapi-without-ffmepg4.patch
 # port from intel-mediasdk to oneVPL
 Patch:		oneVPL.patch
 # fix appstreamcli validate to show in Software (rhbz#2258611)
@@ -53,6 +59,10 @@ Patch:		libidn2.patch
 Patch:		lua-math.patch
 # update to freerdp2 api; backport from master
 Patch:		freerdp2.patch
+# fix build with live555-2024.11.28
+Patch:         live555.patch
+# avoid "stale plugin cache" warnings in flatpaks
+Patch:         flatpak-cache.patch
 
 %{load:%{S:1}}
 %global __provides_exclude_from ^%{vlc_plugindir}/.*$
@@ -377,6 +387,7 @@ Crystal HD plugin for VLC media player
 Summary:	VLC media player FFmpeg plugins
 Requires:	%{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
 Requires:	%{name}-plugins-base%{?_isa} = %{epoch}:%{version}-%{release}
+Requires:      %{name}-plugins-video-out%{?_isa} = %{epoch}:%{version}-%{release}
 %description plugin-ffmpeg
 FFmpeg support plugins for VLC media player
 
@@ -930,6 +941,8 @@ make check
 %{vlc_plugindir}/codec/libttml_plugin.so
 %{vlc_plugindir}/codec/libtwolame_plugin.so
 %{vlc_plugindir}/codec/libuleaddvaudio_plugin.so
+%{vlc_plugindir}/codec/libvaapi_drm_plugin.so
+%{vlc_plugindir}/codec/libvaapi_plugin.so
 %{vlc_plugindir}/codec/libvorbis_plugin.so
 %{vlc_plugindir}/codec/libvpx_plugin.so
 %{vlc_plugindir}/codec/libwebvtt_plugin.so
@@ -1242,6 +1255,9 @@ make check
 
 
 %changelog
+* Tue Apr 01 2025 Simone Caronni <negativo17@gmail.com> - 2:3.0.21-6
+- Merge in latest changes from Fedora.
+
 * Fri Dec 06 2024 Simone Caronni <negativo17@gmail.com> - 2:3.0.21-5
 - Rebuild for updated dependencies.
 
