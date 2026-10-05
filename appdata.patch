@@ -1,0 +1,12 @@
+diff --git a/share/org.videolan.vlc.appdata.xml.in.in b/share/org.videolan.vlc.appdata.xml.in.in
+index cc9c39a..3c55620 100644
+--- a/share/org.videolan.vlc.appdata.xml.in.in
++++ b/share/org.videolan.vlc.appdata.xml.in.in
+@@ -20,6 +20,7 @@
+     <releases>
+         <release version="@VERSION@" date="@VERSION_DATE@" />
+     </releases>
++    <replaces><id>org.videolan.VLC</id></replaces>
+     <provides>
+         <library>libvlc.so.5</library>
+     </provides>
