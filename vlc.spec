@@ -3,22 +3,33 @@
 %bcond x264 %{with freeworld}
 %bcond x265 %{with freeworld}
 
-# not compatible with asdcplib-2.12
-%bcond asdcp %[!(0%{?fedora} >= 38 || 0%{?rhel} >= 10)]
+# use Qt6 where available
+%bcond qt6 %[(0%{?fedora} || 0%{?rhel} >= 10)]
+
+# freerdp3 not yet supported upstream
+%bcond freerdp 0
+# requires libmpcdec 1.3.0
+%bcond mpc %[(0%{?fedora} || 0%{?rhel} >= 10)]
 # not compatible with opencv 3.4 or 4.0
 # https://code.videolan.org/videolan/vlc/-/issues/22016
 %bcond opencv 0
 # not compatible with libplacebo-6
 # https://code.videolan.org/videolan/vlc/-/merge_requests/3950
 %bcond placebo %[!(0%{?fedora} >= 39 || 0%{?rhel} >= 10)]
+# libpostproc was removed in FFmpeg 8 (F44+)
+%bcond postproc %[!(0%{?fedora} >= 44 || 0%{?rhel} >= 11)]
 # disabled due to various issues
 %bcond projectm 0
 
 # some dependencies are not yet in EPEL 10
-%bcond daala %{undefined el10}
+%bcond daala 1
 %bcond lirc 1
-%bcond schro %[!(0%{?rhel} >= 10)]
 %bcond sdl %[!(0%{?rhel} >= 10)]
+
+%ifnarch %{ix86}
+# now compatible with asdcplib-2.12
+%bcond asdcp 1
+%endif
 
 %ifnarch s390x
 # retired from F43, was never in EPEL 9+
@@ -30,29 +41,30 @@
 %bcond vpl 1
 %endif
 
+#global commit 6de05adcbaf2e8b85fe86aad4169393098628119
+#global gitdate 20260917
+
+%global app_id  org.videolan.vlc
+
 Name:		vlc
 Epoch:		2
-Version:	3.0.21
-Release:	7%{?dist}
+Version:	3.0.24
+Release:	1%{?dist}
 Summary:	The cross-platform open-source multimedia framework, player and server
 License:	GPL-2.0-or-later AND LGPL-2.1-or-later AND BSD-2-Clause AND BSD-3-Clause
 URL:		https://www.videolan.org
+%if 0%{?commit:1}
+Source:		https://code.videolan.org/videolan/vlc/-/archive/%{commit}/vlc-%{commit}.tar.bz2
+%else
 Source:		https://get.videolan.org/vlc/%{version}/vlc-%{version}.tar.xz
+%endif
 Source:		macros.vlc
 
 ## upstream patches
-# opus_header: fix channel mapping family 1 parsing (rhbz#2307919)
-Patch:		https://code.videolan.org/videolan/vlc/-/merge_requests/5590.patch
-# add support for ffmpeg 7.0 (without VAAPI)
-Patch:		https://code.videolan.org/videolan/vlc/-/merge_requests/5574.patch
-# mux: avformat: fix avio callbacks signature with ffmpeg 6.1
-Patch:		https://code.videolan.org/videolan/vlc/-/merge_requests/6168.patch
-# ffmpeg: backport more channel checks
-Patch:		https://code.videolan.org/videolan/vlc/-/merge_requests/6273.patch
-# avcodec: vaapi: support VAAPI with latest FFmpeg
-Patch:		https://code.videolan.org/videolan/vlc/-/merge_requests/6606.patch
-# nfs: fix libnfs API v2 support (rhbz#2341791)
-Patch:		https://code.videolan.org/videolan/vlc/-/merge_requests/6527.patch
+
+## backported patches from master
+# freerdp: update to freerdp 2.0 api (#2278)
+Patch:		freerdp2.patch
 
 ## upstreamable patches
 
@@ -61,20 +73,18 @@ Patch:		https://code.videolan.org/videolan/vlc/-/merge_requests/6527.patch
 Patch:		0001-Use-SYSTEM-wide-ciphers-for-gnutls.patch
 # Fix building with fdk-aac-2.0; backport for 3.0 from flathub
 Patch:		fdk-aac2.patch
-# port from intel-mediasdk to oneVPL
-Patch:		oneVPL.patch
 # fix appstreamcli validate to show in Software (rhbz#2258611)
 Patch:		appdata.patch
 # port from libidn to libidn2
 Patch:		libidn2.patch
 # fix deprecated lua math functions (rhbz#2280091)
 Patch:		lua-math.patch
-# update to freerdp2 api; backport from master
-Patch:		freerdp2.patch
-# fix build with live555-2024.11.28
-Patch:		live555.patch
 # avoid "stale plugin cache" warnings in flatpaks
 Patch:		flatpak-cache.patch
+# fix build with libupnp-1.18
+Patch:		libupnp118.patch
+# fix build with librist < 0.2.8 (EPEL 9, 10)
+Patch:		librist.patch
 
 %{load:%{S:1}}
 %global __provides_exclude_from ^%{vlc_plugindir}/.*$
@@ -87,7 +97,7 @@ BuildRequires:	gcc-c++
 BuildRequires:	desktop-file-utils
 BuildRequires:	libappstream-glib
 
-BuildRequires:	a52dec-devel
+#BuildRequires:	a52dec-devel
 BuildRequires:	aalib-devel
 BuildRequires:	faad2-devel
 BuildRequires:	hostname
@@ -98,7 +108,9 @@ BuildRequires:	libcrystalhd-devel
 BuildRequires:	libgcrypt-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libmad-devel
+%if %{with mpc}
 BuildRequires:	libmpcdec-devel
+%endif
 BuildRequires:	libpng-devel
 %if %{with lirc}
 BuildRequires:	lirc-devel
@@ -130,7 +142,9 @@ BuildRequires:	pkgconfig(flac)
 #BuildRequires:	pkgconfig(fluidlite)
 BuildRequires:	pkgconfig(fluidsynth) >= 1.1.2
 BuildRequires:	pkgconfig(fontconfig) >= 2.11
+%if %{with freerdp}
 BuildRequires:	pkgconfig(freerdp2)
+%endif
 BuildRequires:	pkgconfig(freetype2)
 BuildRequires:	pkgconfig(fribidi)
 BuildRequires:	pkgconfig(gl)
@@ -152,7 +166,7 @@ BuildRequires:	pkgconfig(libchromaprint)
 %if %{with ieee1394}
 BuildRequires:	pkgconfig(libdc1394-2) >= 2.1.0
 %endif
-BuildRequires:	pkgconfig(libdca) >= 0.0.5
+#BuildRequires:	pkgconfig(libdca) >= 0.0.5
 #BuildRequires:	pkgconfig(libdsm) >= 0.2.0
 BuildRequires:	pkgconfig(libdvbpsi)
 BuildRequires:	pkgconfig(libebml) >= 1.3.6
@@ -161,7 +175,7 @@ BuildRequires:	pkgconfig(libgme)
 BuildRequires:	pkgconfig(libidn2)
 BuildRequires:	pkgconfig(libmatroska)
 BuildRequires:	pkgconfig(libmodplug) >= 0.8.9.0
-BuildRequires:	pkgconfig(libmpeg2) >= 0.3.2
+#BuildRequires:	pkgconfig(libmpeg2) >= 0.3.2
 BuildRequires:	pkgconfig(libmpg123)
 BuildRequires:	pkgconfig(libmtp) >= 1.0.0
 BuildRequires:	pkgconfig(libnfs) >= 1.10.0
@@ -169,7 +183,9 @@ BuildRequires:	pkgconfig(libnotify) pkgconfig(gtk+-3.0)
 %if %{with placebo}
 BuildRequires:	pkgconfig(libplacebo) < 6
 %endif
+%if %{with postproc}
 BuildRequires:	pkgconfig(libpostproc)
+%endif
 %if %{with projectm}
 BuildRequires:	pkgconfig(libprojectM)
 %endif
@@ -177,6 +193,7 @@ BuildRequires:	pkgconfig(libpulse) >= 1.0
 %if %{with ieee1394}
 BuildRequires:	pkgconfig(libraw1394) >= 2.0.1 pkgconfig(libavc1394) >= 0.5.3
 %endif
+BuildRequires:	pkgconfig(librist) >= 0.2.1
 BuildRequires:	pkgconfig(librsvg-2.0) >= 2.9.0
 BuildRequires:	pkgconfig(libsecret-1) >= 0.18
 #BuildRequires:	pkgconfig(libsidplay2)
@@ -202,15 +219,21 @@ BuildRequires:	pkgconfig(opencv)
 %endif
 BuildRequires:	pkgconfig(opus) >= 1.0.3
 BuildRequires:	pkgconfig(protobuf-lite) >= 2.5
+%if %{with qt6}
+BuildRequires:	pkgconfig(Qt6Core)
+BuildRequires:	pkgconfig(Qt6Gui)
+BuildRequires:	pkgconfig(Qt6Svg)
+BuildRequires:	pkgconfig(Qt6Widgets)
+BuildRequires:	qt6-qtbase-private-devel
+%else
 BuildRequires:	pkgconfig(Qt5Core) >= 5.5
 BuildRequires:	pkgconfig(Qt5Gui) >= 5.5
 BuildRequires:	pkgconfig(Qt5Svg) >= 5.5
 BuildRequires:	pkgconfig(Qt5Widgets) >= 5.5
 BuildRequires:	pkgconfig(Qt5X11Extras) >= 5.5
-BuildRequires:	pkgconfig(samplerate)
-%if %{with schro}
-BuildRequires:	pkgconfig(schroedinger-1.0) >= 1.0.10
+BuildRequires:	qt5-qtbase-private-devel
 %endif
+BuildRequires:	pkgconfig(samplerate)
 %if %{with sdl}
 BuildRequires:	pkgconfig(SDL_image) >= 1.2.10
 %endif
@@ -256,7 +279,6 @@ BuildRequires:	pkgconfig(xinerama)
 BuildRequires:	pkgconfig(xpm)
 BuildRequires:	pkgconfig(xproto)
 BuildRequires:	pkgconfig(zvbi-0.2) >= 0.2.28
-BuildRequires:	qt5-qtbase-private-devel
 BuildRequires:	zlib-devel
 
 Provides:	%{name}-xorg%{?_isa} = %{epoch}:%{version}-%{release}
@@ -314,9 +336,7 @@ Requires:	%{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
 Requires:	%{name}-plugins-base%{?_isa} = %{epoch}:%{version}-%{release}
 Requires:	%{name}-plugins-video-out%{?_isa} = %{epoch}:%{version}-%{release}
 Requires:	%{name}-plugin-lua%{?_isa} = %{epoch}:%{version}-%{release}
-Requires:	(%{name}-plugin-pipewire%{?_isa} if pipewire)
 Requires:	(%{name}-plugin-pulseaudio%{?_isa} = %{epoch}:%{version}-%{release} if (pipewire-pulseaudio or pulseaudio))
-Requires:	(qt5-qtwayland%{?_isa} if libwayland-client%{?_isa})
 Recommends:	%{name}-plugins-extra%{?_isa} = %{epoch}:%{version}-%{release}
 Recommends:	%{name}-plugin-ffmpeg%{?_isa} = %{epoch}:%{version}-%{release}
 Recommends:	%{name}-plugin-visualization%{?_isa} = %{epoch}:%{version}-%{release}
@@ -358,7 +378,9 @@ Requires:	(%{name}-plugin-notify%{?_isa} = %{epoch}:%{version}-%{release} if gtk
 Requires:	%{name}-plugin-opencv%{?_isa} = %{epoch}:%{version}-%{release}
 %endif
 Requires:	(%{name}-plugin-pulseaudio%{?_isa} = %{epoch}:%{version}-%{release} if (pipewire-pulseaudio or pulseaudio))
+%if %{with freerdp}
 Requires:	%{name}-plugin-rdp%{?_isa} = %{epoch}:%{version}-%{release}
+%endif
 Requires:	%{name}-plugin-samba%{?_isa} = %{epoch}:%{version}-%{release}
 Requires:	%{name}-plugin-svg%{?_isa} = %{epoch}:%{version}-%{release}
 Requires:	%{name}-plugin-visualization%{?_isa} = %{epoch}:%{version}-%{release}
@@ -390,6 +412,9 @@ Obsoletes:	%{name}-plugin-ieee1394 < %{epoch}:%{version}-%{release}
 %endif
 %if %{without opencv}
 Obsoletes:	%{name}-plugin-opencv < %{epoch}:%{version}-%{release}
+%endif
+%if %{without freerdp}
+Obsoletes:	%{name}-plugin-rdp < %{epoch}:%{version}-%{release}
 %endif
 
 %description plugins-base
@@ -515,6 +540,7 @@ Requires:	%{name}-plugins-base%{?_isa} = %{epoch}:%{version}-%{release}
 %description plugin-pulseaudio
 PulseAudio plugins for VLC media player
 
+%if %{with freerdp}
 # requires freerdp2, for RDP remote desktop support
 %package plugin-rdp
 Summary:	VLC media player RDP plugin
@@ -522,6 +548,7 @@ Requires:	%{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
 Requires:	%{name}-plugins-base%{?_isa} = %{epoch}:%{version}-%{release}
 %description plugin-rdp
 RDP access plugin for VLC media player
+%endif
 
 # requires libsmbclient, for SMB protocol support
 %package plugin-samba
@@ -570,7 +597,7 @@ developing applications and plugins that use %{name}.
 
 
 %prep
-%autosetup -p1
+%autosetup -p1 %{?commit:-n %{name}-%{commit}}
 
 rm -f aclocal.m4 m4/lib*.m4 m4/lt*.m4
 ./bootstrap
@@ -578,18 +605,16 @@ rm -f aclocal.m4 m4/lib*.m4 m4/lt*.m4
 # switch "Allow automatic icon change" to opt-in
 sed -i -e 's|\("qt-icon-change",\) true|\1 false|' modules/gui/qt/qt.cpp
 
-# sync appstream app-id with Flathub
 # fill in release date from appstream.patch
 # https: https://code.videolan.org/videolan/vlc/-/merge_requests/1555 (4.0)
-sed -e 's|org\.videolan\.vlc|org.videolan.VLC|' \
-    -e 's|@DATE@|%(date +%F -r %{S:0})|' \
+sed -e 's|@DATE@|%(date +%F -r %{S:0})|' \
     -e 's|http:|https:|g' \
-    -i share/vlc.appdata.xml.in.in
+    -i share/%{app_id}.appdata.xml.in.in
 
 %if 0%{?flatpak}
 # icons are renamed in order to be exported
-sed -i -e '/icon_theme_load/s|"vlc"|"org.videolan.VLC"|' modules/notify/notify.c
-sed -i -e '/fromTheme/s|"vlc"|"org.videolan.VLC"|' \
+sed -i -e '/icon_theme_load/s|"vlc"|"%{app_id}"|' modules/notify/notify.c
+sed -i -e '/fromTheme/s|"vlc"|"%{app_id}"|' \
 	modules/gui/qt/main_interface.cpp modules/gui/qt/qt.cpp
 %endif
 
@@ -629,8 +654,8 @@ export LIVE555_PREFIX=%{_prefix}
 	--enable-libcddb					\
 	--enable-screen						\
 	--enable-vnc						\
-	--enable-freerdp					\
-	--enable-realrtsp					\
+	--enable-freerdp%{!?with_freerdp:=no}			\
+	--disable-realrtsp					\
 	--enable-asdcp%{!?with_asdcp:=no}			\
 								\
 	--enable-dvbpsi						\
@@ -640,7 +665,7 @@ export LIVE555_PREFIX=%{_prefix}
 	--enable-shout						\
 	--enable-matroska					\
 	--enable-mod						\
-	--enable-mpc						\
+	--enable-mpc%{!?with_mpc:=no}				\
 								\
 	--disable-shine						\
 	--disable-omxil						\
@@ -652,17 +677,17 @@ export LIVE555_PREFIX=%{_prefix}
 	--enable-libva						\
 	--enable-avformat					\
 	--enable-swscale					\
-	--enable-postproc					\
+	--enable-postproc%{!?with_postproc:=no}			\
 	--enable-faad						\
 	--enable-aom						\
 	--enable-dav1d						\
 	--enable-vpx						\
 	--enable-twolame					\
 	--enable-fdkaac						\
-	--enable-a52						\
-	--enable-dca						\
+	--disable-a52						\
+	--disable-dca						\
 	--enable-flac						\
-	--enable-libmpeg2					\
+	--disable-libmpeg2					\
 	--enable-vorbis						\
 	--enable-tremor						\
 	--enable-speex						\
@@ -671,7 +696,6 @@ export LIVE555_PREFIX=%{_prefix}
 	--enable-theora						\
 	--enable-oggspots					\
 	--enable-daala%{!?with_daala:=no}			\
-	--enable-schroedinger%{!?with_schro:=no}		\
 	--enable-png						\
 	--enable-jpeg						\
 	--disable-bpg						\
@@ -723,6 +747,7 @@ export LIVE555_PREFIX=%{_prefix}
 	--disable-libtar					\
 	--enable-lirc%{!?with_lirc:=no}				\
 	--enable-srt						\
+	--enable-librist					\
 								\
 	--disable-goom						\
 	--enable-projectm%{!?with_projectm:=no}			\
@@ -789,7 +814,7 @@ rm -rf %{buildroot}%{_docdir}/vlc
 
 %check
 desktop-file-validate %{buildroot}%{_datadir}/applications/vlc.desktop
-appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/vlc.appdata.xml
+appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{app_id}.appdata.xml
 
 # chroma_copy_test fails on s390x (big endian?)
 %ifnarch s390x
@@ -807,11 +832,11 @@ make check
 %files
 %doc AUTHORS NEWS README THANKS
 %license COPYING COPYING.LIB
-%{_datadir}/applications/%{name}.desktop
+%{_datadir}/applications/%{name}*.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 %{_datadir}/solid/actions/%{name}-*.desktop
 %{_datadir}/vlc/utils/
-%{_metainfodir}/%{name}.appdata.xml
+%{_metainfodir}/%{app_id}.appdata.xml
 
 %files libs -f %{name}.lang
 %license COPYING.LIB
@@ -882,7 +907,6 @@ make check
 %{vlc_plugindir}/access/libaccess_concat_plugin.so
 %{vlc_plugindir}/access/libaccess_imem_plugin.so
 %{vlc_plugindir}/access/libaccess_mms_plugin.so
-%{vlc_plugindir}/access/libaccess_realrtsp_plugin.so
 %{vlc_plugindir}/access/libattachment_plugin.so
 %{vlc_plugindir}/access/libdtv_plugin.so
 %{vlc_plugindir}/access/libfilesystem_plugin.so
@@ -935,7 +959,6 @@ make check
 %{vlc_plugindir}/audio_output/libafile_plugin.so
 %{vlc_plugindir}/audio_output/libalsa_plugin.so
 %{vlc_plugindir}/audio_output/libamem_plugin.so
-%{vlc_plugindir}/codec/liba52_plugin.so
 %{vlc_plugindir}/codec/libadpcm_plugin.so
 %{vlc_plugindir}/codec/libaes3_plugin.so
 %{vlc_plugindir}/codec/libaraw_plugin.so
@@ -1004,6 +1027,7 @@ make check
 %{vlc_plugindir}/demux/libdemuxdump_plugin.so
 %{vlc_plugindir}/demux/libdiracsys_plugin.so
 %{vlc_plugindir}/demux/libdirectory_demux_plugin.so
+%{vlc_plugindir}/demux/libdmxmus_plugin.so
 %{vlc_plugindir}/demux/libes_plugin.so
 %{vlc_plugindir}/demux/libflacsys_plugin.so
 %{vlc_plugindir}/demux/libh26x_plugin.so
@@ -1115,8 +1139,12 @@ make check
 %{vlc_plugindir}/text_renderer/libtdummy_plugin.so
 %exclude %{vlc_plugindir}/video_chroma/libswscale_plugin.so
 %{vlc_plugindir}/video_chroma/*.so
+%if %{with postproc}
 %exclude %{vlc_plugindir}/video_filter/libpostproc_plugin.so
+%endif
+%if %{with opencv}
 %exclude %{vlc_plugindir}/video_filter/libopencv_*.so
+%endif
 %{vlc_plugindir}/video_filter/*.so
 %{vlc_plugindir}/video_output/libfb_plugin.so
 %{vlc_plugindir}/video_output/libvdummy_plugin.so
@@ -1152,15 +1180,10 @@ make check
 %if %{with daala}
 %{vlc_plugindir}/codec/libdaala_plugin.so
 %endif
-%{vlc_plugindir}/codec/libdca_plugin.so
 %{vlc_plugindir}/codec/libkate_plugin.so
 %{vlc_plugindir}/codec/liblibass_plugin.so
-%{vlc_plugindir}/codec/liblibmpeg2_plugin.so
 %if %{with vpl}
 %{vlc_plugindir}/codec/libqsv_plugin.so
-%endif
-%if %{with schro}
-%{vlc_plugindir}/codec/libschroedinger_plugin.so
 %endif
 %if %{with sdl}
 %{vlc_plugindir}/codec/libsdl_image_plugin.so
@@ -1170,7 +1193,9 @@ make check
 %{vlc_plugindir}/control/liblirc_plugin.so
 %endif
 %{vlc_plugindir}/demux/libgme_plugin.so
+%if %{with mpc}
 %{vlc_plugindir}/demux/libmpc_plugin.so
+%endif
 %{vlc_plugindir}/demux/libmkv_plugin.so
 %{vlc_plugindir}/demux/libmod_plugin.so
 %{vlc_plugindir}/demux/libts_plugin.so
@@ -1202,7 +1227,9 @@ make check
 %{vlc_plugindir}/stream_out/libstream_out_chromaprint_plugin.so
 %{vlc_plugindir}/vdpau/libvdpau_avcodec_plugin.so
 %{vlc_plugindir}/video_chroma/libswscale_plugin.so
+%if %{with postproc}
 %{vlc_plugindir}/video_filter/libpostproc_plugin.so
+%endif
 
 %files plugin-fluidsynth
 %{vlc_plugindir}/codec/libfluidsynth_plugin.so
@@ -1246,8 +1273,10 @@ make check
 %{vlc_plugindir}/audio_output/libpulse_plugin.so
 %{vlc_plugindir}/services_discovery/libpulselist_plugin.so
 
+%if %{with freerdp}
 %files plugin-rdp
 %{vlc_plugindir}/access/librdp_plugin.so
+%endif
 
 %files plugin-samba
 %{vlc_plugindir}/access/libsmb_plugin.so
@@ -1300,6 +1329,10 @@ make check
 
 
 %changelog
+* Mon Oct 05 2026 Simone Caronni <negativo17@gmail.com> - 2:3.0.24-1
+- Update to 3.0.24.
+- Merge in latest changes from Fedora.
+
 * Sun Nov 02 2025 Simone Caronni <negativo17@gmail.com> - 2:3.0.21-7
 - Merge in changes from Fedora.
 

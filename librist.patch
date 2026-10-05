@@ -1,0 +1,17 @@
+This typo was fixed in librist 0.2.8:
+
+https://code.videolan.org/rist/librist/-/commit/116d160c900154d0fbb9faf58d8c136c7922c499
+
+diff -up ./modules/access_output/rist.c.orig ./modules/access_output/rist.c
+--- ./modules/access_output/rist.c.orig	2026-09-17 07:01:48.000000000 -0400
++++ ./modules/access_output/rist.c	2026-09-17 16:42:18.382293564 -0400
+@@ -316,6 +316,9 @@ vlc_module_begin()
+     add_integer( RIST_CFG_PREFIX RIST_URL_PARAM_VERBOSE_LEVEL, RIST_DEFAULT_VERBOSE_LEVEL,
+             RIST_VERBOSE_LEVEL_TEXT, RIST_VERBOSE_LEVEL_LONGTEXT, true )
+         change_integer_list( verbose_level_type, verbose_level_type_names )
++#ifndef RIST_DEFAULT_RECOVERY_LENGTH_MIN
++#define RIST_DEFAULT_RECOVERY_LENGTH_MIN RIST_DEFAULT_RECOVERY_LENGHT_MIN
++#endif
+     add_integer( RIST_CFG_PREFIX RIST_CFG_LATENCY, RIST_DEFAULT_RECOVERY_LENGTH_MIN,
+             BUFFER_TEXT, BUFFER_LONGTEXT, true )
+     add_string( RIST_CFG_PREFIX RIST_URL_PARAM_CNAME, NULL, RIST_CNAME_TEXT, 

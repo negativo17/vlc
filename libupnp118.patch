@@ -1,0 +1,13 @@
+diff --git a/modules/services_discovery/upnp.hpp b/modules/services_discovery/upnp.hpp
+index b90e3cf..bc17189 100644
+--- a/modules/services_discovery/upnp.hpp
++++ b/modules/services_discovery/upnp.hpp
+@@ -37,7 +37,7 @@
+ 
+ #include <vlc_common.h>
+ 
+-#if UPNP_VERSION < 10800
++#if (UPNP_VERSION < 10800) || (UPNP_VERSION >= 11800)
+ typedef void* UpnpEventPtr;
+ #else
+ typedef const void* UpnpEventPtr;
